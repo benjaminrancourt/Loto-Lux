@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "loto-lux",
+  "private_key_id": "1d9203a86bd50f6369c2899d35c595b7afdfa336",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQD2z6j5JOnbKFnn\n3Nj1+UkG4HvIqb00/Jb7qcF5J7QeZpmo5FUoU2PoQdo4UdSvQCJtBndZt6C+lSLO\n9X0O9i0r4ZPjn0U0j8VfsSo6jahH0oOo3FKRTAA5VZNwmrAaOe29nfP9Q1kl/RyP\nQENAwdFJT3i447dBnrhyyp5M1WAXzmOLDTrrj44ETg0xxtkZY0SSIcXiw9Fqdcac\n0sScw1IfLe/AH0ZvO7Y2YG1ZLHAffsj9XIQ+v8btFgXP3qyCHXPALnw/aUHHDDyv\nijpAc9EnTiykqYPONFmsx2acXF9VeXwGXJM8OFMNVUy/MNcgT8U9lwWgzT8pcXXq\nbPMoNJ3BAgMBAAECggEAVi87fQyj0NCtXGblKDeNhaY78106YddWTbkAg3MW1YrU\nW4KoLfW4rHDaZ9JDZ5MIsnOQl7aknghr6EMXEXNrYKhbwR9rxifyLzEpYtr2iWX8\nbanJ90zHwz2bx7VsiyvxVcZjXev3pGlXYLp7AZDsqSHkMQPriTGIjSUt0/yqmoTa\n80QYdSG1xvNAaz3Zf2YenwVXzb423xvfQzTH+jH60YEJTC3pzN7cpcVRub2zb+F3\nxWRnI7aOBmejD/MYGJvQfOqXb6CFYNHdQHA4Q6zPTy3d2gnwRnQz40ik4fTwfzRE\ncoDg3FSAj5S0c1gQQEKF9LJZPac7I32jLAmzaqzicQKBgQD+fS0FFRpAu6OxqVif\n4n3j5m5t3xAoUvw0yhvAWy+UYa/3ExortqJqr9B9EzLz1SCX4uAqe5Y8mQ+T8tGt\n/Mfx/y5RMvM3wh9hrFr8clQAXiXJJxk8PmkXlV9f7HPgbB18rGNYGBZeCJZhHl+D\nDlCJNvdapU6c2SVgdot+fxMNvQKBgQD4RtBcwKdzjmPHVJcF6TYCO9wTSNJ42jt+\nCJaEp05xBMjPdn7HWf0BJs6tZotjJfI5krcBiMAfefv69P+/wejAfXTcQroExN6O\n/Iu2FQio84TBDedUDW8UJMHFwTcqFW+wepyalLVLQNjfWFMEN+j+WlyHLMEPnmcl\nu4InaiMmVQKBgQC9MqzMsYKiC55IUAFeZJF5ZHBG6OZnRELSsEtvd5to8jNTOfVj\n+FTJgko7IpHn61Re90H284ifJqAJOyYd9udjh3aU0Y82rfCMugmu0wSWfWgUIyhE\nvJV+/gM5Gl6Pw3EspjD5ZncCk9nQ/DbABV1klePRlUJbo6iBDcDpW2n79QKBgQD0\nuSBy/LdR8R2rAldmzSyeYRCZtaM42qvfnGl5UkzAnF2wGXX33FzFwNHiG/zy+xla\n5KIdEgWGQUA+azaYdnONIVyKK/+d6cwSlx7DmNITbw4BGUpXEHLYIS8bVUuh4MVZ\n6FHrEP/usHnVFQOnWdEAvmMMHvIiChpUGBK/9R+2jQKBgQCnwnMlFQh0l0Gpvd2J\nbG0wiIWdl0HMWI0OYqPJjyonnlnZCtQsQSKA3AxKEHuOcfCLeae6/j1VKw7Qvx6G\nqBBKghdA1OJ6rlkEqCoK57snHOyfbRwN7W+kqgG42/hfpd9sH5LqmsJeGsvuPOjy\nsTPLnEgeaf+CPjMKHvAR20ktUQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "donnees@loto-lux.iam.gserviceaccount.com",
+  "client_id": "110695545078900061769",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/donnees%40loto-lux.iam.gserviceaccount.com"
+}

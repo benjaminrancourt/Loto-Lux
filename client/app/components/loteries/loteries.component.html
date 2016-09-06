@@ -1,0 +1,18 @@
+<section id="services" class="service-item">
+  <div class="container">
+    <div class="center wow fadeInDown">
+      <h2>Loteries</h2>
+      <p class="lead">
+        À travers les différentes sections de ce site Web, consultez les derniers résultats des loteries supportées, <br/>
+        entrez vos sélections, validez les et recevez les derniers résultats par courriel dès qu'ils sont disponibles sur le site Web de Loto-Québec!
+      </p>
+      <p class="error" *ngIf="error">{{error}}</p>
+    </div>
+
+    <div class="row" *ngIf="loteries">
+      <div class="col-sm-6 col-md-6" *ngFor="let loterie of loteries">
+        <loterie [loterie]="loterie"></loterie>
+      </div>
+    </div>
+  </div><!--/.container-->
+</section><!--/#services-->

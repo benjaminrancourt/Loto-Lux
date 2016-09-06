@@ -1,0 +1,78 @@
+.calendar .calendar-header {
+  background: rgba(0,0,0,0.45);
+}
+
+.calendar .calendar-header .year-title,
+.calendar .calendar-header-month .month-title {
+  color: #000000;
+}
+
+.calendar .calendar-header .year-neighbor,
+.calendar .calendar-header-month .month-neighbor {
+  color: #555555;
+}
+
+.calendar .prev,
+.calendar .next {
+  color: #AAAAAA;
+}
+
+.calendar .calendar-header table th:hover {
+  background: rgba(0,0,0,0.40);
+}
+
+.calendar .calendar-header-month {
+  background-color: rgba(0,0,0,0.30);
+}
+
+.calendar .calendar-header-month table th:hover {
+  background: rgba(0,0,0,0.25);
+}
+
+.calendar .month-container .month {
+  background-color: rgba(0,0,0,0.15);
+  border-radius: 4px;
+}
+
+.calendar .months-container .month .month-title  {
+  color: #4e4e4e;
+}
+
+.calendar .months-container .month .day-header {
+  color: #aaaaaa;
+}
+
+.calendar .months-container .month .day:not(.disabled) .day-content {
+  border-radius: 15px;
+  font-weight: bold;
+  color: white;
+}
+
+.calendar .months-container .month .day-content.precedent {
+  border: 2px solid #dd4b39;
+}
+
+.calendar .months-container .month .day-content.precedent:hover {
+  background-color: #dd4b39;
+  color: black;
+}
+
+.calendar .months-container .month .day-content.courant {
+  border: 2px solid #00a65a;
+  background-color: #00a65a;
+  color: black !important;
+  cursor: default;
+}
+
+.calendar .months-container .month .day-content.courant:hover {
+  cursor: default;
+  background-color: #00a65a;
+}
+
+.calendar .months-container .month .day-content.suivant {
+  border: 2px solid #f39c12;
+}
+
+.calendar .months-container .month .day-content.suivant:hover {
+  background-color: #f39c12;
+}

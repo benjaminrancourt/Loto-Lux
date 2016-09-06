@@ -1,0 +1,41 @@
+<div *ngIf="loterie">
+<div class="media services-wrap wow fadeInDown" [style.background-color]="loterie.couleur" [ngClass]="loterie.url">
+  <div class="pull-left">
+    <a [routerLink]="['LoterieDetailDate', {loterie: loterie.url, date: tirage.date}]" *ngIf="petitComposant">
+      <img class="img-responsive" [src]="src" alt="{{loterie.nom}}"/>
+    </a>
+    <img class="img-responsive" [src]="src" alt="{{loterie.nom}}" *ngIf="!petitComposant"/>
+  </div>
+  <div class="media-body">
+    <h3 class="media-heading">
+      <a [routerLink]="['LoterieDetailDate', {loterie: loterie.url, date: tirage.date}]" *ngIf="petitComposant">
+        {{titre()}}
+      </a>
+      <span *ngIf="!petitComposant">{{titre()}}</span>
+    </h3>
+    <div class="numeros list-group" *ngIf="tirage.principal">
+      <div *ngFor="let num of tirage.principal; let i = index">
+
+        <div class="libelleComplementaire" *ngIf="estComplementaire(i)">
+          <span class="complementaireGauche">&nbsp;</span>
+          <span class="complementaireCentre">Complémentaire&nbsp;(C)</span>
+          <span class="complementaireDroite">&nbsp;</span>
+        </div>
+
+        <span [class.num]="!estComplementaire(i)" [class.complementaire]="estComplementaire(i)">{{num}}</span>
+        <span class="num-sep" *ngIf="avecSeparateur(i)">-</span>
+      </div>
+    </div>
+
+    <div class="secondaire list-group" *ngIf="tirage.secondaire && !petitComposant">
+      <h3 class="media-heading">Lots additionnels</h3>
+      <div class="numeros list-group" *ngFor="let numeros of tirage.secondaire">
+        <div *ngFor="let num of numeros; let i = index">
+          <span class="num">{{num}}</span>
+          <span class="num-sep" *ngIf="avecSeparateur(i)">-</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

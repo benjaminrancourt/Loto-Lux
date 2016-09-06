@@ -1,0 +1,35 @@
+.jumbotron {
+  background-color: white;
+  text-align: center;
+  padding: 20px 60px 30px;
+}
+
+.home-jumbotron h1 {
+  font-size: 96px;
+  color: #c52d2f;
+}
+
+.home-jumbotron .lead {
+  z-index: 20;
+  position: relative;
+  font-size: 24px;
+  line-height: 1.4;
+  color: black;
+}
+
+.home-jumbotron .middle-circle {
+  -moz-border-radius: 80px;
+  -webkit-border-radius: 80px;
+  background-color: white;
+  border-radius: 80px;
+  font-size: 50px;
+  height: 100px;
+  width: 100px;
+  line-height: 100px;
+  position: absolute;
+  left: 50%;
+  margin-left: -50px;
+  z-index: 10;
+  bottom: -60px;
+  color: #c52d2f;
+}

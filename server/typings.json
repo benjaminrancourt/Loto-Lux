@@ -1,0 +1,18 @@
+{
+  "globalDependencies": {
+    "async": "registry:dt/async#1.4.2+20160602152629",
+    "body-parser": "registry:dt/body-parser#0.0.0+20160619023215",
+    "cheerio": "registry:dt/cheerio#0.17.0+20160407085313",
+    "express": "registry:dt/express#4.0.0+20160317120654",
+    "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160602151406",
+    "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
+    "mime": "registry:dt/mime#0.0.0+20160316155526",
+    "node": "registry:dt/node#6.0.0+20160608083720",
+    "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",
+    "winston": "registry:dt/winston#0.0.0+20160417152829"
+  },
+  "dependencies": {
+    "firebase": "registry:npm/firebase#3.0.5+20160723033700",
+    "request": "registry:npm/request#2.69.0+20160428223725"
+  }
+}

@@ -45,23 +45,17 @@ gulp.task('build:client', ["tslint:client"], function(){
 // Lint all custom TypeScript files.
 gulp.task('tslint:server', () => {
   return gulp.src("server/src/**/*.ts")
-    .pipe(tslint())
-    .pipe(tslint.report('prose'));
+    .pipe(tslint({ formatter: 'prose' }))
+    .pipe(tslint.report());
 });
 
 gulp.task('tslint:client', () => {
   return gulp.src("client/app/**/*.ts")
-    .pipe(tslint())
-    .pipe(tslint.report('prose'));
+    .pipe(tslint({ formatter: 'prose' }))
+    .pipe(tslint.report());
 });
 
 //Copy the resources to the distribution
-gulp.task("resources:server", () => {
-  return gulp.src(["server/src/config/utils/*.json"])
-    .pipe(gulp.dest("dist/server/config/utils"))
-    .pipe(browserSync.stream());
-});
-
 gulp.task("resources:client", () => {
   return gulp.src(["client/**/*", "!client/**/*.ts","!client/typings", "!client/typings/**","!client/*.json"])
     .pipe(gulp.dest("dist/client"))
@@ -123,7 +117,7 @@ gulp.task('start', function () {
 gulp.task("build", function (callback) {
   runSequence('clean:server', 'clean:client',
     'build:server', 'build:client',
-    'resources:server', 'resources:client',
+    'resources:client',
     'libs',
     callback);
 });
@@ -132,7 +126,6 @@ gulp.task("build", function (callback) {
 gulp.task("build-start:server", function (callback) {
   runSequence('clean:server',
     'build:server',
-    'resources:server',
     'start',
     callback);
 });
@@ -140,7 +133,7 @@ gulp.task("build-start:server", function (callback) {
 gulp.task("heroku:production", function (callback) {
   runSequence('clean:server', 'clean:client',
     'build:server', 'build:client',
-    'resources:server', 'resources:client',
+    'resources:client',
     'libs',
     callback);
 });

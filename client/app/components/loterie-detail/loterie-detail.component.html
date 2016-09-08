@@ -1,6 +1,6 @@
 <div class="center wow fadeInDown">
   <h1 *ngIf="loterie">{{loterie.nom}}</h1>
-  <h2 *ngIf="date">Résultats du {{date}}</h2> <!-- | amDateFormat:'LL' -->
+  <h2 *ngIf="date">Résultats du {{date | amDateFormat:'LL'}}</h2>
 </div>
 
 <div class="container" *ngIf="loterie">
@@ -8,7 +8,8 @@
     <div class="col-sm-4 col-md-4" *ngIf="date && dates">
       <div class="calendrier media-body">
         <h3 class="media-heading">Tirages précédents</h3>
-        <calendrier [loterie]="loterie.url" [date]="date" [dates]="dates"></calendrier>
+        <calendrier [loterie]="loterie.url" [date]="date" [dates]="dates"
+          (onChangementDate)="onChangementDate($event)"></calendrier>
       </div>
     </div>
     <div class="col-sm-8 col-md-8" *ngIf="tirage">

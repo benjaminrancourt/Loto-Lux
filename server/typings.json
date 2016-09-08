@@ -3,6 +3,7 @@
     "async": "registry:dt/async#2.0.1+20160804113311",
     "body-parser": "registry:dt/body-parser#0.0.0+20160619023215",
     "cheerio": "registry:dt/cheerio#0.17.0+20160407085313",
+    "core-js": "registry:dt/core-js#0.0.0+20160725163759",
     "express": "registry:dt/express#4.0.0+20160708185218",
     "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20160829034835",
     "mime": "registry:dt/mime#0.0.0+20160316155526",

@@ -1,16 +1,14 @@
-import { Component, OnInit } from 'angular2/core';
-import { RouteParams } from 'angular2/router';
-//import { DateFormatPipe } from 'angular2-moment';
+import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { DateTirage, Loterie, Tirage } from '../../models';
 import { DateService, LoterieService, TirageService } from '../../services';
-import { CalendrierComponent, LoterieComponent } from './..';
 
 @Component({
+  selector: 'loterie-detail',
   templateUrl: './app/components/loterie-detail/loterie-detail.component.html',
-  styleUrls: ['./app/components/loterie-detail/loterie-detail.component.css'],
-  directives: [CalendrierComponent, LoterieComponent]//,
-  //pipes: [DateFormatPipe]
+  styleUrls: ['./app/components/loterie-detail/loterie-detail.component.css']
 })
 
 export class LoterieDetailComponent implements OnInit {
@@ -24,33 +22,47 @@ export class LoterieDetailComponent implements OnInit {
     private dateService: DateService,
     private loterieService: LoterieService,
     private tirageService: TirageService,
-    private routeParams: RouteParams) {
+    private route: ActivatedRoute,
+    private location: Location) {
   }
 
   ngOnInit(): void {
-    this.recupererLoterie();
+    interface IRouteParams {
+      loterie: string;
+      date: string;
+    }
+
+    this.route.params.forEach((params: IRouteParams) => {
+      let loterie: string = params.loterie;
+      let date: string = params.date;
+
+      this.recupererLoterie(loterie, date);
+    });
   }
 
-  private recupererLoterie(): void {
-    let url: string = this.routeParams.get('loterie');
-    let date: string = this.routeParams.get('date');
-
+  private recupererLoterie(url: string, date: string): void {
     //Recupère la loterie
     this.loterieService.recupererParURL(url).then(loterie => {
       this.loterie = loterie;
 
       //Si la date a été spécifié, ajoute les informations pertinentes
-      if (date !== null) {
-        this.tirageService.recuperer(url, date).then(tirage => {
-          this.tirage = tirage;
-          this.date = date;
-        });
+      if (date !== undefined) {
+        this.onChangementDate(date);
       } else {
         this.tirage = this.loterie.dernierTirage;
         this.date = this.loterie.dernierTirage.date;
+        this.location.go('/loteries/' + this.loterie.url + '/' + this.date);
       }
 
       this.dateService.recuperer(url).then(dates => this.dates = dates);
+    });
+  }
+
+  private onChangementDate(date: string): void {
+    this.location.go('/loteries/' + this.loterie.url + '/' + date);
+    this.tirageService.recuperer(this.loterie.url, date).then(tirage => {
+      this.tirage = tirage;
+      this.date = date;
     });
   }
 }

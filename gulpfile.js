@@ -65,12 +65,22 @@ gulp.task("resources:client", () => {
 // Copy all required libraries into build directory.
 gulp.task("libs", () => {
   return gulp.src([
-    'angular2/bundles/angular2-polyfills.js',
+    'core-js/client/shim.+(js|min.js|min.js.map)',
+    'zone.js/dist/zone.js',
+    'reflect-metadata/Reflect.+(js|js.map)',
     'systemjs/dist/system.src.js',
-    'rxjs/bundles/Rx.umd.js',
-    'angular2/bundles/angular2.dev.js',
-    'angular2/bundles/router.dev.js',
-    'angular2/bundles/http.dev.js'
+
+    '@angular/core/bundles/core.umd.js',
+    '@angular/common/bundles/common.umd.js',
+    '@angular/compiler/bundles/compiler.umd.js',
+    '@angular/platform-browser/bundles/platform-browser.umd.js',
+    '@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+    '@angular/http/bundles/http.umd.js',
+    '@angular/router/bundles/router.umd.js',
+    '@angular/forms/bundles/forms.umd.js',
+    'moment/min/moment-with-locales.min.js',
+    'angular2-moment/*.+(js|js.map)',
+    'angular2-moment/src/*.ts'
   ], {cwd: "node_modules/**"}) /* Glob required here. */
     .pipe(gulp.dest("dist/client/libs"))
     .pipe(browserSync.stream());

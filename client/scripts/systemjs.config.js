@@ -20,7 +20,6 @@
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
       'rxjs': 'https://unpkg.com/rxjs@5.0.0-beta.6',
-      'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
       'moment': 'npm:moment',
       'angular2-moment': 'npm:angular2-moment'
     },
@@ -37,10 +36,6 @@
 
       rxjs: {
         main: './libs/rxjs/bundles/Rx.umd.js',
-        defaultExtension: 'js'
-      },
-      'angular2-in-memory-web-api': {
-        main: './index.js',
         defaultExtension: 'js'
       },
       'moment': {

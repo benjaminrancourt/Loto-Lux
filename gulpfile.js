@@ -1,106 +1,111 @@
-"use strict";
+'use strict';
 
-const gulp = require("gulp"),
-      del = require("del"),
-      tsc = require("gulp-typescript"),
+const gulp = require('gulp'),
+      del = require('del'),
+      tsc = require('gulp-typescript'),
       sourcemaps = require('gulp-sourcemaps'),
       tslint = require('gulp-tslint'),
       runSequence = require('run-sequence'),
       nodemon = require('gulp-nodemon'),
+      gulpTypings = require('gulp-typings'),
       browserSync = require('browser-sync').create();
 
 // Delete the distribution
 gulp.task('clean:server', (cb) => {
-  return del(["dist/server"], cb);
+  return del(['dist/server'], cb);
 });
 
 gulp.task('clean:client', (cb) => {
-  return del(["dist/client"], cb);
+  return del(['dist/client'], cb);
 });
 
 //Build the server
-gulp.task('build:server', ["tslint:server"], function () {
+gulp.task('build:server', ['tslint:server'], function () {
   var tsProject = tsc.createProject('server/tsconfig.json');
   var tsResult = gulp.src('server/src/**/*.ts')
     .pipe(sourcemaps.init())
     .pipe(tsc(tsProject))
   return tsResult.js
-    .pipe(sourcemaps.write("."))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('dist/server'))
     .pipe(browserSync.stream());
 });
 
 //Build the client
-gulp.task('build:client', ["tslint:client"], function(){
+gulp.task('build:client', ['tslint:client'], function(){
   var tsProject = tsc.createProject('client/tsconfig.json');
   var tsResult = gulp.src('client/**/*.ts')
     .pipe(sourcemaps.init())
     .pipe(tsc(tsProject))
   return tsResult.js
-    .pipe(sourcemaps.write("."))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('dist/client'))
     .pipe(browserSync.stream());
 });
 
 // Lint all custom TypeScript files.
 gulp.task('tslint:server', () => {
-  return gulp.src("server/src/**/*.ts")
-    .pipe(tslint())
-    .pipe(tslint.report('prose'));
+  return gulp.src('server/src/**/*.ts')
+    .pipe(tslint({ formatter: 'prose' }))
+    .pipe(tslint.report());
 });
 
 gulp.task('tslint:client', () => {
-  return gulp.src("client/app/**/*.ts")
-    .pipe(tslint())
-    .pipe(tslint.report('prose'));
+  return gulp.src('client/app/**/*.ts')
+    .pipe(tslint({ formatter: 'prose' }))
+    .pipe(tslint.report());
 });
 
 //Copy the resources to the distribution
-gulp.task("resources:server", () => {
-  return gulp.src(["server/src/config/utils/*.json"])
-    .pipe(gulp.dest("dist/server/config/utils"))
-    .pipe(browserSync.stream());
-});
-
-gulp.task("resources:client", () => {
-  return gulp.src(["client/**/*", "!client/**/*.ts","!client/typings", "!client/typings/**","!client/*.json"])
-    .pipe(gulp.dest("dist/client"))
+gulp.task('resources:client', () => {
+  return gulp.src(['client/**/*', '!client/**/*.ts','!client/typings', '!client/typings/**','!client/*.json'])
+    .pipe(gulp.dest('dist/client'))
     .pipe(browserSync.stream());
 });
 
 // Copy all required libraries into build directory.
-gulp.task("libs", () => {
+gulp.task('libs', () => {
   return gulp.src([
-    'angular2/bundles/angular2-polyfills.js',
+    'core-js/client/shim.+(js|min.js|min.js.map)',
+    'zone.js/dist/zone.js',
+    'reflect-metadata/Reflect.+(js|js.map)',
     'systemjs/dist/system.src.js',
-    'rxjs/bundles/Rx.umd.js',
-    'angular2/bundles/angular2.dev.js',
-    'angular2/bundles/router.dev.js',
-    'angular2/bundles/http.dev.js'
-  ], {cwd: "node_modules/**"}) /* Glob required here. */
-    .pipe(gulp.dest("dist/client/libs"))
+
+    '@angular/core/bundles/core.umd.js',
+    '@angular/common/bundles/common.umd.js',
+    '@angular/compiler/bundles/compiler.umd.js',
+    '@angular/platform-browser/bundles/platform-browser.umd.js',
+    '@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+    '@angular/http/bundles/http.umd.js',
+    '@angular/router/bundles/router.umd.js',
+    '@angular/forms/bundles/forms.umd.js',
+    'moment/min/moment-with-locales.min.js',
+    'angular2-moment/*.+(js|js.map)',
+    'angular2-moment/src/*.ts'
+  ], {cwd: 'node_modules/**'}) /* Glob required here. */
+    .pipe(gulp.dest('dist/client/libs'))
     .pipe(browserSync.stream());
 });
 
 // Watch for changes in TypeScript, HTML and CSS files.
 gulp.task('watch', function () {
   browserSync.init({
-    proxy: "http://localhost:3000",
+    proxy: 'http://localhost:3000',
     port: 7000
   });
 
-  gulp.watch(["server/**/*.ts"], ['build:server']).on('change', function (e) {
+  gulp.watch(['server/**/*.ts'], ['build:server']).on('change', function (e) {
       console.log('[Server] TypeScript file ' + e.path + ' has been changed. Compiling.');
   });
 
-  gulp.watch(["client/**/*.ts"], ['build:client']).on('change', function (e) {
+  gulp.watch(['client/**/*.ts'], ['build:client']).on('change', function (e) {
       console.log('[Client] TypeScript file ' + e.path + ' has been changed. Compiling.');
   });
 
-  gulp.watch(["client/**/*", "!client/**/*.ts", "!client/typings", "!client/typings/**", "!client/*.json"])
+  gulp.watch(['client/**/*', '!client/**/*.ts', '!client/typings', '!client/typings/**', '!client/*.json'])
     .on('change', function (file) {
       console.log('[Client] Resource file ' + file.path + ' has been changed. Updating.');
-      gulp.src(file.path, {base:"client"}).pipe(gulp.dest("dist/client"));
+      gulp.src(file.path, {base:'client'}).pipe(gulp.dest('dist/client'));
       browserSync.reload(file);
   });
 });
@@ -119,28 +124,41 @@ gulp.task('start', function () {
     });
 });
 
-// Build the project.
-gulp.task("build", function (callback) {
-  runSequence('clean:server', 'clean:client',
-    'build:server', 'build:client',
-    'resources:server', 'resources:client',
-    'libs',
-    callback);
+//Install typings
+gulp.task('typings:server', function (callback) {
+  return gulp.src('./server/typings.json')
+    .pipe(gulpTypings());
+});
+
+gulp.task('typings:client', function (callback) {
+  return gulp.src('./client/typings.json')
+    .pipe(gulpTypings());
 });
 
 //Build the server only and start it
-gulp.task("build-start:server", function (callback) {
+gulp.task('build-start:server', function (callback) {
   runSequence('clean:server',
     'build:server',
-    'resources:server',
     'start',
     callback);
 });
 
-gulp.task("heroku:production", function (callback) {
+//Build the server for production
+gulp.task('build', function (callback) {
   runSequence('clean:server', 'clean:client',
+    'typings:server', 'typings:client',
     'build:server', 'build:client',
-    'resources:server', 'resources:client',
+    'resources:client',
+    'libs',
+    callback);
+});
+
+//Build the server for production
+gulp.task('heroku:production', function (callback) {
+  runSequence('clean:server', 'clean:client',
+    'typings:server', 'typings:client',
+    'build:server', 'build:client',
+    'resources:client',
     'libs',
     callback);
 });

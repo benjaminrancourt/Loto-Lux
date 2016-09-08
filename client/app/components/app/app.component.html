@@ -2,29 +2,32 @@
   <nav class="navbar navbar-inverse" role="banner">
     <div class="container">
       <div class="navbar-header">
-        <a class="navbar-brand" [routerLink]="['Accueil']">
+        <a class="navbar-brand" routerLink="/accueil">
           <img src="images/logo.png" alt="logo">
         </a>
       </div>
 
       <div class="collapse navbar-collapse navbar-right">
         <ul class="nav navbar-nav">
-          <li><a [routerLink]="['Accueil']" routerLinkActive="active">Accueil</a></li>
+          <li><a routerLink="/accueil" routerLinkActive="active">Accueil</a></li>
           <li class="dropdown" *ngIf="loteries">
-            <a [routerLink]="['Loteries']" routerLinkActive="active" class="dropdown-toggle" data-toggle="dropdown">
+            <a routerLink="/loteries" routerLinkActive="active" class="dropdown-toggle" data-toggle="dropdown">
               Loteries <i class="fa fa-angle-down"></i>
             </a>
             <ul class="dropdown-menu">
               <li *ngFor="let loterie of loteries">
-                <a [routerLink]="['LoterieDetail', {loterie: loterie.url}]" routerLinkActive="active">{{loterie.nom}}</a>
+                <a [routerLink]="['/loteries', loterie.url]" routerLinkActive="active">{{loterie.nom}}</a>
               </li>
             </ul>
           </li>
+          <li>
+            <a title="GitHub" href="https://github.com/ranb2002/Loto-Lux"><span class="fa fa-github"></span></a>
+          </li>
         </ul>
       </div>
-    </div><!--/.container-->
-  </nav><!--/nav-->
-</header><!--/header-->
+    </div>
+  </nav>
+</header>
 
 <router-outlet></router-outlet>
 

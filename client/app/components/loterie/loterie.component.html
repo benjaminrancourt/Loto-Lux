@@ -1,14 +1,14 @@
 <div *ngIf="loterie">
 <div class="media services-wrap wow fadeInDown" [style.background-color]="loterie.couleur" [ngClass]="loterie.url">
   <div class="pull-left">
-    <a [routerLink]="['LoterieDetailDate', {loterie: loterie.url, date: tirage.date}]" *ngIf="petitComposant">
+    <a [routerLink]="['/loteries', loterie.url, tirage.date]" *ngIf="petitComposant">
       <img class="img-responsive" [src]="src" alt="{{loterie.nom}}"/>
     </a>
     <img class="img-responsive" [src]="src" alt="{{loterie.nom}}" *ngIf="!petitComposant"/>
   </div>
   <div class="media-body">
     <h3 class="media-heading">
-      <a [routerLink]="['LoterieDetailDate', {loterie: loterie.url, date: tirage.date}]" *ngIf="petitComposant">
+      <a [routerLink]="['/loteries', loterie.url, tirage.date]" *ngIf="petitComposant">
         {{titre()}}
       </a>
       <span *ngIf="!petitComposant">{{titre()}}</span>

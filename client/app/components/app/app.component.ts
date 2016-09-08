@@ -1,53 +1,12 @@
-import { Component } from 'angular2/core';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
-
+import { Component } from '@angular/core';
 import { Loterie } from './../../models';
-import { DateService, LoterieService, TirageService } from './../../services';
-
-import {
-  AccueilComponent,
-  LoteriesComponent,
-  LoterieDetailComponent,
-  PiedDePageComponent
-  } from './..';
+import { LoterieService } from './../../services';
 
 @Component({
   selector: 'my-app',
   templateUrl: './app/components/app/app.component.html',
-  styleUrls: ['./app/components/app/app.component.css'],
-  directives: [
-    ROUTER_DIRECTIVES,
-    PiedDePageComponent
-    ],
-  providers: [
-    ROUTER_PROVIDERS,
-    DateService, LoterieService, TirageService
-  ]
+  styleUrls: ['./app/components/app/app.component.css']
 })
-
-@RouteConfig([
-  {
-    path: '/accueil',
-    name: 'Accueil',
-    component: AccueilComponent,
-    useAsDefault: true
-  },
-  {
-    path: '/loteries',
-    name: 'Loteries',
-    component: LoteriesComponent
-  },
-  {
-    path: '/loteries/:loterie',
-    name: 'LoterieDetail',
-    component: LoterieDetailComponent
-  },
-  {
-    path: '/loteries/:loterie/:date',
-    name: 'LoterieDetailDate',
-    component: LoterieDetailComponent
-  }
-])
 
 export class AppComponent {
   loteries: Loterie[];

@@ -1,19 +1,8 @@
-import { Component } from 'angular2/core';
-
-import {
-  FonctionnalitesComponent,
-  LoteriesComponent,
-  PresentationComponent
-} from './../';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'accueil',
-  templateUrl: './app/components/accueil/accueil.component.html',
-  directives: [
-    FonctionnalitesComponent,
-    LoteriesComponent,
-    PresentationComponent
-    ]
+  templateUrl: './app/components/accueil/accueil.component.html'
 })
 
 export class AccueilComponent {

@@ -1,27 +1,29 @@
-import { Component, Input, OnInit} from 'angular2/core';
-import { ROUTER_DIRECTIVES } from 'angular2/router';
+import { Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 import { Loterie, Tirage } from '../../models';
-import { CalendrierComponent } from './..';
 
 @Component({
   selector: 'loterie',
   templateUrl: './app/components/loterie/loterie.component.html',
-  styleUrls: ['./app/components/loterie/loterie.component.css'],
-  directives: [CalendrierComponent, ROUTER_DIRECTIVES]
+  styleUrls: ['./app/components/loterie/loterie.component.css']
 })
 
 //Représente une boîte contenant des informations sommaires sur la loterie
-export class LoterieComponent implements OnInit {
+export class LoterieComponent implements OnInit, OnChanges {
   @Input() loterie: Loterie;
   @Input() tirage: Tirage;
 
   petitComposant: boolean;
   src: string;
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['loterie'] && changes['loterie'].previousValue !== changes['loterie'].currentValue) {
+      this.src = 'images/loteries/' + this.loterie.url + '.png';
+    }
+  }
+
   //Initialise la source du logo
   ngOnInit(): void {
-    this.src = 'images/loteries/' + this.loterie.url + '.png';
     this.petitComposant = this.tirage === undefined;
 
     if (this.petitComposant) {

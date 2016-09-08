@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from 'angular2/core';
-import { Router } from 'angular2/router';
+import { AfterViewInit, Component, ElementRef, EventEmitter,
+  Input, OnChanges, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { DateTirage } from './../../models';
 
@@ -12,26 +13,29 @@ declare let $: JQueryStatic;
   styleUrls: ['./app/components/calendrier/calendrier.component.css']
 })
 
-export class CalendrierComponent implements AfterViewInit, OnInit  {
+export class CalendrierComponent implements AfterViewInit, OnChanges  {
   @Input() loterie: string;
   @Input() date: string;
   @Input() dates: DateTirage[];
+  @Output() onChangementDate: EventEmitter<string>;
 
   datesJavaScript: Date[];
   datesString: string[];
 
   @ViewChild('calendrier') calendrier: ElementRef;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.onChangementDate = new EventEmitter<string>();
+  }
 
-  ngOnInit(): void {
-    this.datesJavaScript = this.dates.map(n => this.toDate(n) );
-    this.datesString = this.dates.map(n => n.date);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['date']) { this.miseAJourDate(); }
+    if (changes['dates']) { this.miseAJourDates(); }
   }
 
   ngAfterViewInit(): void {
-    let dateTirage: DateTirage = { date: this.date, estEffectue: null };
-    let dateDepart: Date = this.toDate(dateTirage);
+    this.miseAJourDate();
+    this.miseAJourDates();
 
     $(this.calendrier.nativeElement).calendar({
         clickDay: (e) => { this.clickDay(e); },
@@ -40,21 +44,41 @@ export class CalendrierComponent implements AfterViewInit, OnInit  {
         disablePrev2Year: true,
         displayMonthHeader: true,
         language: 'fr',
-        startYear: dateDepart.getFullYear(),
-        startMonth: dateDepart.getMonth(),
         numDisplayedMonth: 1,
-        numDisplayedMonthHeader: 3,
-        enabledDays: this.datesJavaScript,
-        minDate: this.datesJavaScript[0],
-        maxDate: this.datesJavaScript[this.datesJavaScript.length - 1]
+        numDisplayedMonthHeader: 3
     });
+  }
+
+  miseAJourDate(): void {
+    let dateTirage: DateTirage = { date: this.date, estEffectue: null };
+    let dateDepart: Date = this.toDate(dateTirage);
+    let calendrier: any = $(this.calendrier.nativeElement).data('calendar');
+
+    if (calendrier) {
+      calendrier.setYear(dateDepart.getFullYear());
+      calendrier.setMonth(dateDepart.getMonth());
+    }
+  }
+
+  miseAJourDates(): void {
+    this.datesJavaScript = this.dates.map(n => this.toDate(n) );
+    this.datesString = this.dates.map(n => n.date);
+    let calendrier: any = $(this.calendrier.nativeElement).data('calendar');
+
+    if (calendrier) {
+      calendrier.setEnabledDays(this.datesJavaScript);
+      calendrier.setMinDate(this.datesJavaScript[0]);
+      calendrier.setMaxDate(this.datesJavaScript[this.datesJavaScript.length - 1]);
+    }
   }
 
   clickDay(element: any): void {
     let date: string = element.date.toISOString().slice(0,10);
 
     if (date !== this.date) {
-      this.router.navigate(['LoterieDetailDate', { loterie: this.loterie, date: date }]);
+      this.onChangementDate.emit(date);
+      this.date = date;
+      $(this.calendrier.nativeElement).data('calendar')._render();
     }
   }
 
@@ -62,7 +86,7 @@ export class CalendrierComponent implements AfterViewInit, OnInit  {
     let dateISO: string = date.toISOString().slice(0,10);
     let pos: number = $.inArray(dateISO, this.datesString);
 
-    if (pos > - 1) {
+    if (pos > -1) {
       let dateTirage: DateTirage = this.dates[pos];
 
       if (dateTirage.date === this.date) {

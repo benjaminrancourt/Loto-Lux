@@ -72,7 +72,7 @@
     "no-reference": false,
     "no-require-imports": false,
     "no-shadowed-variable": false,
-    "no-string-literal": true,
+    "no-string-literal": false,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
     "no-unreachable": true,

@@ -1,15 +1,13 @@
-import { Component, OnInit } from 'angular2/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Loterie } from './../../models';
 import { LoterieService } from './../../services';
-import { LoterieComponent } from './..';
 
 @Component({
   selector: 'loteries',
   templateUrl: './app/components/loteries/loteries.component.html',
   styleUrls: ['./app/components/loteries/loteries.component.css'],
-  providers: [LoterieService],
-  directives: [LoterieComponent]
+  providers: [LoterieService]
 })
 
 //Représente une liste des loteries sur la page d'accueil

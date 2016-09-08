@@ -29,10 +29,6 @@ export class CalendrierComponent implements AfterViewInit, OnChanges  {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    let loterie: string = changes['loterie'] ? 'loterie ' : '';
-    let date: string = changes['date'] ? 'date ' : '';
-    let dates: string = changes['dates'] ? 'dates ' : '';
-
     if (changes['date']) { this.miseAJourDate(); }
     if (changes['dates']) { this.miseAJourDates(); }
   }

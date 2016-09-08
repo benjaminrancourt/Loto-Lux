@@ -36,9 +36,7 @@ Loto-Lux est une application Web de loteries canadiennes, dont l'Extra, Lotto 6/
 $ git clone https://github.com/ranb2002/Loto-Lux.git
 $ cd Loto-Lux
 $ npm install
-$ cd client && typings install && cd ..
-$ cd server && typings install && cd ..
-$ npm run build-start-dev
+$ npm run build-start
 ```
 
 ## Licence

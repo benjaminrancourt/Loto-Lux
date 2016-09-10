@@ -1,24 +1,11 @@
 <html>
-
   <head>
     <title>Loto-Lux</title>
-    <base href="/"/>
 
+    <base href="/"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/animate.min.css" rel="stylesheet">
-    <link href="css/prettyPhoto.css" rel="stylesheet">
-    <link href="css/main.css" rel="stylesheet">
-    <link href="css/responsive.css" rel="stylesheet">
-    <link href="css/bootstrap-year-calendar.css" rel="stylesheet">
-
-    <!--[if lt IE 9]>
-    <script src="scripts/html5shiv.js"></script>
-    <script src="scripts/respond.min.js"></script>
-    <![endif]-->
+    <link href="css/global.min.css" rel="stylesheet">
 
     <link rel="shortcut icon" href="images/ico/favicon.ico" type="image/x-icon" />
     <link rel="apple-touch-icon" sizes="180x180" href="images/ico/apple-touch-icon-180x180.png" />
@@ -31,26 +18,17 @@
     <link rel="apple-touch-icon" sizes="57x57" href="images/ico/apple-touch-icon-57x57.png" />
     <link rel="apple-touch-icon" href="images/ico/apple-touch-icon.png" />
 
+    <!--[if lt IE 9]><script src="scripts/ie9.min.js"></script><![endif]-->
     <script src="libs/core-js/client/shim.min.js"></script>
     <script src="libs/zone.js/dist/zone.js"></script>
     <script src="libs/reflect-metadata/Reflect.js"></script>
     <script src="libs/systemjs/dist/system.src.js"></script>
 
     <script src="scripts/systemjs.config.js"></script>
-    <script>
-      System.import('app/main').then(null, console.error.bind(console));
-    </script>
+    <script>System.import('app/main').then(null, console.error.bind(console));</script>
   </head>
   <body>
     <my-app>Loading...</my-app>
   </body>
-
-  <script src="scripts/jquery.js"></script>
-  <script src="scripts/bootstrap.min.js"></script>
-  <script src="scripts/jquery.prettyPhoto.js"></script>
-  <script src="scripts/jquery.isotope.min.js"></script>
-  <script src="scripts/main.js"></script>
-  <script src="scripts/wow.min.js"></script>
-  <script src="scripts/bootstrap-year-calendar.js"></script>
-  <script src="scripts/bootstrap-year-calendar.fr.js"></script>
+  <script src="scripts/scripts.min.js"></script>
 </html>

@@ -1,14 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "outDir": "dist/server",
     "removeComments": true,
-    "noImplicitAny": false
+    "sourceMap": true,
+    "target": "es6"
   },
   "exclude": [
-    "typings"
+    "node_modules"
+  ],
+  "filesGlob": [
+    "server/src/**/*.ts",
+    "server/typings/*.d.ts"
   ]
 }

@@ -10,7 +10,10 @@ declare let $: JQueryStatic;
   selector: 'calendrier',
   template: '<div #calendrier></div>',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./app/components/calendrier/calendrier.component.css']
+  styleUrls: [
+    './app/components/calendrier/calendrier.component.css',
+    './app/components/calendrier/bootstrap-year-calendar.css'
+  ]
 })
 
 export class CalendrierComponent implements AfterViewInit, OnChanges  {
@@ -34,9 +37,6 @@ export class CalendrierComponent implements AfterViewInit, OnChanges  {
   }
 
   ngAfterViewInit(): void {
-    this.miseAJourDate();
-    this.miseAJourDates();
-
     $(this.calendrier.nativeElement).calendar({
         clickDay: (e) => { this.clickDay(e); },
         customDayRenderer: (element, date) => { this.customDayRenderer(element, date); },
@@ -47,6 +47,9 @@ export class CalendrierComponent implements AfterViewInit, OnChanges  {
         numDisplayedMonth: 1,
         numDisplayedMonthHeader: 3
     });
+
+    this.miseAJourDate();
+    this.miseAJourDates();
   }
 
   miseAJourDate(): void {

@@ -35,29 +35,29 @@
 			}
 
 			this.options = {
-				startYear: !isNaN(parseInt(opt.startYear)) ? parseInt(opt.startYear) : new Date().getFullYear(),
-				startMonth: !isNaN(parseInt(opt.startMonth)) ? parseInt(opt.startMonth) : new Date().getMonth(),
-				numDisplayedMonth: !isNaN(parseInt(opt.numDisplayedMonth)) ? parseInt(opt.numDisplayedMonth) : 12,
-				numDisplayedMonthHeader: !isNaN(parseInt(opt.numDisplayedMonthHeader)) ? parseInt(opt.numDisplayedMonthHeader) : 12,
-				displayMonthHeader: opt.displayMonthHeader != null ? opt.displayMonthHeader : false,
-				minDate: opt.minDate instanceof Date ? opt.minDate : null,
-				maxDate: opt.maxDate instanceof Date ? opt.maxDate : null,
-				language: (opt.language != null && dates[opt.language] != null) ? opt.language : 'en',
 				allowOverlap: opt.allowOverlap != null ? opt.allowOverlap : true,
-				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
 				alwaysHalfDay: opt.alwaysHalfDay != null ? opt.alwaysHalfDay : false,
-				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
-				enabledDays: opt.enabledDays instanceof Array ? opt.enabledDays : [],
-				disabledDays: opt.disabledDays instanceof Array ? opt.disabledDays : [],
+				contextMenuItems: opt.contextMenuItems instanceof Array ? opt.contextMenuItems : [],
+				customDataSourceRenderer : $.isFunction(opt.customDataSourceRenderer) ? opt.customDataSourceRenderer : null,
+				customDayRenderer : $.isFunction(opt.customDayRenderer) ? opt.customDayRenderer : null,
+				dataSource: opt.dataSource instanceof Array != null ? opt.dataSource : [],
 				disableNext2Year: opt.disableNext2Year != null ? opt.disableNext2Year : false,
 				disablePrev2Year: opt.disablePrev2Year != null ? opt.disablePrev2Year : false,
-				roundRangeLimits: opt.roundRangeLimits != null ? opt.roundRangeLimits : false,
-				dataSource: opt.dataSource instanceof Array != null ? opt.dataSource : [],
-				style: opt.style == 'background' || opt.style == 'border' || opt.style == 'custom' ? opt.style : 'border',
+				disabledDays: opt.disabledDays instanceof Array ? opt.disabledDays : [],
+				displayMonthHeader: opt.displayMonthHeader != null ? opt.displayMonthHeader : false,
+				displayWeekNumber: opt.displayWeekNumber != null ? opt.displayWeekNumber : false,
 				enableContextMenu: opt.enableContextMenu != null ? opt.enableContextMenu : false,
-				contextMenuItems: opt.contextMenuItems instanceof Array ? opt.contextMenuItems : [],
-				customDayRenderer : $.isFunction(opt.customDayRenderer) ? opt.customDayRenderer : null,
-				customDataSourceRenderer : $.isFunction(opt.customDataSourceRenderer) ? opt.customDataSourceRenderer : null
+				enableRangeSelection: opt.enableRangeSelection != null ? opt.enableRangeSelection : false,
+				enabledDays: opt.enabledDays instanceof Array ? opt.enabledDays : [],
+				language: (opt.language != null && dates[opt.language] != null) ? opt.language : 'en',
+				maxDate: opt.maxDate instanceof Date ? opt.maxDate : null,
+				minDate: opt.minDate instanceof Date ? opt.minDate : null,
+				numDisplayedMonth: !isNaN(parseInt(opt.numDisplayedMonth)) ? parseInt(opt.numDisplayedMonth) : 12,
+				numDisplayedMonthHeader: !isNaN(parseInt(opt.numDisplayedMonthHeader)) ? parseInt(opt.numDisplayedMonthHeader) : 12,
+				roundRangeLimits: opt.roundRangeLimits != null ? opt.roundRangeLimits : false,
+				startMonth: !isNaN(parseInt(opt.startMonth)) ? parseInt(opt.startMonth) : new Date().getMonth(),
+				startYear: !isNaN(parseInt(opt.startYear)) ? parseInt(opt.startYear) : new Date().getFullYear(),
+				style: opt.style == 'background' || opt.style == 'border' || opt.style == 'custom' ? opt.style : 'border'
 			};
 
 			this._initializeDatasourceColors();
@@ -67,12 +67,12 @@
 				opt = [];
 			}
 
-			if(opt.renderEnd) { this.element.bind('renderEnd', opt.renderEnd); }
 			if(opt.clickDay) { this.element.bind('clickDay', opt.clickDay); }
 			if(opt.dayContextMenu) { this.element.bind('dayContextMenu', opt.dayContextMenu); }
-			if(opt.selectRange) { this.element.bind('selectRange', opt.selectRange); }
 			if(opt.mouseOnDay) { this.element.bind('mouseOnDay', opt.mouseOnDay); }
 			if(opt.mouseOutDay) { this.element.bind('mouseOutDay', opt.mouseOutDay); }
+			if(opt.renderEnd) { this.element.bind('renderEnd', opt.renderEnd); }
+			if(opt.selectRange) { this.element.bind('selectRange', opt.selectRange); }
 		},
 		_initializeDatasourceColors: function() {
 			for(var i in this.options.dataSource) {
@@ -842,8 +842,6 @@
             this.element.find('td.day.range-end').removeClass('range-end');
 
             if (this._mouseDown) {
-                var beforeRange = true;
-                var afterRange = false;
                 var minDate = _this._rangeStart < _this._rangeEnd ? _this._rangeStart : _this._rangeEnd;
                 var maxDate = _this._rangeEnd > _this._rangeStart ? _this._rangeEnd : _this._rangeStart;
 
@@ -1190,12 +1188,12 @@
 	}
 
 	/* Events binding management */
-	$.fn.renderEnd = function(fct) { $(this).bind('renderEnd', fct); }
 	$.fn.clickDay = function(fct) { $(this).bind('clickDay', fct); }
 	$.fn.dayContextMenu = function(fct) { $(this).bind('dayContextMenu', fct); }
-	$.fn.selectRange = function(fct) { $(this).bind('selectRange', fct); }
 	$.fn.mouseOnDay = function(fct) { $(this).bind('mouseOnDay', fct); }
 	$.fn.mouseOutDay = function(fct) { $(this).bind('mouseOutDay', fct); }
+	$.fn.renderEnd = function(fct) { $(this).bind('renderEnd', fct); }
+	$.fn.selectRange = function(fct) { $(this).bind('selectRange', fct); }
 
 	var dates = $.fn.calendar.dates = {
 		en: {

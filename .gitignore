@@ -2,8 +2,10 @@
 # Directories
 #---------------------------------
 node_modules
-client/typings/*
-!client/typings/manual
+client/typings/index.d.ts
+client/typings/modules/*
+client/typings/globals/*
+!client/typings/globals/bootstrap-year-calendar
 server/typings/*
 dist
 

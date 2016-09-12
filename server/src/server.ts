@@ -4,10 +4,8 @@ import { Routes } from './config/routes/routes';
 import bodyParser = require('body-parser');
 import path = require('path');
 
-import { Journal } from './config/utils';
 import { Robots } from './robots/robots';
 
-let journal: Journal = new Journal();
 let port: number = process.env.PORT || 3000;
 let app = express();
 
@@ -30,7 +28,8 @@ app.get('/*', renderIndex);
 let server = app.listen(port, () => {
     let host = server.address().address;
     let port = server.address().port;
-    journal.debug('Cette application Express écoute sur le port %d à l\'adresse %s', port, host);
+
+    console.log('Cette application Express écoute sur le port %d à l\'adresse %s', port, host);
 
     new Robots().miseAJour();
 });

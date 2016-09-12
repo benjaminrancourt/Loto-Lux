@@ -60,6 +60,13 @@ gulp.task('tslint:client', () => {
     .pipe(tslint({ formatter: 'prose' }))
     .pipe(tslint.report());
 });
+
+gulp.task('tslint:specs', () => {
+  return gulp
+    .src(['server/src/**/*.spec.ts', 'client/app/**/*.spec.ts'])
+    .pipe(tslint({ formatter: 'prose' }))
+    .pipe(tslint.report());
+});
 //END - Lint ***********************************************************
 
 //BEGIN - Compilation *********************************************************
@@ -81,6 +88,16 @@ gulp.task('compile:server', ['tslint:server'], function () {
 
 gulp.task('compile:client', ['tslint:client'], function(){
   return compile(tscConfigClient);
+});
+
+gulp.task('compile:specs', ['tslint:specs'], function(){
+  var specsClient = tscConfigClient;
+  specsClient.filesGlob = ["client/app/**/*.spec.ts", "client/typings/*.d.ts"];
+
+  var specsServe = tscConfigServer;
+  specsServe.filesGlob = ["server/src/**/*.spec.ts", "server/typings/*.d.ts"];
+
+  return compile(specsClient) && compile(specsServe);
 });
 //END - Compilation ***********************************************************
 

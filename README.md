@@ -1,6 +1,7 @@
 # Loto-Lux
-[![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](http://stackshare.io/ranb2002/loto-lux)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
+[![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](http://stackshare.io/ranb2002/loto-lux)
+[![Build Status](https://travis-ci.org/ranb2002/Loto-Lux.svg?branch=master)](https://travis-ci.org/ranb2002/Loto-Lux)
 [![Dependency Status](https://david-dm.org/ranb2002/loto-lux.svg)](https://david-dm.org/ranb2002/loto-lux)
 [![devDependency Status](https://david-dm.org/ranb2002/loto-lux/dev-status.svg)](https://david-dm.org/ranb2002/loto-lux#info=devDependencies)
 

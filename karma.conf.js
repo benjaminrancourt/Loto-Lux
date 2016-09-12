@@ -4,18 +4,18 @@ module.exports = function(config) {
 
     frameworks: ['jasmine'],
 
-    browsers: process.env.TRAVIS ? ['Chrome_travis_ci'] : ['Chrome'],
     plugins: [
       'karma-jasmine',
       'karma-coverage',
       'karma-chrome-launcher'
     ],
 
-    systemjs: {
-      serveFiles: [
-        'node_modules/**/*.js',
-        'app/**/*.js'
-      ]
+    browsers: process.env.TRAVIS ? ['Chrome_travis_ci'] : ['Chrome'],
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
     },
 
     files: [
@@ -73,13 +73,6 @@ module.exports = function(config) {
         {type: 'json', subdir: '.', file: 'coverage-final.json'}
       ]
     },
-
-    customLaunchers: {
-      Chrome_travis_ci: {
-        base: 'Chrome',
-        flags: ['--no-sandbox']
-      }
-		},
 
     singleRun: true
   });

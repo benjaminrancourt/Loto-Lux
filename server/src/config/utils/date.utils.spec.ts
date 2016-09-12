@@ -64,14 +64,4 @@ describe('La classe « DateUtils » fonctionne', () => {
       expect(resultat).toEqual(dateStringBD);
     });
   });
-
-  /*describe('si sa fonction « replaceAll » fonctionne', () => {
-    it('si ses résultats sont corrects', () => {
-      let resultat: any = DateUtils.replaceAll(dateString, '-', '/');
-      expect(resultat).toEqual(dateStringBD);
-
-      resultat = DateUtils.replaceAll(dateStringBD, '/', '-');
-      expect(resultat).toEqual(dateString);
-    });
-  });*/
 });

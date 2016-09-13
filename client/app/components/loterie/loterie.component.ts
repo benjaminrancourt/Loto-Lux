@@ -32,7 +32,7 @@ export class LoterieComponent implements OnInit, OnChanges {
   }
 
   titre(): string {
-    return this.petitComposant ? this.loterie.nom + ' - ' + this.tirage.date : 'Lot principal';
+    return this.petitComposant ? this.loterie.nom + ' — ' + this.tirage.date : 'Lot principal';
   }
 
   //Retourne vrai si le numéro à la i-ième position est un numéro complémentaire
@@ -43,5 +43,10 @@ export class LoterieComponent implements OnInit, OnChanges {
   //Retourne vrai s'il faut ajouter un séparateur entre chaque numéro
   avecSeparateur(i: number): boolean {
     return this.loterie.avecSeparateur && i < this.loterie.dernierTirage.principal.length - 1;
+  }
+
+  //Retourne vrai s'il y a des résultats secondaires à afficher
+  afficherResultatsSecondaires(): boolean {
+    return !this.petitComposant && this.tirage.secondaire && this.tirage.secondaire.length > 0;
   }
 }

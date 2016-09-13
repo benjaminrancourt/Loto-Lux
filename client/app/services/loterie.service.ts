@@ -3,12 +3,13 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { Loterie } from '../models/loterie.model';
+import { Service } from './';
 
 @Injectable()
-export class LoterieService {
-  private url: string = 'api/loteries';  // URL to web api
-
-  constructor(private http: Http) { }
+export class LoterieService extends Service {
+  constructor(private http: Http) {
+    super('api/loteries');
+  }
 
   recuperer(): Promise<Loterie[]> {
     return this.http.get(this.url)
@@ -18,7 +19,7 @@ export class LoterieService {
   }
 
   recupererParURL(loterie: string): Promise<Loterie> {
-    return this.http.get(this.url + '/' + loterie)
+    return this.http.get(this.construireURL([loterie]))
       .toPromise()
       .then(response => response.json())
       .catch(this.handleError);

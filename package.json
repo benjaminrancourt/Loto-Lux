@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "Application présentant les résultats de différentes loteries",
   "engines": {
-    "node": "5.9.1"
+    "node": "6.5.0"
   },
   "main": "dist/server/server.js",
   "scripts": {

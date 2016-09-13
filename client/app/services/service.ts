@@ -1,6 +1,6 @@
 export class Service {
+  protected url: string;
   private SEPARATEUR: string = '/';
-  private url: string;
 
   constructor(url: string) {
     this.url = url;

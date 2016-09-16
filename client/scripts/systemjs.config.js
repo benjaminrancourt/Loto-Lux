@@ -21,7 +21,8 @@
 
       'rxjs': 'https://unpkg.com/rxjs@5.0.0-beta.6',
       'moment': 'npm:moment',
-      'angular2-moment': 'npm:angular2-moment'
+      'angular2-moment': 'npm:angular2-moment',
+      'angular2-jwt': 'npm:angular2-jwt/angular2-jwt.js'
     },
 
     packages: {
@@ -45,7 +46,8 @@
       'angular2-moment': {
         main: './index.js',
         defaultExtension: 'js'
-      }
+      },
+      'angular2-jwt': { defaultExtension: 'js' }
     }
   });
 })(this);

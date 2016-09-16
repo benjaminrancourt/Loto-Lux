@@ -42,8 +42,8 @@ export class Robot {
   }
 
   public supprimer(): void {
-    this.tirageService.supprimerToutes(null);
-    this.dateService.supprimerToutes(null);
+    this.tirageService.supprimerToutes(() => { return; });
+    this.dateService.supprimerToutes(() => { return; });
   }
 
   //Permet de déterminer si les résultats des tirages ont déjà été téléchargés
@@ -195,12 +195,12 @@ export class Robot {
 
     this.tirageService.creer(tirage, (erreur) => {
       if (!erreur) {
-        this.loterieService.mettreAJourDernierTirage(this.loterie.url, tirage.toJSON(), null);
+        this.loterieService.mettreAJourDernierTirage(this.loterie.url, tirage.toJSON(), () => { return; });
 
         let date: Date = new Date(tirage.date, true);
         this.dateService.creer(date, (erreur) => {
           if (erreur) {
-            this.tirageService.supprimer(tirage, null);
+            this.tirageService.supprimer(tirage, () => { return; });
           }
         });
       }

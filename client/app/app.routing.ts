@@ -5,6 +5,11 @@ import { AccueilComponent, LoteriesComponent, LoterieDetailComponent } from './c
 
 const appRoutes: Routes = [
   {
+    path: '',
+    redirectTo: 'accueil',
+    pathMatch: 'full'
+  },
+  {
     path: 'accueil',
     component: AccueilComponent
   },

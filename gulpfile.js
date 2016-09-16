@@ -233,7 +233,9 @@ gulp.task('libraries:js', () => {
     '@angular/forms/bundles/forms.umd.js',
 
     'moment/min/moment-with-locales.min.js',
-    'angular2-moment/*.js'
+    'angular2-moment/*.js',
+
+    'angular2-jwt/angular2-jwt.js'
   ], {cwd: 'node_modules/**'})
     .pipe(gulp.dest('dist/client/libs'));
 });
@@ -244,7 +246,8 @@ gulp.task('libraries:map', () => {
       'core-js/client/shim.min.js.map',
       'reflect-metadata/Reflect.js.map',
       'angular2-moment/*.js.map',
-      'angular2-moment/src/*.ts'
+      'angular2-moment/src/*.ts',
+      'angular2-jwt/angular2-jwt.js.map'
     ], {cwd: 'node_modules/**'})
     .pipe(gulp.dest('dist/client/libs'));
 });

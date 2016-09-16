@@ -6,6 +6,7 @@ module.exports = function(config) {
 
     plugins: [
       'karma-jasmine',
+      'karma-mocha-reporter',
       'karma-coverage',
       'karma-chrome-launcher'
     ],
@@ -66,7 +67,7 @@ module.exports = function(config) {
       'dist/**/!(*spec).js': ['coverage']
     },
 
-    reporters: ['progress', 'dots', 'coverage'],
+    reporters: ['mocha', 'coverage'],
 
     coverageReporter: {
       reporters:[

@@ -3,11 +3,22 @@ import express = require('express');
 import { Routes } from './config/routes/routes';
 import bodyParser = require('body-parser');
 import path = require('path');
+import replace = require('replace');
 
 import { Robots } from './robots/robots';
 
 let port: number = process.env.PORT || 3000;
 let app = express();
+let ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
+
+console.log('process.env.NODE_ENV = ' + '\'' + ENV + '\'');
+replace({
+  regex: 'process.env.NODE_ENV',
+  replacement: '\'' + ENV + '\'',
+  paths: ['./dist/client/app/main.js'],
+  recursive: true,
+  silent: true
+});
 
 app.use('/app', express.static(path.resolve(__dirname, '../client/app')));
 app.use('/libs', express.static(path.resolve(__dirname, '../client/libs')));

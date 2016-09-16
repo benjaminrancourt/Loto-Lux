@@ -1,7 +1,8 @@
-import { NgModule }      from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
-import { HttpModule }    from '@angular/http';
+import { NgModule }       from '@angular/core';
+import { BrowserModule }  from '@angular/platform-browser';
+import { FormsModule }    from '@angular/forms';
+import { HttpModule }     from '@angular/http';
+import { AUTH_PROVIDERS } from 'angular2-jwt';
 
 import { DateFormatPipe } from 'angular2-moment';
 import moment from 'moment';
@@ -43,7 +44,7 @@ moment.locale('fr-ca');
     AppComponent
   ],
   providers: [
-    DateService, LoterieService, TirageService
+    AUTH_PROVIDERS, DateService, LoterieService, TirageService
   ],
   bootstrap: [ AppComponent ]
 })

@@ -1,17 +1,20 @@
-import { Injectable }        from '@angular/core';
-import { tokenNotExpired }   from 'angular2-jwt';
+import { Injectable } from '@angular/core';
+import { Headers, Http, RequestOptions } from '@angular/http';
+import { tokenNotExpired } from 'angular2-jwt';
 
 import { AuthConfiguration } from './auth.config';
-import { Utilisateur }       from './../models';
+import { Utilisateur } from './../models';
+import { Service } from './';
 
 declare var Auth0Lock: any;
 
 @Injectable()
-export class AuthService {
+export class AuthService extends Service {
   lock: any;
   utilisateur: Utilisateur;
 
-  constructor() {
+  constructor(private http: Http) {
+    super('api/utilisateurs');
     this.lock = new Auth0Lock(AuthConfiguration.ID_CLIENT, AuthConfiguration.DOMAINE, AuthConfiguration.OPTIONS);
     this.lock.on('authenticated', (resultats) => this.authentification(resultats));
   }
@@ -28,7 +31,6 @@ export class AuthService {
 
   //Déconnecte l'utilisateur en supprimant ces informations locales
   public deconnexion(): void {
-    console.log('deconnexion');
     localStorage.removeItem(AuthConfiguration.ID_TOKEN);
     localStorage.removeItem(AuthConfiguration.UTILISATEUR);
   }
@@ -43,8 +45,25 @@ export class AuthService {
 
       this.utilisateur = new Utilisateur(resultat.idToken, profile);
 
-      localStorage.setItem(AuthConfiguration.ID_TOKEN, resultat.idToken);
-      localStorage.setItem(AuthConfiguration.UTILISATEUR, JSON.stringify(this.utilisateur));
+      this.enregistrementConnexion().then((connexionEnregistree: boolean) => {
+        localStorage.setItem(AuthConfiguration.ID_TOKEN, resultat.idToken);
+        localStorage.setItem(AuthConfiguration.UTILISATEUR, JSON.stringify(this.utilisateur));
+      });
     });
+  }
+
+  //Demande l'enregistrement de la connexion au serveur
+  private enregistrementConnexion(): Promise<boolean> {
+    let url: string = this.construireURL(['connexion']);
+    let corps: string = JSON.stringify(this.utilisateur);
+    let entetes: Headers = new Headers({ 'Content-Type': 'application/json' });
+    let options: RequestOptions = new RequestOptions({ headers: entetes });
+
+    console.log('enregistrementConnexion ' + corps);
+
+    return this.http.post(url, corps, options)
+      .toPromise()
+      .then(response => response.json())
+      .catch(this.handleError);
   }
 }

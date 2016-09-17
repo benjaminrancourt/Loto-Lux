@@ -6,6 +6,11 @@ export class Service {
     this.url = url;
   }
 
+  protected handleError(error: any): Promise<void>  {
+    console.error('An error occurred', error);
+    return Promise.reject(error.message || error);
+  }
+
   protected construireURL(vars: string[]): string {
     let variables: string[] = [this.url].concat(vars);
     return this.concatener(variables);

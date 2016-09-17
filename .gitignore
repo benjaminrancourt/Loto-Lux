@@ -33,6 +33,8 @@ dist
 *.iml
 /nbproject/private/
 /nbproject
+/server/nbproject
+/client/nbproject
 
 #---------------------------------
 # OS generated

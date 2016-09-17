@@ -2,7 +2,9 @@ import express = require('express');
 import { DateController,
   LoterieController,
   //SelectionController,
-  TirageController } from './../../controllers';
+  TirageController,
+  UtilisateurController
+} from './../../controllers';
 
 let router = express.Router();
 
@@ -11,12 +13,14 @@ export class LoterieRoutes {
   private loterieController: LoterieController;
   //private selectionController: SelectionController;
   private tirageController: TirageController;
+  private utilisateurController: UtilisateurController;
 
   constructor() {
     this.dateController = new DateController();
     this.loterieController = new LoterieController();
     //this.selectionController = new SelectionController();
     this.tirageController = new TirageController();
+    this.utilisateurController = new UtilisateurController();
   }
 
   get routes(): any {

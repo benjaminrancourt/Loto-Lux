@@ -1,0 +1,9 @@
+<div [ngClass]="loterie.url">
+  <h3 class="media-heading">Vos sélections</h3>
+  <div class="numeros list-group" *ngFor="let numeros of tirage.secondaire">
+    <span *ngFor="let num of numeros; let i = index"
+      class="num">
+      {{num}}
+    </span>
+  </div>
+</div>

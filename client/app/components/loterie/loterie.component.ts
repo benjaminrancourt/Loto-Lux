@@ -37,12 +37,12 @@ export class LoterieComponent implements OnInit, OnChanges {
 
   //Retourne vrai si le numéro à la i-ième position est un numéro complémentaire
   estComplementaire(i: number): boolean {
-    return this.loterie.avecComplementaire && i === this.loterie.dernierTirage.principal.length - 1;
+    return this.loterie.avecComplementaire && i === this.tirage.principal.length - 1;
   }
 
   //Retourne vrai s'il faut ajouter un séparateur entre chaque numéro
   avecSeparateur(i: number): boolean {
-    return this.loterie.avecSeparateur && i < this.loterie.dernierTirage.principal.length - 1;
+    return this.loterie.avecSeparateur && i < this.tirage.principal.length - 1;
   }
 
   //Retourne vrai s'il y a des résultats secondaires à afficher

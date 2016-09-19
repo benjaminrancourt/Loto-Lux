@@ -1,6 +1,6 @@
 h3.media-heading {
-  margin-top: 15px;
   margin-bottom: 10px;
+  margin-top: 15px;
 }
 
 .media>.pull-left{
@@ -37,6 +37,11 @@ h3.media-heading {
   color: #313946;
 }
 
+.extra .numeros .num {
+  background-color: #fff;
+  color: #313946;
+}
+
 .numeros .complementaire,
 .numeros .num {
   float: left;
@@ -46,10 +51,6 @@ h3.media-heading {
   margin-right: 1.5%;
   text-align: center;
   width: 30px;
-}
-
-.extra .numeros .num {
-  width: auto;
 }
 
 .num-sep {
@@ -67,14 +68,14 @@ h3.media-heading {
 }
 
 .complementaireGauche {
+  -moz-border-radius: 24px 0 0 24px;
+  background-color: #0279b5;
+  border-radius: 24px 0 0 24px;
+  border-right: 0;
+  border: 2px solid #fff;
   float: left;
   height: 24px;
   width: 16px;
-  background-color: #0279b5;
-  -moz-border-radius: 24px 0 0 24px;
-  border-radius: 24px 0 0 24px;
-  border: 2px solid #fff;
-  border-right: 0;
 }
 
 .complementaireCentre {
@@ -92,25 +93,25 @@ h3.media-heading {
 }
 
 .complementaireDroite {
+  -moz-border-radius: 0 24px 24px 0;
+  background-color: #0279b5;
+  border-left: 0;
+  border-radius: 0 24px 24px 0;
+  border: 2px solid #fff;
   float: left;
   height: 24px;
   width: 16px;
-  background-color: #0279b5;
-  -moz-border-radius: 0 24px 24px 0;
-  border-radius: 0 24px 24px 0;
-  border: 2px solid #fff;
-  border-left: 0;
 }
 
 .numeros .complementaire {
-  background-color: #0279b5;
   -moz-border-radius: 24px;
+  background-color: #0279b5;
   border-radius: 24px;
   border: 2px solid #fff;
   color: #fff;
+  line-height: 24px;
   margin-left: 1.5%;
   margin-top: 1%;
-  line-height: 24px;
 }
 
 .list-group {
@@ -119,6 +120,6 @@ h3.media-heading {
 
 .list-group:after {
   clear: both;
-  display: block;
   content: "";
+  display: block;
 }

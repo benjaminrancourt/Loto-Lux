@@ -46,8 +46,10 @@ export class AuthService extends Service {
       this.utilisateur = new Utilisateur(resultat.idToken, profile);
 
       this.enregistrementConnexion().then((connexionEnregistree: boolean) => {
-        localStorage.setItem(AuthConfiguration.ID_TOKEN, resultat.idToken);
-        localStorage.setItem(AuthConfiguration.UTILISATEUR, JSON.stringify(this.utilisateur));
+        if (connexionEnregistree) {
+          localStorage.setItem(AuthConfiguration.ID_TOKEN, resultat.idToken);
+          localStorage.setItem(AuthConfiguration.UTILISATEUR, JSON.stringify(this.utilisateur));
+        }
       });
     });
   }

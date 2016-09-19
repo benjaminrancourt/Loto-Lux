@@ -8,6 +8,7 @@
 
       'components': './app/components',
       'models': './app/models',
+      'selections': './app/selections',
       'services': './app/services',
 
       '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
@@ -33,6 +34,7 @@
 
       components: { main: 'index' },
       models: { main: 'index' },
+      selections: { main: 'index' },
       services: { main: 'index' },
 
       rxjs: {

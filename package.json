@@ -47,6 +47,7 @@
     "gulp": "^3.9.1",
     "gulp-clean-css": "^2.0.12",
     "gulp-concat": "^2.6.0",
+    "gulp-csslint": "^1.0.0",
     "gulp-nodemon": "^2.1.0",
     "gulp-purifycss": "^0.2.0",
     "gulp-sourcemaps": "^2.0.0-alpha",

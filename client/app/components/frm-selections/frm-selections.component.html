@@ -1,0 +1,19 @@
+<div *ngIf="selectionVide" [ngClass]="loterie.url">
+  <h3 class="media-heading">Ajouter de nouvelles sélections</h3>
+  <form [formGroup]="formulaire" (ngSubmit)="onSubmit()" class="numeros">
+
+      <input
+        *ngFor="let num of selectionVide; let i = index; trackBy: trackByIdx;"
+        class="num" type="number"
+        name="num_{{i}}" id="num_{{i}}"
+        formControlName="num_{{i}}"
+        [(ngModel)]="selectionVide[i]"
+        [class.valide]="numeroValide(i)" [class.invalide]="!numeroValide(i)"
+        min="{{selection.minimum}}" max="{{selection.maximum}}"
+      />
+
+    <button class="btn btn-primary">Supprimer</button>
+    <button class="btn btn-primary">Ajouter</button>
+    <button class="btn btn-primary" [disabled]="!(formulaire.valid && selectionsValides())">Sauvegarder</button>
+  </form>
+</div>

@@ -1,14 +1,14 @@
 .navbar-brand {
-  padding: 0;
   margin:0;
+  padding: 0;
 }
 
 .navbar {
+  background: #151515;
   border-radius: 0;
   margin-bottom: 0;
-  background: #151515;
-  padding: 15px 0;
   padding-bottom: 0;
+  padding: 15px 0;
 }
 
  .navbar-nav{
@@ -21,12 +21,12 @@
 }
 
 .navbar-inverse .navbar-nav > li > a {
-  padding: 5px 12px;
-  margin: 0;
   border-radius: 3px;
   color: #fff;
-  line-height: 24px;
   display: inline-block;
+  line-height: 24px;
+  margin: 0;
+  padding: 5px 12px;
 }
 
 .navbar-inverse .navbar-nav > li > a:hover{
@@ -39,9 +39,9 @@
 }
 
 .navbar-inverse .navbar-brand {
+  color: #fff;
   font-size: 36px;
   line-height: 50px;
-  color: #fff;
 }
 
 .navbar-inverse .navbar-nav > li > a.active,
@@ -55,16 +55,16 @@
 }
 
 .navbar-inverse .navbar-nav .dropdown-menu {
-  background-color: rgba(0,0,0,.85);
-  -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125);
   -moz-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125);
-  border: 0;
-  padding: 0;
-  margin-top: 0;
-  border-top: 0;
+  -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125);
+  background-color: rgba(0,0,0,.85);
   border-radius: 0;
+  border-top: 0;
+  border: 0;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125);
   left: 0;
+  margin-top: 0;
+  padding: 0;
 }
 
 .navbar-inverse .navbar-nav .dropdown-menu:before{
@@ -73,8 +73,8 @@
 }
 
 .navbar-inverse .navbar-nav .dropdown-menu > li > a {
-  padding: 8px 15px;
   color: #fff;
+  padding: 8px 15px;
 }
 
 .navbar-inverse .navbar-nav .dropdown-menu > li:hover > a,

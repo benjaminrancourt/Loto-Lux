@@ -1,9 +1,9 @@
 #footer {
-  padding-top: 30px;
-  padding-bottom: 30px;
-  color: #fff;
   background: #2e2e2e;
   border-top: 5px solid #c52d2f;
+  color: #fff;
+  padding-bottom: 30px;
+  padding-top: 30px;
 }
 
 #footer a {
@@ -16,8 +16,8 @@
 
 #footer ul {
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
 #footer ul > li {

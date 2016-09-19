@@ -2,8 +2,9 @@
 
 const gulp = require('gulp'),
       del = require('del'),
-      cleanCSS = require('gulp-clean-css'),
+      csslint = require('gulp-csslint'),
       tsc = require('gulp-typescript'),
+      environments = require('gulp-environments'),
       concat = require('gulp-concat'),
       purify = require('gulp-purifycss'),
       sourcemaps = require('gulp-sourcemaps'),
@@ -14,6 +15,11 @@ const gulp = require('gulp'),
       gulpTypings = require('gulp-typings'),
       builder = require('systemjs-builder'),
       browserSync = require('browser-sync').create();
+
+var development = environments.development;
+var production = environments.production;
+var ENV = production() ? 'production' : 'development';
+console.log('gulpfile.js - ' + ENV);
 
 const tscConfigServer = require('./server/tsconfig.json');
 const tscConfigClient = require('./client/tsconfig.json');
@@ -32,9 +38,9 @@ gulp.task('typings:client', function (callback) {
     .src('client/typings.json')
     .pipe(gulpTypings());
 });
-//END - Typings *****************************************************************
+//END - Typings ****************************************************************
 
-//BEGIN - Clean ***************************************************************
+//BEGIN - Clean ****************************************************************
 gulp.task('clean', ['clean:server', 'clean:client']);
 
 gulp.task('clean:server', (cb) => {
@@ -44,9 +50,9 @@ gulp.task('clean:server', (cb) => {
 gulp.task('clean:client', (cb) => {
   return del(['dist/client'], cb);
 });
-//END - Clean *****************************************************************
+//END - Clean ******************************************************************
 
-//BEGIN - Lint ****************************************************************
+//BEGIN - Lint *****************************************************************
 gulp.task('tslint:server', () => {
   return gulp
     .src('server/src/**/*.ts')
@@ -67,9 +73,16 @@ gulp.task('tslint:specs', () => {
     .pipe(tslint({ formatter: 'prose' }))
     .pipe(tslint.report());
 });
-//END - Lint ***********************************************************
 
-//BEGIN - Compilation *********************************************************
+gulp.task('tslint:css-composants', () => {
+  return gulp
+    .src('client/app/components/**/*.css')
+    .pipe(csslint('.csslintrc'))
+    .pipe(csslint.formatter());
+});
+//END - Lint *******************************************************************
+
+//BEGIN - Compilation **********************************************************
 function compile(tscConfig) {
   return gulp
     .src(tscConfig.filesGlob)
@@ -99,9 +112,9 @@ gulp.task('compile:specs', ['tslint:specs'], function(){
 
   return compile(specsClient) && compile(specsServe);
 });
-//END - Compilation ***********************************************************
+//END - Compilation ************************************************************
 
-//BEGIN - Ressources *********************************************************
+//BEGIN - Ressources ***********************************************************
 gulp.task('ressources', function(callback) {
   runSequence(
     'ressources:fonts', 'ressources:html',
@@ -109,7 +122,7 @@ gulp.task('ressources', function(callback) {
     'ressources:css', callback);
 });
 
-//  CSS ******************************************************
+//  CSS ************************************************************************
 gulp.task('ressources:css', ['ressources:css-global', 'ressources:css-composants']);
 
 var optionsPurify = {
@@ -123,25 +136,29 @@ var optionsPurify = {
 gulp.task('ressources:css-global', function() {
   return gulp
     .src(['client/css/*.css', '!client/css/font-awesome.css'])
-    .pipe(purify(['dist/client/app/**/*.js', 'dist/client/scripts/**/*.js', 'dist/client/**/*.html'],
-      optionsPurify))
+    .pipe(production(
+      purify(['dist/client/app/**/*.js',
+        'dist/client/scripts/**/*.js',
+        'dist/client/**/*.html'], optionsPurify)
+     ))
     .pipe(concat('global.min.css'))
-    .pipe(cleanCSS())
     .pipe(gulp.dest('dist/client/css'))
     .pipe(browserSync.stream());
 });
 
-gulp.task('ressources:css-composants', function() {
+gulp.task('ressources:css-composants', ['tslint:css-composants'], function() {
   return gulp
     .src('client/app/components/**/*.css')
-    .pipe(purify(['dist/client/app/**/*.js', 'dist/client/scripts/**/*.js', 'dist/client/**/*.html'],
-       optionsPurify))
-    .pipe(cleanCSS())
+    .pipe(production(
+      purify(['dist/client/app/**/*.js',
+        'dist/client/scripts/**/*.js',
+        'dist/client/**/*.html'], optionsPurify)
+     ))
     .pipe(gulp.dest('dist/client/app/components'))
     .pipe(browserSync.stream());
 });
 
-//  Fonts ******************************************************
+//  Fonts **********************************************************************
 gulp.task('ressources:fonts', function() {
   return gulp
     .src('client/fonts/**/*')
@@ -149,7 +166,7 @@ gulp.task('ressources:fonts', function() {
     .pipe(browserSync.stream());
 });
 
-//  Html ******************************************************
+//  Html ***********************************************************************
 gulp.task('ressources:html', function() {
   return gulp
     .src('client/**/*.html')
@@ -157,7 +174,7 @@ gulp.task('ressources:html', function() {
     .pipe(browserSync.stream());
 });
 
-//  Images ******************************************************
+//  Images *********************************************************************
 gulp.task('ressources:images', function() {
   return gulp
     .src('client/images/**/*')
@@ -165,7 +182,7 @@ gulp.task('ressources:images', function() {
     .pipe(browserSync.stream());
 });
 
-//  scripts ******************************************************
+//  scripts ********************************************************************
 gulp.task('ressources:scripts', [
   'ressources:scripts-min',
   'ressources:scripts-systemjs',
@@ -195,7 +212,7 @@ gulp.task('ressources:scripts-min', function() {
       '!client/scripts/respond.min.js'
     ])
     .pipe(concat('scripts.min.js'))
-    .pipe(uglify())
+    .pipe(production(uglify()))
     .pipe(gulp.dest('dist/client/scripts'))
     .pipe(browserSync.stream());
 });
@@ -207,11 +224,11 @@ gulp.task('ressources:scripts-ie9', function() {
       'client/scripts/respond.min.js'
     ])
     .pipe(concat('ie9.min.js'))
-    .pipe(uglify())
+    .pipe(production(uglify()))
     .pipe(gulp.dest('dist/client/scripts'))
     .pipe(browserSync.stream());
 });
-//END - Ressources ***********************************************************
+//END - Ressources *************************************************************
 
 //BEGIN - Librairies ***********************************************************
 gulp.task('libraries', ['libraries:js', 'libraries:map']);
@@ -253,7 +270,7 @@ gulp.task('libraries:map', () => {
 });
 //END - Librairies *************************************************************
 
-//BEGIN - Watch *************************************************************
+//BEGIN - Watch ****************************************************************
 function watch(fichier) {
   console.log('[Client] Resource file ' + fichier.path + ' has been changed. Updating.');
   gulp.src(fichier.path, {base:'client'}).pipe(gulp.dest('dist/client'));
@@ -279,7 +296,7 @@ gulp.task('watch', function () {
   gulp.watch(['client/images/**/*'], ['ressources:images']).on('change', watch);
   gulp.watch(['client/**/*.html'], ['ressources:html']).on('change', watch);
 });
-//END - Watch *************************************************************
+//END - Watch ******************************************************************
 
 // Start the express server with nodemon
 gulp.task('start', function () {

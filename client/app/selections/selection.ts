@@ -3,6 +3,8 @@ export interface ISelectionOptions {
   minimum: number;
   maximum: number;
   regex: string;
+
+  numSelectionsMin?: number;
   verifieDuplicat?: boolean;
 }
 
@@ -12,6 +14,7 @@ export class Selection {
   public maximum: number;
   public regex: string;
 
+  public numSelectionsMin: number;
   protected verifieDuplicat: boolean;
 
   constructor(options: ISelectionOptions) {
@@ -19,6 +22,8 @@ export class Selection {
     this.minimum = options.minimum;
     this.maximum = options.maximum;
     this.regex = options.regex;
+
+    this.numSelectionsMin = options.numSelectionsMin ? options.numSelectionsMin : 1;
     this.verifieDuplicat = options.verifieDuplicat ? options.verifieDuplicat : false;
   }
 

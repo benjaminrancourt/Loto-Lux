@@ -1,19 +1,28 @@
-<div *ngIf="selectionVide" [ngClass]="loterie.url">
+<div *ngIf="selections" [ngClass]="loterie.url">
   <h3 class="media-heading">Ajouter de nouvelles sélections</h3>
-  <form [formGroup]="formulaire" (ngSubmit)="onSubmit()" class="numeros">
-
+  <form [formGroup]="formulaire" (ngSubmit)="enregistrer()">
+    <div class="numeros list-group" *ngFor="let ligne of selections; let i = index; trackBy: trackByIdx;">
       <input
-        *ngFor="let num of selectionVide; let i = index; trackBy: trackByIdx;"
+        *ngFor="let num of ligne; let j = index; trackBy: trackByIdx;"
         class="num" type="number"
-        name="num_{{i}}" id="num_{{i}}"
-        formControlName="num_{{i}}"
-        [(ngModel)]="selectionVide[i]"
-        [class.valide]="numeroValide(i)" [class.invalide]="!numeroValide(i)"
+        formControlName="{{loterie.url}}_{{i}}_{{j}}"
+        name="{{loterie.url}}_{{i}}_{{j}}" id="{{loterie.url}}_{{i}}_{{j}}"
+        [(ngModel)]="selections[i][j]"
+        [class.valide]="numeroValide(i, j)" [class.invalide]="!numeroValide(i, j)"
         min="{{selection.minimum}}" max="{{selection.maximum}}"
       />
-
-    <button class="btn btn-primary">Supprimer</button>
+      <span class="input-group-btn">
+        <button *ngIf="selections.length >= 2"
+          class="btn btn-remove btn-danger" type="button" (click)="suppression(i)">
+          <span class="glyphicon glyphicon-minus"></span>
+        </button>
+        <button *ngIf="i === selections.length - 1"
+          class="btn btn-success btn-add" type="button" (click)="ajout()">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </span>
+    </div>
     <button class="btn btn-primary">Ajouter</button>
-    <button class="btn btn-primary" [disabled]="!(formulaire.valid && selectionsValides())">Sauvegarder</button>
+    <button class="btn btn-primary" [disabled]="!(formulaire.valid && selectionsValides())">Enregistrer</button>
   </form>
 </div>

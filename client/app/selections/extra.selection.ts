@@ -10,4 +10,8 @@ export class ExtraSelection extends Selection {
 
     super(options);
   }
+
+  numeroGagnant(pos: number, selection: number[], tirage: number[]): boolean {
+    return selection[pos] === tirage[pos];
+  }
 }

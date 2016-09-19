@@ -1,3 +1,9 @@
+.extra .numeros .num {
+  background-color: #fff;
+  color: #313946;
+  width: 30px;
+}
+
 input[type=number] {
   -moz-appearance: textfield;
   -webkit-appearance: textfield;
@@ -10,10 +16,10 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-input.ng-valid, .valide  {
+.valide  {
   border: 2px solid #42A948;
 }
 
-input.ng-dirty.ng-invalid, .invalide  {
+.ng-dirty.invalide  {
   border: 2px solid #a94442;
 }

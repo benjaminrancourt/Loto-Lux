@@ -5,3 +5,11 @@
 h3.media-heading {
   margin: 15px 0 10px 5px;
 }
+
+.container {
+  margin-bottom: 30px;
+}
+
+.selections {
+  padding: 1px 10px;
+}

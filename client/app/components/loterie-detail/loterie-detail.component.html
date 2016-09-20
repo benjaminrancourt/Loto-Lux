@@ -16,8 +16,8 @@
       <loterie [loterie]="loterie" [tirage]="tirage"></loterie>
     </div>
 
-    <div class="col-sm-4 col-md-4"></div>
-    <div class="col-sm-8 col-md-8" *ngIf="tirage">
+    <div class="col-sm-4 col-md-4" *ngIf="auth.estAuthentifie()"></div>
+    <div class="col-sm-8 col-md-8" *ngIf="tirage && auth.estAuthentifie()">
       <div class="selections"
            [style.background-color]="loterie.couleur" [ngClass]="loterie.url">
         <frm-selections [loterie]="loterie" [tirage]="tirage"></frm-selections>

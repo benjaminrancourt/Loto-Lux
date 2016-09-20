@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import { AuthService, ISelectionOptions, SelectionService } from './../../services';
 import { Loterie, Tirage } from './../../models';
 import { Selection,
   ExtraSelection,
@@ -24,7 +25,9 @@ export class FrmSelectionsComponent implements OnChanges, OnInit {
   selections: number[][];
   selection: Selection;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,
+    private selectionService: SelectionService,
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     this.buildForm();
@@ -82,7 +85,15 @@ export class FrmSelectionsComponent implements OnChanges, OnInit {
 
   //Enregistre les sélections de l'utilisateur
   enregistrer(): void {
-    console.log('Submit');
+    let options: ISelectionOptions = {
+      loterie: this.loterie.url,
+      date: this.tirage.date,
+      utilisateur: this.authService.getCourriel(),
+      token: this.authService.getToken(),
+      trie: this.selection.trie
+    };
+
+    this.selectionService.ajouter(options, this.selections);
     //this.changementLoterie();
   }
 

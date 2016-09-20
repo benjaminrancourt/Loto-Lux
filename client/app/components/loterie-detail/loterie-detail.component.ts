@@ -3,10 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { DateTirage, Loterie, Tirage } from '../../models';
-import { DateService, LoterieService, TirageService } from '../../services';
+import { AuthService, DateService, LoterieService, TirageService } from '../../services';
 
 @Component({
   selector: 'loterie-detail',
+  providers: [ AuthService ],
   templateUrl: './app/components/loterie-detail/loterie-detail.component.html',
   styleUrls: ['./app/components/loterie-detail/loterie-detail.component.css']
 })
@@ -19,6 +20,7 @@ export class LoterieDetailComponent implements OnInit {
   dates: DateTirage[];
 
   constructor(
+    private auth: AuthService,
     private dateService: DateService,
     private loterieService: LoterieService,
     private tirageService: TirageService,

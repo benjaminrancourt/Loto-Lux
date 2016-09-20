@@ -15,6 +15,9 @@ export class AuthService extends Service {
 
   constructor(private http: Http) {
     super('api/utilisateurs');
+
+    this.utilisateur = JSON.parse(localStorage.getItem(AuthConfiguration.UTILISATEUR));
+
     this.lock = new Auth0Lock(AuthConfiguration.ID_CLIENT, AuthConfiguration.DOMAINE, AuthConfiguration.OPTIONS);
     this.lock.on('authenticated', (resultats) => this.authentification(resultats));
   }
@@ -33,6 +36,14 @@ export class AuthService extends Service {
   public deconnexion(): void {
     localStorage.removeItem(AuthConfiguration.ID_TOKEN);
     localStorage.removeItem(AuthConfiguration.UTILISATEUR);
+  }
+
+  public getCourriel(): string {
+    return this.utilisateur.courriel;
+  }
+
+  public getToken(): string {
+    return this.utilisateur.token;
   }
 
   //Récupère le résultat de l'authentification pour aller chercher certaines informations de son profil
@@ -60,8 +71,6 @@ export class AuthService extends Service {
     let corps: string = JSON.stringify(this.utilisateur);
     let entetes: Headers = new Headers({ 'Content-Type': 'application/json' });
     let options: RequestOptions = new RequestOptions({ headers: entetes });
-
-    console.log('enregistrementConnexion ' + corps);
 
     return this.http.post(url, corps, options)
       .toPromise()

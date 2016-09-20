@@ -24,7 +24,7 @@ import {
   AppComponent
   } from './components';
 
-import { DateService, LoterieService, TirageService } from './services';
+import { DateService, LoterieService, SelectionService, TirageService } from './services';
 import { routing } from './app.routing';
 
 moment.locale('fr-ca');
@@ -50,7 +50,7 @@ moment.locale('fr-ca');
     AppComponent
   ],
   providers: [
-    AUTH_PROVIDERS, DateService, LoterieService, TirageService
+    AUTH_PROVIDERS, DateService, LoterieService, SelectionService, TirageService
   ],
   bootstrap: [ AppComponent ]
 })

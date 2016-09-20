@@ -5,6 +5,7 @@ export interface ISelectionOptions {
   regex: string;
 
   numSelectionsMin?: number;
+  trie?: boolean;
   verifieDuplicat?: boolean;
 }
 
@@ -15,6 +16,7 @@ export class Selection {
   public regex: string;
 
   public numSelectionsMin: number;
+  public trie: boolean;
   protected verifieDuplicat: boolean;
 
   constructor(options: ISelectionOptions) {
@@ -24,6 +26,7 @@ export class Selection {
     this.regex = options.regex;
 
     this.numSelectionsMin = options.numSelectionsMin ? options.numSelectionsMin : 1;
+    this.trie = options.trie ? options.trie : true;
     this.verifieDuplicat = options.verifieDuplicat ? options.verifieDuplicat : false;
   }
 

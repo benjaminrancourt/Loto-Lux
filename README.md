@@ -61,6 +61,11 @@ npm run build-start
 [ImageHeroku]: <https://avatars.githubusercontent.com/u/23211?v=3&s=64>
 [-]: <http://findicons.com/files/icons/2427/retina/64/arrow_circle_right.png>
 
+## Remerciements
+Je tiens à souligner la contribution d'autres projets qui m'ont servi à titre d'exemples et de guides, notamment :
+- [todo-angular2-firebase](https://github.com/r-park/todo-angular2-firebase) de [r-park](https://github.com/r-park)
+- [auth0-angularjs2-systemjs-sample](https://github.com/auth0-samples/auth0-angularjs2-systemjs-sample) de [Auth0](https://github.com/auth0-samples)
+
 ## Licence
 
 MIT

@@ -1,4 +1,5 @@
 import { SelectionService } from './../services';
+import { ISelection } from './../model';
 
 export class SelectionBusiness {
   private service: SelectionService;
@@ -16,7 +17,7 @@ export class SelectionBusiness {
   //TODO: Valider utilisateur
   //TODO: Valider loterie
   //TODO: Valider date
-  recuperer(loterie: string, date: string, callback: (error: any, selections: number[][]) => void): void {
+  recuperer(loterie: string, date: string, callback: (error: any, selections: ISelection[]) => void): void {
     this.service.recuperer(loterie, date.split('-'), callback);
   }
 
@@ -24,7 +25,7 @@ export class SelectionBusiness {
   //TODO: Valider utilisateur
   //TODO: Valider loterie
   //TODO: Valider date
-  ajouter(loterie: string, date: string, selections: number[][], callback: (error: any) => void): void {
+  ajouter(loterie: string, date: string, selections: string[][], callback: (error: any) => void): void {
     this.service.ajouter(loterie, date.split('-'), selections, callback);
   }
 

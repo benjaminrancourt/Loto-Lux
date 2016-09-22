@@ -1,5 +1,6 @@
 import DataAccess from './../dataAccess/dataAccess';
 import { UtilisateurService } from './';
+import { ISelection} from './../model';
 
 export class SelectionService {
   private nomDonnees: string;
@@ -13,18 +14,39 @@ export class SelectionService {
   }
 
   //Recupère les sélections de l'utilisateur
-  //TODO: Valider utilisateur
-  //TODO: Valider loterie
-  //TODO: Valider date
-  recuperer(loterie: string, date: string[], callback: (error: any, selections: number[][]) => void): void {
-    //this.service.recuperer(loterie, date, callback);
+  recuperer(loterie: string, date: string[], callback: (error: any, selections: ISelection[]) => void): void {
+    DataAccess.database(this.nomDonnees)
+      .child(loterie)
+      .child(date[0]).child(date[1]).child(date[2])
+      .child(UtilisateurService.encoderCourriel(this.courriel))
+      .once('value', (snapshot) => {
+        let selections: ISelection[] = [];
+
+        snapshot.forEach((snap): boolean => {
+          let selection: ISelection = {
+            id: snap.key,
+            nombres: snap.val()
+          };
+          selections.push(selection);
+
+          return false;
+        });
+
+        selections.sort((a, b) => {
+          let selectionA: string = a.nombres.join();
+          let selectionB: string = b.nombres.join();
+
+          if (selectionA < selectionB) return -1;
+          if (selectionA > selectionB) return 1;
+          return 0;
+        });
+
+        callback(null, selections.sort());
+    });
   }
 
   //Ajoute les sélections de l'utilisateur dans la base de données
-  //TODO: Valider utilisateur
-  //TODO: Valider loterie
-  //TODO: Valider date
-  ajouter(loterie: string, date: string[], selections: number[][], callback: (error: any) => void): void {
+  ajouter(loterie: string, date: string[], selections: string[][], callback: (error: any) => void): void {
     let donnees: any = DataAccess.database(this.nomDonnees)
       .child(loterie)
       .child(date[0]).child(date[1]).child(date[2])
@@ -38,9 +60,6 @@ export class SelectionService {
   }
 
   //Supprime la sélection de l'utilisateur dans la base de dommées
-  //TODO: Valider utilisateur
-  //TODO: Valider loterie
-  //TODO: Valider date
   supprimer(loterie: string, date: string[], id: string, callback: (error: any) => void): void {
     DataAccess.database(this.nomDonnees)
       .child(loterie)

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import { Component, Input, Output, OnChanges, EventEmitter, SimpleChanges, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { AuthService, ISelectionOptions, SelectionService } from './../../services';
@@ -19,6 +19,7 @@ import { Selection,
 export class FrmSelectionsComponent implements OnChanges, OnInit {
   @Input() loterie: Loterie;
   @Input() tirage: Tirage;
+  @Output() onAjoutSelection: EventEmitter<void>;
 
   formulaire: FormGroup;
 
@@ -27,7 +28,9 @@ export class FrmSelectionsComponent implements OnChanges, OnInit {
 
   constructor(private fb: FormBuilder,
     private selectionService: SelectionService,
-    private authService: AuthService) { }
+    private authService: AuthService) {
+      this.onAjoutSelection = new EventEmitter<void>();
+    }
 
   ngOnInit(): void {
     this.buildForm();
@@ -75,6 +78,7 @@ export class FrmSelectionsComponent implements OnChanges, OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['loterie'] && changes['loterie'].previousValue !== changes['loterie'].currentValue) {
       this.changementLoterie();
+      this.buildForm();
     }
   }
 
@@ -89,12 +93,14 @@ export class FrmSelectionsComponent implements OnChanges, OnInit {
       loterie: this.loterie.url,
       date: this.tirage.date,
       utilisateur: this.authService.getCourriel(),
-      token: this.authService.getToken(),
-      trie: this.selection.trie
+      token: this.authService.getToken()
     };
 
-    this.selectionService.ajouter(options, this.selections);
-    //this.changementLoterie();
+    this.selectionService.ajouter(options, this.selections, this.selection).then(() => {
+      this.onAjoutSelection.emit();
+      this.changementLoterie();
+      this.buildForm();
+    });
   }
 
   //Retourne vrai si le numéro à la position spécifiée est valide

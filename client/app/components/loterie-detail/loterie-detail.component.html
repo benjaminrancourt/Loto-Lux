@@ -20,7 +20,8 @@
     <div class="col-sm-8 col-md-8" *ngIf="tirage && auth.estAuthentifie()">
       <div class="selections"
            [style.background-color]="loterie.couleur" [ngClass]="loterie.url">
-        <frm-selections [loterie]="loterie" [tirage]="tirage"></frm-selections>
+        <frm-selections [loterie]="loterie" [tirage]="tirage"
+          (onAjoutSelection)="onAjoutSelection($event)"></frm-selections>
         <selections [loterie]="loterie" [tirage]="tirage"></selections>
       </div>
     </div>

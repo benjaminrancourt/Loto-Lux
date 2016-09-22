@@ -1,9 +1,10 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { DateTirage, Loterie, Tirage } from '../../models';
 import { AuthService, DateService, LoterieService, TirageService } from '../../services';
+import { SelectionsComponent } from './..';
 
 @Component({
   selector: 'loterie-detail',
@@ -13,6 +14,9 @@ import { AuthService, DateService, LoterieService, TirageService } from '../../s
 })
 
 export class LoterieDetailComponent implements OnInit {
+  @ViewChild(SelectionsComponent)
+  selectionsComponent: SelectionsComponent;
+
   loterie: Loterie;
   tirage: Tirage;
   date: string;
@@ -65,6 +69,14 @@ export class LoterieDetailComponent implements OnInit {
     this.tirageService.recuperer(this.loterie.url, date).then(tirage => {
       this.tirage = tirage;
       this.date = date;
+
+      this.onAjoutSelection();
     });
+  }
+
+  private onAjoutSelection(): void {
+    if (this.selectionsComponent) {
+      this.selectionsComponent.recuperer();
+    }
   }
 }

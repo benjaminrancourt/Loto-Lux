@@ -6,6 +6,7 @@ export interface ISelectionOptions {
 
   numSelectionsMin?: number;
   trie?: boolean;
+  zeros?: boolean;
   verifieDuplicat?: boolean;
 }
 
@@ -17,6 +18,7 @@ export class Selection {
 
   public numSelectionsMin: number;
   public trie: boolean;
+  public zeros: boolean;
   protected verifieDuplicat: boolean;
 
   constructor(options: ISelectionOptions) {
@@ -27,6 +29,7 @@ export class Selection {
 
     this.numSelectionsMin = options.numSelectionsMin ? options.numSelectionsMin : 1;
     this.trie = options.trie ? options.trie : true;
+    this.zeros = options.zeros ? options.zeros : true;
     this.verifieDuplicat = options.verifieDuplicat ? options.verifieDuplicat : false;
   }
 
@@ -56,5 +59,33 @@ export class Selection {
     }
 
     return numerosValide && aucunDuplicat;
+  }
+
+  public formatString(selections: number[][]): string[][] {
+    let selectionString: string[][] = [];
+
+    if (this.trie) { selections = this.trier(selections); }
+
+    for (let i = 0; i < selections.length; ++i) {
+      selectionString[i] = selections[i].map((nombre) => {
+        if (this.zeros && nombre >= 0 && nombre <= 9) {
+          return '0' + nombre.toString();
+        } else {
+          return nombre.toString();
+        }
+      });
+    }
+
+    return selectionString;
+  }
+
+  //Trie les sélections
+  private trier(selections: number[][]): number[][] {
+    let resultats: number[][] = [];
+    for (let i = 0; i < selections.length; ++i) {
+      resultats[i] = selections[i].sort((a, b) => a - b);
+    }
+
+    return resultats;
   }
 }

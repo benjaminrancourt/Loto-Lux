@@ -30,7 +30,7 @@ export class SelectionController {
       let courriel: string = req.params.courriel;
       let token: string = req.params.token;
       let business: SelectionBusiness = new SelectionBusiness(courriel, token);
-      let selections: number[][] = req.body as number[][];
+      let selections: string[][] = req.body as string[][];
 
       business.ajouter(loterie, date, selections, (error) => {
         if (error) res.send({'error': 'error'});

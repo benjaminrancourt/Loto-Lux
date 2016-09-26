@@ -1,6 +1,6 @@
 'use strict';
 
-const gulp = require('gulp'),
+var gulp = require('gulp'),
       del = require('del'),
       csslint = require('gulp-csslint'),
       tsc = require('gulp-typescript'),
@@ -21,8 +21,8 @@ var production = environments.production;
 var ENV = production() ? 'production' : 'development';
 console.log('gulpfile.js - ' + ENV);
 
-const tscConfigServer = require('./server/tsconfig.json');
-const tscConfigClient = require('./client/tsconfig.json');
+var tscConfigServer = require('./server/tsconfig.json');
+var tscConfigClient = require('./client/tsconfig.json');
 
 //BEGIN - Typings **************************************************************
 gulp.task('typings', ['typings:server', 'typings:client']);
@@ -324,5 +324,3 @@ gulp.task('compile-start:server', function (callback) {
 gulp.task('build', function (callback) {
   runSequence('clean', 'typings', 'compile', 'ressources', 'libraries', callback);
 });
-
-gulp.task('heroku:production', ['build']);

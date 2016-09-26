@@ -11,7 +11,8 @@
     "test": "karma start karma.conf.js",
     "posttest": "node_modules/.bin/remap-istanbul -i coverage/coverage-final.json -o coverage -t html",
     "coverage": "http-server -c-1 -o -p 9875 ./coverage",
-    "build-start": "gulp build && npm run start"
+    "build-start": "gulp build && npm run start",
+    "production": "pm2 start dist/server/server.js"
   },
   "author": {
     "name": "Benjamin Rancourt",
@@ -57,6 +58,7 @@
     "gulp-typings": "^2.0.4",
     "gulp-uglify": "^2.0.0",
     "moment": "^2.15.0",
+    "pm2": "^2.0.15",
     "reflect-metadata": "^0.1.8",
     "replace": "^0.3.0",
     "request": "^2.74.0",

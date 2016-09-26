@@ -56,10 +56,10 @@ System.config({
   packages: {
     rxjs: { defaultExtension: 'js' },
     'moment': {
-      main: 'min/moment-with-locales.min.js',
+      main: 'min/moment-with-locales.min.js'
     },
     'angular2-moment': {
-      main: 'index',
+      main: 'index'
     },
 
     'dist/server/app/business': { main: 'index' },

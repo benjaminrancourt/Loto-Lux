@@ -35,6 +35,7 @@ export class Selection {
 
   //Retourne vrai si le numéro est entre le minimum et le maximum inclusivement
   numeroValide(numero: number): boolean {
+    if (!numero) { return false; }
     return numero >= this.minimum && numero <= this.maximum;
   }
 
@@ -51,7 +52,7 @@ export class Selection {
 
   //Retourne vrai si la sélection est valide
   selectionValide(numeros: number[]): boolean {
-    let numerosValide: boolean = numeros.every(this.numeroValide, this);
+    let numerosValide: boolean = numeros.filter(this.numeroValide, this).length === this.nbreNumeros;
     let aucunDuplicat: boolean = true;
 
     if (this.verifieDuplicat) {

@@ -1,11 +1,10 @@
 <div *ngIf="selections" [ngClass]="loterie.url">
   <h3 class="media-heading">Ajouter de nouvelles sélections</h3>
-  <form [formGroup]="formulaire">
+  <form>
     <div class="numeros list-group" *ngFor="let ligne of selections; let i = index; trackBy: trackByIdx;">
       <input
         *ngFor="let num of ligne; let j = index; trackBy: trackByIdx;"
-        class="num" type="number"
-        formControlName="{{loterie.url}}_{{i}}_{{j}}"
+        class="num" type="number" required
         name="{{loterie.url}}_{{i}}_{{j}}" id="{{loterie.url}}_{{i}}_{{j}}"
         [(ngModel)]="selections[i][j]"
         [class.valide]="numeroValide(i, j)" [class.invalide]="!numeroValide(i, j)"
@@ -23,6 +22,6 @@
       </span>
     </div>
     <button class="btn btn-primary" (click)="enregistrer()"
-            [disabled]="!(formulaire.valid && selectionsValides())">Enregistrer</button>
+            [disabled]="!selectionsValides()">Enregistrer</button>
   </form>
 </div>

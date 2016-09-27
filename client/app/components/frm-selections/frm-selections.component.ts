@@ -1,5 +1,4 @@
-import { Component, Input, Output, OnChanges, EventEmitter, SimpleChanges, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, Input, Output, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
 
 import { AuthService, ISelectionOptions, SelectionService } from './../../services';
 import { Loterie, Tirage } from './../../models';
@@ -16,47 +15,19 @@ import { Selection,
     './app/components/frm-selections/frm-selections.component.css']
 })
 //Représente le formulaire permettant à l'utilisateur d'ajouter de nouvelles sélections
-export class FrmSelectionsComponent implements OnChanges, OnInit {
+export class FrmSelectionsComponent implements OnChanges {
   @Input() loterie: Loterie;
   @Input() tirage: Tirage;
   @Output() onAjoutSelection: EventEmitter<void>;
 
-  formulaire: FormGroup;
-
   selections: number[][];
   selection: Selection;
 
-  constructor(private fb: FormBuilder,
+  constructor(
     private selectionService: SelectionService,
     private authService: AuthService) {
       this.onAjoutSelection = new EventEmitter<void>();
     }
-
-  ngOnInit(): void {
-    this.buildForm();
-  }
-
-  buildForm(): void {
-    if (!this.selection) { return; }
-
-    let inputs: {[key: string]: any;} = {};
-
-    for (let i: number = 0; i < this.selections.length; ++i) {
-      for (let j: number = 0; j < this.selection.nbreNumeros; ++j) {
-        let cle: string = this.loterie.url + '_' + i + '_' + j;
-        inputs[cle] = [this.selections[i][j],
-          [
-            Validators.required,
-            Validators.pattern(this.selection.regex),
-            Validators.minLength(this.selection.minimum.toString().length),
-            Validators.maxLength(this.selection.maximum.toString().length)
-          ]
-        ];
-      }
-    }
-
-    this.formulaire = this.fb.group(inputs);
-  }
 
   //Initialisation des sélections de la loterie
   changementLoterie(): void {
@@ -78,7 +49,6 @@ export class FrmSelectionsComponent implements OnChanges, OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['loterie'] && changes['loterie'].previousValue !== changes['loterie'].currentValue) {
       this.changementLoterie();
-      this.buildForm();
     }
   }
 
@@ -99,12 +69,13 @@ export class FrmSelectionsComponent implements OnChanges, OnInit {
     this.selectionService.ajouter(options, this.selections, this.selection).then(() => {
       this.onAjoutSelection.emit();
       this.changementLoterie();
-      this.buildForm();
     });
   }
 
   //Retourne vrai si le numéro à la position spécifiée est valide
   numeroValide(i: number, j: number): boolean {
+    if (!this.selections[i][j]) { return false; }
+
     let numero: number = this.selections[i][j];
     let resultat: boolean = this.selection.numeroValide(numero);
     resultat = resultat && this.selection.numeroUnique(numero, this.selections[i]);
@@ -126,12 +97,10 @@ export class FrmSelectionsComponent implements OnChanges, OnInit {
   //Ajoute une nouvelle sélection
   ajout(): void {
     this.selections.push(new Array(this.selection.nbreNumeros));
-    this.buildForm();
   }
 
   //Supprime la sélection sélectionnée
   suppression(i: number): void {
     this.selections.splice(i, 1);
-    this.buildForm();
   }
 }

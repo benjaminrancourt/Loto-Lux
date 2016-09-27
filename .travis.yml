@@ -32,7 +32,7 @@ deploy:
     dev: loto-lux-stage
     master: loto-lux
   on:
-    repo: ranb2002/loto-lux
+    repo: ranb2002/Loto-Lux
     branch:
       - dev
       - master

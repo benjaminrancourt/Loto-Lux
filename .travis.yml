@@ -29,7 +29,3 @@ deploy:
     branch:
     - master
     - dev
-notifications:
-  email:
-    recipients:
-    - Benjamin.Rancourt@USherbrooke.ca

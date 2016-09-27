@@ -31,6 +31,8 @@ deploy:
   app:
     dev: loto-lux-stage
     master: loto-lux
+  on:
+    all_branches: true
 
 notifications:
   email:

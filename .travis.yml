@@ -1,14 +1,11 @@
 sudo: required
 dist: trusty
-
 language: node_js
 node_js:
 - 6.1.0
-
 cache:
   directories:
   - node_modules
-
 before_install:
 - export CHROME_BIN=/usr/bin/google-chrome
 - export DISPLAY=:99.0
@@ -17,25 +14,21 @@ before_install:
 - sudo apt-get install -y libappindicator1 fonts-liberation
 - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 - sudo dpkg -i google-chrome*.deb
-
 before_script:
 - gulp build
-
 script: karma start karma.conf.js --single-run
-
 deploy:
   provider: heroku
-  buildpack: https://github.com/appstack/heroku-buildpack-nodejs-gulp.git
   api_key:
-    secure: GfJ/v0uvsK0muDef5ZN1kZap5uBZfSH7Itn1yFkWdMjY5BaIbnLRedUCVTTzJh9cXWFF6isNEIeuH3IQtJW8r7pSgqqJV6eieqd8M6uGX9ZWw28NJzIxkbM5HpU51f3qDoYS6804zbIaLMFDoc/KvParOUf79egmO6E3UQlT9RnN4S0JlgWZHPieenaeCohSjhXgq6jlopk+yuTmxy4yHZSuSL3a5v/ks7Z6tpYxXAcfceu9apD62Xh7Myg299g2KVIa9Vlw86LClTXxkdGOR5s6hrY7IpNtPcxuXbnB2LMjJDRQk2YtTx1dUl2VF8kdIPTAq1GRIDjH4eSDMYXNZvYlHaJNN/9jJnTdTALBXMIiIATYh7xRbQnTmoxyZT1o1v9UTC+0FnDI5yRdqxi1rjsMBG+NxOh7xYAy0HShDNTxyHElGixT8OmcwhKVf37VOUVFur2Dt4Q9Jfxv2exmBQIaysNWsgsJmXrWoN9j3uhfNbaqG1qsuXe808EgBhREh9I/SEP03BgM5Lr3mUZGQ7JynL4ZtxQKZkT4UA2Ax0P2EkTKKprQjITzM8wEsui9nOUqioHHUQEZzZ/N757jSPaNEXGhGCCBGXBhatVShDOMI8l5cLFerSHHs3hiFuEcNYGI88hpgvlIDIrv4EZgY1nIAF119fJJm/Z9nc/v0qU=
+    secure: atCB7wQawAuvB+2GMSdAas8/ebGQvRRO48gfMo7HKsoRasvl4nKwn8tdm1i3gjVbW0eaj2DfTw7i/21LIXAuENARZ0EcdY9rdgpexytngoEKoxTQBmySJctpKxBp+/Rv3nTaqGWhbI5iXc5GlQIncLKcnaFX2pJLjm8Mx3I9lDRhVY8LKllHWxpMPjPzULWTSzuAHhJtH6a7jNu+TpTpCR4uz1TpGZEQB24zjGsQRsF4MpZZek3NJxcfeFBccRlsNY+MBxfbowLyECEyXYiyk6BmeFosIUGcTWF4SalXxqtkucuek1mBrolho5Pv2uHEWl+UmflEdV3f1EQgxPSxd2dDTcYNPSF+KVBEP/TGTp2gK94VkaZlWiGDhJ7p9y0vO6NBU7QAP2aW8xSaH1AbhJku60tuj2ljdiKyHXaYB8etUZAWn/Plv/dYo1fghvw+BF/546Qpr3pYv3A28miruva/lCPFJLs8NOmnI2S6jkGZ+XP2DHNcDt7VSUGSCIFzE5/q0UchiEB70CN6rxa/n6dVU/7VYRbbm5PDMxHBvT+qST2qVg5gT+rIDHntUYOEgdj0+HBlXK0hWQ+ozCjXCSwcs5J8zIhpRMnlIVkZn8ffkIcOHBcMKeciiYZ0we9BsEoe73NXsl4QMJ+ngVGTQCKo8HbTWD+2U6XfML/ob1c=
   app:
-    dev: loto-lux-stage
     master: loto-lux
+    dev: loto-lux-stage
   on:
     repo: ranb2002/Loto-Lux
     branch:
-    - dev
     - master
+    - dev
 notifications:
   email:
     recipients:

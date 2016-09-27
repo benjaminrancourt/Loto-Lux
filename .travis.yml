@@ -20,12 +20,8 @@ script: karma start karma.conf.js --single-run
 deploy:
   provider: heroku
   api_key:
-    secure: atCB7wQawAuvB+2GMSdAas8/ebGQvRRO48gfMo7HKsoRasvl4nKwn8tdm1i3gjVbW0eaj2DfTw7i/21LIXAuENARZ0EcdY9rdgpexytngoEKoxTQBmySJctpKxBp+/Rv3nTaqGWhbI5iXc5GlQIncLKcnaFX2pJLjm8Mx3I9lDRhVY8LKllHWxpMPjPzULWTSzuAHhJtH6a7jNu+TpTpCR4uz1TpGZEQB24zjGsQRsF4MpZZek3NJxcfeFBccRlsNY+MBxfbowLyECEyXYiyk6BmeFosIUGcTWF4SalXxqtkucuek1mBrolho5Pv2uHEWl+UmflEdV3f1EQgxPSxd2dDTcYNPSF+KVBEP/TGTp2gK94VkaZlWiGDhJ7p9y0vO6NBU7QAP2aW8xSaH1AbhJku60tuj2ljdiKyHXaYB8etUZAWn/Plv/dYo1fghvw+BF/546Qpr3pYv3A28miruva/lCPFJLs8NOmnI2S6jkGZ+XP2DHNcDt7VSUGSCIFzE5/q0UchiEB70CN6rxa/n6dVU/7VYRbbm5PDMxHBvT+qST2qVg5gT+rIDHntUYOEgdj0+HBlXK0hWQ+ozCjXCSwcs5J8zIhpRMnlIVkZn8ffkIcOHBcMKeciiYZ0we9BsEoe73NXsl4QMJ+ngVGTQCKo8HbTWD+2U6XfML/ob1c=
-  app:
-    master: loto-lux
-    dev: loto-lux-stage
+    secure: DigJs+nrBDETpFO2Ns90MSpURmsBKQn11+W9FyAvTN0RHwA/sPXMbvw4It3iOebsIRlDrJb0omttDCn5j5jRiTRiI1B3Q7chKUn2KG1hF3ioqRlg98EaAbS6tAUkE7+OpFW0BmyWYgqhEpaCOiXhqKybqOs3Q49/LX9xkWq5YJRSCz7rWiOt1muaXsxisAhyOjhnAO5Z/5C5BR/itdS1FoXp0dkWdjJ7zfAslW6dbfG7KX+riDiAtpM+nWAcWuyw3ycJj0ZYt4hzeZV/cb00nr4TDuCkRIb/Z3MVYR9e3R/6xjWluwMUcFyAc223QO8WTjuSejVdlEiORWP65fVoYxTgQ28LGosK2fSL6OZ5rdzRdbQPjfy0SL//GajZGJ818Lpd9wRi/AWL+6TP5uwcJz1MDjoShbdZd6TvbTb3CaQbzAdu8+5J0f9KhMMD3eOJunbJ5Muu7WZV+JCm6z+cIQxJxUQmH3vIhRJeQ84HVV8l9M70GiO4jSesBe07U+5QftH49NdY4LF1KBI90IFfysIA8dQJhES53TN4Dpa1zPmayLKsWO4K+0kmAi3i28ZjSqOVQT4haJxP9Ivg63hcOI/+TEWIJ54e7r7EzSP46Kd0X5wNJyJvcyWRIT5S9ZRfLHglY05F+JIMYqDfGfm7Iprl4AJe7izlasLgaM+owIM=
+  app: loto-lux-stage
   on:
     repo: ranb2002/Loto-Lux
-    branch:
-    - master
-    - dev
+    branch: dev

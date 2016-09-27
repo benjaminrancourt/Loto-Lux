@@ -23,17 +23,6 @@ before_script:
 
 script: karma start karma.conf.js --single-run
 
-deploy:
-  provider: heroku
-  buildpack: https://github.com/appstack/heroku-buildpack-nodejs-gulp.git
-  api_key:
-    secure: m0ywODPrGTAdgNEFxoUiThZz2jx0/Kf1dVp08T2M6fb1X4SqnFXRYT+JPZqkpe4e/oOA+x0AswIxBM9fZg70HqmXkyEXNKdsNsrrOKlK4iVx/ohvfvuNPRUnHdGVZAp0sJBaf+Uc6gcQZ+rnRqAHCDBEtErRmWjv/Jazl41e1uHhAUqdEOZn9ZxW2pgNTrnQuH51pMrEhIGH76mXmk4hspNI7Uiugzkc4oGKMixBWs4VoZ9eFFwc5uainJe9Tnguim5XGGs4BbgRRkaZN/zNXBSYkZI3u+FUIlKVynGubuUwGDll58h8xuEnV8kjdykT7xkAxs805aa2AbQtkf1tavRXQLym1r25cXPRiKpOylGbXUZ36DCxbieUtm7IqvrBYZ/s3AnOlXOow285Wv1f/zkierA1nzBEmwf8hA/rnlfCBHiCELeavlkfEsN/EdMzvkwF02xd5rhdEvt2kWGJ2W2P9Kfqohsv/isEm0AlaOCTJ4Jv79Lap40/ulZuf1CYYHHiT3FbPm0SoCgtsiDW89o95KOpqRa8wN/P+mX8grsomJsJSuBmwdYh9iDbmx5YSgCsUO68TPtXteOUeuP1Y7Z1twPRPIR/6g6kh3DwXpTIsGsCMxbj4VwIgg96RWRy5iNBxr/MkShCwYI2hLzXpcBAtcSy7C5FfKGCaSqKwYE=
-  app:
-    dev: loto-lux-stage
-    master: loto-lux
-  on:
-    all_branches: true
-
 notifications:
   email:
     recipients:

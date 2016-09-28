@@ -65,6 +65,7 @@ export class SelectionService {
       .child(loterie)
       .child(date[0]).child(date[1]).child(date[2])
       .child(UtilisateurService.encoderCourriel(this.courriel))
+      .child(id)
       .remove(callback);
   }
 }

@@ -13,7 +13,7 @@ export class SelectionRoutes {
   get routes(): any {
     router.get('/:loterie/:date/:courriel/:token', this.controller.recuperer);
     router.post('/:loterie/:date/:courriel/:token/ajouter', this.controller.ajouter);
-    router.post('/:loterie/:date/:courriel/:token/supprimer', this.controller.supprimer);
+    router.delete('/:loterie/:date/:courriel/:token/supprimer/:id', this.controller.supprimer);
 
     return router;
   }

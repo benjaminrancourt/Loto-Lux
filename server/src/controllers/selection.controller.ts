@@ -50,7 +50,7 @@ export class SelectionController {
       let courriel: string = req.params.courriel;
       let token: string = req.params.token;
       let business: SelectionBusiness = new SelectionBusiness(courriel, token);
-      let id: string = req.body as string;
+      let id: string = req.params.id as string;
 
       business.supprimer(loterie, date, id, (error) => {
         if (error) res.send({'error': 'error'});

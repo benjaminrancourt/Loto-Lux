@@ -39,4 +39,18 @@ export class SelectionsComponent implements OnInit, OnChanges {
       this.recuperer();
     }
   }
+
+  suppression(position: number, selection: ISelection): void {
+    let options: ISelectionOptions = {
+      loterie: this.loterie.url,
+      date: this.tirage.date,
+      utilisateur: this.authService.getCourriel(),
+      token: this.authService.getToken()
+    };
+
+    this.selectionService.supprimer(options, selection.id)
+      .then(() => {
+        this.selections.splice(position, 1);
+      });
+  }
 }

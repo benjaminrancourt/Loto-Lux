@@ -18,13 +18,18 @@ export class SelectionService extends Service {
     super('api/selections');
   }
 
+  protected construireURLOptions(selOptions: ISelectionOptions, vars: string[]): string {
+    let arrayURL = [selOptions.loterie, selOptions.date, selOptions.utilisateur, selOptions.token];
+    arrayURL = arrayURL.concat(vars);
+    return super.construireURL(arrayURL);
+  }
+
   //Envoie les nouvelles sélections au serveur
   public ajouter(selOptions: ISelectionOptions, selections: number[][], selection: Selection): Promise<boolean> {
     let entetes: Headers = new Headers({ 'Content-Type': 'application/json' });
     let options: RequestOptions = new RequestOptions({ headers: entetes });
 
-    let arrayURL = [selOptions.loterie, selOptions.date, selOptions.utilisateur, selOptions.token, 'ajouter'];
-    let url: string = this.construireURL(arrayURL);
+    let url: string = this.construireURLOptions(selOptions, ['ajouter']);
     let corps: string = JSON.stringify(selection.formatString(selections));
 
     return this.http.post(url, corps, options)
@@ -35,10 +40,18 @@ export class SelectionService extends Service {
 
   //Récupère les sélections de l'utilisateur
   public recuperer(selOptions: ISelectionOptions): Promise<ISelection[]> {
-    let arrayURL = [selOptions.loterie, selOptions.date, selOptions.utilisateur, selOptions.token];
-    let url: string = this.construireURL(arrayURL);
+    let url: string = this.construireURLOptions(selOptions, []);
 
     return this.http.get(url)
+      .toPromise()
+      .then(response => response.json())
+      .catch(this.handleError);
+  }
+
+  public supprimer(selOptions: ISelectionOptions, iDSelection: string): Promise<boolean>  {
+    let url: string = this.construireURLOptions(selOptions, ['supprimer', iDSelection]);
+
+    return this.http.delete(url)
       .toPromise()
       .then(response => response.json())
       .catch(this.handleError);

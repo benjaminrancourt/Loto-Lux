@@ -1,4 +1,4 @@
-#footer {
+footer {
   background: #2e2e2e;
   border-top: 5px solid #c52d2f;
   color: #fff;
@@ -6,25 +6,25 @@
   padding-top: 30px;
 }
 
-#footer a {
+a {
   color: #fff;
 }
 
-#footer a:hover {
+a:hover {
   color: #c52d2f;
 }
 
-#footer ul {
+ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-#footer ul > li {
+ul > li {
   display: inline-block;
   margin-left: 15px;
 }
 
-#footer p {
+p {
   margin: 0 0 5px 0;
 }

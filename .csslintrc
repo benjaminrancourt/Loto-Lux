@@ -1,7 +1,7 @@
 {
   "adjoining-classes": true,
   "box-model": true,
-  "box-sizing": true,
+  "box-sizing": false,
   "bulletproof-font-face": true,
   "compatible-vendor-prefixes": true,
   "display-property-grouping": true,

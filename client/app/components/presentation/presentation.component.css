@@ -4,7 +4,7 @@
   text-align: center;
 }
 
-.home-jumbotron h1 {
+h1 {
   color: #c52d2f;
   font-size: 96px;
 }
@@ -18,8 +18,6 @@
 }
 
 .home-jumbotron .middle-circle {
-  -moz-border-radius: 80px;
-  -webkit-border-radius: 80px;
   background-color: white;
   border-radius: 80px;
   bottom: -60px;

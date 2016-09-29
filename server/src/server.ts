@@ -42,5 +42,7 @@ let server = app.listen(port, () => {
 
     console.log('Cette application Express écoute sur le port %d à l\'adresse %s', port, host);
 
-    new Robots().miseAJour();
+    let robots: Robots = new Robots();
+    //robots.vider().then(() => robots.importer());
+    robots.importer();
 });

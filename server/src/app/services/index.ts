@@ -1,3 +1,5 @@
+export * from './service';
+
 export * from './donnee-date.service';
 export * from './date.service';
 export * from './loterie.service';

@@ -1,25 +1,27 @@
-import DataAccess from './../dataAccess/dataAccess';
-import { UtilisateurService } from './';
-import { ISelection} from './../model';
+import firebase = require('firebase');
 
-export class SelectionService {
-  private nomDonnees: string;
+import { UtilisateurService, Service } from './';
+import { ISelection} from './../model';
+import { DateUtils } from './../../config/utils';
+
+export class SelectionService extends Service {
   private courriel: string;
   private token: string;
 
   constructor(courriel: string, token: string) {
-    this.nomDonnees = 'selections';
+    super('selections');
     this.courriel = courriel;
     this.token = token;
   }
 
   //Recupère les sélections de l'utilisateur
-  recuperer(loterie: string, date: string[], callback: (error: any, selections: ISelection[]) => void): void {
-    DataAccess.database(this.nomDonnees)
+  recuperer(loterie: string, date: string): firebase.Promise<ISelection[]> {
+    return this.database()
       .child(loterie)
-      .child(date[0]).child(date[1]).child(date[2])
+      .child(DateUtils.stringToStringBD(date))
       .child(UtilisateurService.encoderCourriel(this.courriel))
-      .once('value', (snapshot) => {
+      .once('value')
+      .then((snapshot) => {
         let selections: ISelection[] = [];
 
         snapshot.forEach((snap): boolean => {
@@ -41,31 +43,34 @@ export class SelectionService {
           return 0;
         });
 
-        callback(null, selections.sort());
-    });
+        return selections.sort();
+    })
+    .catch(this.gererErreur);
   }
 
   //Ajoute les sélections de l'utilisateur dans la base de données
-  ajouter(loterie: string, date: string[], selections: string[][], callback: (error: any) => void): void {
-    let donnees: any = DataAccess.database(this.nomDonnees)
+  ajouter(loterie: string, date: string, selections: string[][]): firebase.Promise<any> {
+    let promesses: any = [];
+    let donnees: any = this.database()
       .child(loterie)
-      .child(date[0]).child(date[1]).child(date[2])
+      .child(DateUtils.stringToStringBD(date))
       .child(UtilisateurService.encoderCourriel(this.courriel));
 
     for (let i = 0; i < selections.length; ++i) {
-      donnees.push(selections[i]);
+      promesses.push(donnees.push(selections[i]));
     }
 
-    callback(null);
+    return firebase.Promise.all(promesses);
   }
 
   //Supprime la sélection de l'utilisateur dans la base de dommées
-  supprimer(loterie: string, date: string[], id: string, callback: (error: any) => void): void {
-    DataAccess.database(this.nomDonnees)
+  supprimer(loterie: string, date: string, id: string): firebase.Promise<any> {
+    return this.database()
       .child(loterie)
-      .child(date[0]).child(date[1]).child(date[2])
+      .child(DateUtils.stringToStringBD(date))
       .child(UtilisateurService.encoderCourriel(this.courriel))
       .child(id)
-      .remove(callback);
+      .remove()
+      .catch(this.gererErreur);
   }
 }

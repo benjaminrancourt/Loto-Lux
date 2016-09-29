@@ -48,20 +48,21 @@ export class LoterieDetailComponent implements OnInit {
 
   private recupererLoterie(url: string, date: string): void {
     //Recupère la loterie
-    this.loterieService.recupererParURL(url).then(loterie => {
-      this.loterie = loterie;
+    this.loterieService.recupererParURL(url)
+      .then((loterie) => {
+        this.loterie = loterie;
 
-      //Si la date a été spécifié, ajoute les informations pertinentes
-      if (date !== undefined) {
-        this.onChangementDate(date);
-      } else {
-        this.tirage = this.loterie.dernierTirage;
-        this.date = this.loterie.dernierTirage.date;
-        this.location.go('/loteries/' + this.loterie.url + '/' + this.date);
-      }
+        //Si la date a été spécifié, ajoute les informations pertinentes
+        if (date !== undefined) {
+          this.onChangementDate(date);
+        } else {
+          this.tirage = this.loterie.dernierTirage;
+          this.date = this.loterie.dernierTirage.date;
+          this.location.go('/loteries/' + this.loterie.url + '/' + this.date);
+        }
 
-      this.dateService.recuperer(url).then(dates => this.dates = dates);
-    });
+        this.dateService.recuperer(url).then(dates => this.dates = dates);
+      });
   }
 
   private onChangementDate(date: string): void {

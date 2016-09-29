@@ -1,59 +1,54 @@
-import * as moment from 'moment';
+import firebase = require('firebase');
 
-import DataAccess from './../dataAccess/dataAccess';
 import { DateUtils } from './../../config/utils';
 import { IDonneeDate, JSONDonneeDate } from './../model';
+import { Service } from './';
 
-export class DonneeDateService<T extends IDonneeDate, JSONT extends JSONDonneeDate> {
-  private _nomDonnees: string;
+export class DonneeDateService<T extends IDonneeDate, JSONT extends JSONDonneeDate>
+  extends Service {
   private base: string;
 
-  constructor (base: string, nom?: string) {
+  constructor(base: string, nom?: string) {
+    super(base);
     this.base = base;
-    this._nomDonnees = nom && ('/' + this.base + '/' + nom) || '';
+    this.donnees = (nom && (this.base + '/' + nom)) || this.base;
   }
 
-  get nomDonnees(): string { return this._nomDonnees; }
-  set nomDonnees(nom: string) { this._nomDonnees = '/' + this.base + '/' + nom; }
+  get nomDonnees(): string { return this.donnees; }
+  set nomDonnees(nom: string) { this.donnees = this.base + '/' + nom; }
 
   //Crée une donnée dans la base de données
-  public creer(donnee: T, callback: (error: any) => void): void {
-    let date = DateUtils.momentToStringArray(donnee.date); delete donnee.date;
-    DataAccess.database(this._nomDonnees)
-      .child(date[0]).child(date[1]).child(date[2])
-      .set(donnee, (error: any) => {
-        donnee.date = DateUtils.stringArrayToMoment(date);
-        callback(error);
-      });
+  public creer(donnee: T): firebase.Promise<any> {
+    let date: string = DateUtils.momentToStringBD(donnee.date); delete donnee.date;
+    return this.database().child(date).set(donnee)
+      .then(() => { donnee.date = DateUtils.stringToMoment(date); })
+      .catch(this.gererErreur);
   }
 
   //Supprime une donnée de la base de données
-  public supprimer(donnee: T, callback: (error: any) => void): void {
-    let date = DateUtils.momentToStringArray(donnee.date);
-    DataAccess.database(this._nomDonnees)
-      .child(date[0]).child(date[1]).child(date[2])
-      .remove(callback);
+  public supprimer(donnee: T): firebase.Promise<any> {
+    let date = DateUtils.momentToStringBD(donnee.date);
+    return this.database().child(date).remove()
+      .catch(this.gererErreur);
   }
 
   //Met à jour un tirage de la base de données
-  public mettreAJour(donnee: T, callback: (error: any) => void): void {
-    let date = DateUtils.momentToStringArray(donnee.date); delete donnee.date;
-    DataAccess.database(this._nomDonnees)
-      .child(date[0]).child(date[1]).child(date[2])
-      .update(donnee, (error: any) => {
-        donnee.date = DateUtils.stringArrayToMoment(date);
-        callback(error);
-      });
+  public mettreAJour(donnee: T): firebase.Promise<any> {
+    let date = DateUtils.momentToStringBD(donnee.date); delete donnee.date;
+    return this.database().child(date).update(donnee)
+      .then(() => { donnee.date = DateUtils.stringToMoment(date); })
+      .catch(this.gererErreur);
   }
 
   //Supprime toutes les données de la base de données
-  public supprimerToutes(callback: (error: any) => void): void {
-     DataAccess.database(this._nomDonnees).remove(callback);
+  public supprimerToutes(): firebase.Promise<any> {
+    return this.database().remove()
+      .catch(this.gererErreur);
   }
 
   //Permet de récupérer toutes les données
-  public recuperer(callback: (erreur: any, donnees: JSONT[]) => void): void {
-    DataAccess.database(this._nomDonnees).once('value', (snapshot) => {
+  public recuperer(): firebase.Promise<JSONT[]> {
+    return this.database().once('value').then((snapshot) => {
       let donnees: JSONT[] = [];
       let date: string[] = [];
 
@@ -66,9 +61,9 @@ export class DonneeDateService<T extends IDonneeDate, JSONT extends JSONDonneeDa
           mois.forEach((jour): boolean => {
             date[2] = jour.key;
 
-            let tirage: JSONT = jour.val();
-            tirage.date = DateUtils.stringArrayToString(date);
-            donnees.push(tirage);
+            let donnee: JSONT = jour.val();
+            donnee.date = DateUtils.stringArrayToString(date);
+            donnees.push(donnee);
 
             return false;
           });
@@ -79,22 +74,23 @@ export class DonneeDateService<T extends IDonneeDate, JSONT extends JSONDonneeDa
         return false;
       });
 
-      callback(null, donnees);
-    });
+      return donnees;
+    })
+    .catch(this.gererErreur);
   }
 
   //Permet de récupérer des données selon la date
-  public recupererParDate(date: moment.Moment, callback: (erreur: any, donnees: JSONT) => void): void {
-    let tirageURL: string = this._nomDonnees + '/' + DateUtils.momentToStringBD(date);
-
-    DataAccess.database(tirageURL).once('value', (snapshot) => {
-      if (snapshot.exists()) {
-        let donnee: JSONT = snapshot.val();
-        donnee.date = DateUtils.momentToString(date);
-        callback(null, donnee);
-      } else {
-        callback(false, null);
-      }
-    });
+  public recupererParDate(date: string): firebase.Promise<JSONT> {
+    return this.database().child(DateUtils.stringToStringBD(date)).once('value')
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          let donnee: JSONT = snapshot.val();
+          donnee.date = date;
+          return firebase.Promise.resolve(donnee);
+        } else {
+          return firebase.Promise.reject('Les données n\'existent pas pour la date du ' + date);
+        }
+      })
+      .catch(this.gererErreur);
   }
 }

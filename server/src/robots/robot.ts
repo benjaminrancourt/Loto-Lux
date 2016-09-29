@@ -1,7 +1,12 @@
-import * as async from 'async';
 import * as cheerio from 'cheerio';
 import * as moment from 'moment';
-import * as request from 'request';
+
+import firebase = require('firebase');
+import rp = require('request-promise');
+import http = require('http');
+
+let httpAgent = new http.Agent();
+httpAgent.maxSockets = 15;
 
 import { Date, Loterie, Tirage } from './../app/model';
 import { DateService, LoterieService, TirageService } from './../app/services';
@@ -18,6 +23,7 @@ export class Robot {
 
   private AUJOURDHUI: moment.Moment;
   private PREMIER_TIRAGE: moment.Moment;
+  private dernierTirage: moment.Moment;
 
   private loterieService: LoterieService;
   private tirageService: TirageService;
@@ -37,66 +43,79 @@ export class Robot {
 
     this.AUJOURDHUI = moment();
     this.PREMIER_TIRAGE = DateUtils.stringToMoment(premierTirage);
+    this.dernierTirage = DateUtils.stringToMoment(premierTirage);
 
     this.calculerFrequenceJours();
   }
 
-  public supprimer(): void {
-    this.tirageService.supprimerToutes(() => { return; });
-    this.dateService.supprimerToutes(() => { return; });
+  public supprimer(): firebase.Promise<any> {
+    return this.loterieService.supprimer(this.loterie)
+      .then(() => this.dateService.supprimerToutes())
+      .then(() => this.tirageService.supprimerToutes());
   }
 
   //Permet de déterminer si les résultats des tirages ont déjà été téléchargés
-  public estIndexe(callback: (error: any, result: any) => void): void {
-    this.loterieService.estIndexe(this.loterie.url, callback);
+  public estIndexe(): firebase.Promise<any> {
+    return this.loterieService.existe(this.loterie.url);
   }
 
   //Crée la loterie dans la base de données
-   public creer(callback: (error: any) => void): void {
-     this.loterieService.creer(this.loterie, callback);
+   public creer(): firebase.Promise<any> {
+     return this.loterieService.creer(this.loterie);
    }
 
   //Méthode générale permettant de récuperer les résultats ultérieurs, récupérant la date du dernier tirage ajouté
-  public importerTiragesUlterieurs(): void {
-    this.loterieService.recupererDateDernierTirage(this.loterie.url, (erreur: any, date: string) => {
-      if (erreur === null) {
-        this.importerTiragesUlterieursA(DateUtils.stringToMoment(date));
-      }
-    });
+  public importerTiragesUlterieurs(): firebase.Promise<any> {
+    return this.loterieService.recupererDateDernierTirage(this.loterie.url)
+      .then((date: string) => {
+        this.dernierTirage = DateUtils.stringToMoment(date);
+        return this.importerTiragesUlterieursA();
+      })
+      .catch((erreur) => {
+        console.log('%s : Erreur lors de l\'importation des résultats ultérieurs. %s', this.loterie.nom, erreur);
+      });
   }
 
   //Méthode générale permettant d'importer les résultats des tirages antérieurs, c'est-à-dire depuis sa création
-  public importerTiragesAnterieurs(callback: () => void): void {
-    interface IResultatAnterieur {
-      url: string;
-      annee: number;
+  public importerTiragesAnterieurs(): Promise<any> {
+    let annee: number = this.PREMIER_TIRAGE.clone().year();
+    let options = {
+      timeout: 60000,
+      uri: '',
+      transform: (body) => cheerio.load(body)
+    };
+
+    options.uri = 'https://loteries.lotoquebec.com/fr/loteries/' + this.loterie.url + '?annee=' + annee;
+    options.uri = options.uri + '&widget=resultats-anterieurs&noProduit=' + this.noProduit;
+
+    //Création de la liste de promesses des pages Web à visiter
+    //let promesses: Promise<any>[] = [];
+    let urls: string[] = [];
+
+    while (annee < this.AUJOURDHUI.year()) {
+      /*promesses.push(rp(options)
+        .then(($) => this.getTiragesAnterieurs($))
+        .catch((erreur: any) => console.log('Antérieur ' + erreur))
+      );*/
+
+      urls.push(options.uri);
+      options.uri = options.uri.replace(annee.toString(), (annee + 1).toString());
+      annee++;
     }
 
-    let resultat: IResultatAnterieur = {url: '', annee: this.PREMIER_TIRAGE.clone().year()};
+    console.log('Antérieur ' + this.loterie.nom + ' = ' + urls.length);
 
-    resultat.url = 'https://loteries.lotoquebec.com/fr/loteries/' + this.loterie.url + '?annee=' + resultat.annee;
-    resultat.url = resultat.url + '&widget=resultats-anterieurs&noProduit=' + this.noProduit;
+    //return Promise.all(promesses);
+    return Promise.all(urls.map((url: string) => {
+      let opts = options;
+      opts.uri = url;
 
-    //Création de la queue qui accumulera les pages Web à visiter
-    let queue = async.queue((tirage: IResultatAnterieur, next) => {
-      request(tirage.url, (error, response, body) => {
-        if (response.statusCode === 200) {
-          let $ = cheerio.load(body);
-          this.getTiragesAnterieurs($, tirage.annee);
-        }
+      console.log('Antérieur ' + opts.uri);
 
-        next();
-      });
-    });
-
-    //À la fin de l'obtention des résultats antérieurs, appelera le callback spécifié
-    queue.drain = callback;
-
-    while (resultat.annee <= this.AUJOURDHUI.year()) {
-      queue.push({url: resultat.url, annee: resultat.annee});
-      resultat.url = resultat.url.replace(resultat.annee.toString(), (resultat.annee + 1).toString());
-      resultat.annee++;
-    }
+      return rp(opts)
+        .then(($) => this.getTiragesAnterieurs($))
+        .catch((erreur: any) => console.log('Antérieur ' + erreur));
+    }));
   }
 
   //Méthode générale et spécifique retournant tous les résultats d'un tirage anterieurs
@@ -110,67 +129,78 @@ export class Robot {
   }
 
   //Méthode générale permettant de récuperer les résultats ultérieurs à une date donnée
-  private importerTiragesUlterieursA(dernierTirageAjoute: moment.Moment): void {
-    interface IResultatRecent {
-      url: string;
-      date: moment.Moment;
-    }
+  private importerTiragesUlterieursA(): Promise<any> {
+    let date: moment.Moment = this.dernierTirage.clone();
+    let options = {
+      pool: httpAgent,
+      timeout: 60000,
+      uri: '',
+      transform: (body) => cheerio.load(body)
+    };
 
-    let resultat: IResultatRecent = {url: '', date: dernierTirageAjoute.clone()};
-
+    //Calcul de l'indice de la journée de la semaine
     let indexJour: number = 0;
     let numFrequence: number = this.frequence.length;
-    while (dernierTirageAjoute.day() !== this.frequence[indexJour] && indexJour < numFrequence) {
+    while (date.day() !== this.frequence[indexJour] && indexJour < numFrequence) {
       indexJour++;
     }
 
-    if (indexJour === numFrequence) {
+    if (indexJour === this.frequence.length) {
       return;
     }
 
-    resultat.date.add(this.frequenceJours[indexJour], 'day');
-    resultat.url = 'https://loteries.lotoquebec.com/fr/loteries/' + this.loterie.url + '?date=' + DateUtils.momentToString(resultat.date);
-    indexJour = (indexJour + 1) % numFrequence;
+    //Obtention de la date du prochain tirage et de son url
+    date.add(this.frequenceJours[indexJour], 'day');
+    options.uri = 'https://loteries.lotoquebec.com/fr/loteries/' + this.loterie.url + '?date=' + DateUtils.momentToString(date);
 
-    //Création de la queue qui accumulera les pages Web à visiter
-    let queue = async.queue((tirage: IResultatRecent, next) => {
-      request(tirage.url, (error, response, body) => {
-        if (response.statusCode === 200) {
-          let $ = cheerio.load(body);
-          this.getTirageUlterieur($, DateUtils.momentToString(tirage.date));
-        }
+    //Création de la liste de promesses des pages Web à visiter
+    //let promesses: Promise<any>[] = [];
+    let urls: string[] = [];
+    let datePrecedente: string;
 
-        next();
-      });
-    });
+    while (date < this.AUJOURDHUI) {
+      /*promesses.push(rp(options)
+        .then(($) => this.getTirageUlterieur($))
+        .catch((erreur: any) => console.log('Ultérieur ' + erreur))
+      );*/
+      urls.push(options.uri);
 
-    let ancienneDate: moment.Moment;
-
-    while (resultat.date <= this.AUJOURDHUI) {
-      queue.push({url: resultat.url, date: resultat.date.clone()});
-
-      ancienneDate = resultat.date.clone();
-      resultat.date.add(this.frequenceJours[indexJour], 'day');
-      resultat.url = resultat.url.replace(DateUtils.momentToString(ancienneDate), DateUtils.momentToString(resultat.date));
-
-      indexJour = (indexJour + 1) % numFrequence;
+      datePrecedente = DateUtils.momentToString(date);
+      indexJour = (indexJour + 1) % this.frequence.length;
+      date.add(this.frequenceJours[indexJour], 'day');
+      options.uri = options.uri.replace(datePrecedente, DateUtils.momentToString(date));
     }
+
+    console.log('Ultérieur ' + this.loterie.nom + ' = ' + urls.length);
+
+    //return Promise.all(promesses);
+    return Promise.all(urls.map((url) => {
+      let opts = options;
+      opts.uri = url;
+
+      console.log('Ultérieur ' + url);
+
+      return rp(opts)
+        .then(($) => this.getTirageUlterieur($))
+        .catch((erreur: any) => console.log('Ultérieur ' + JSON.stringify(erreur)));
+    }));
   }
 
   //Méthode spécifique permettant d'important les résultats des tirages antérieurs d'une année spécifique
-  private getTiragesAnterieurs($: CheerioStatic, annee: number): void {
+  private getTiragesAnterieurs($: CheerioStatic): Promise<any> {
     if ($('.conteneur').length !== 1) {
       return;
     }
 
     //Exclure le titre de la page
     let tirages: CheerioElement[] = $('.conteneur table tr').slice(1).toArray().reverse();
+    let promesses: firebase.Promise<any>[] = [];
 
     for (let element of tirages) {
       let date = $(element).children('td.date').text();
       let resultats = this.getTirageAnterieurResultats($, element);
       let resultatPrincipal = resultats.first();
-      let selectionPrincipale = resultatPrincipal.children('span').map((i, element) => { return $(element).text(); }).get();
+      let selectionPrincipale = resultatPrincipal.children('span').map((i, element) => $(element).text()).get();
       selectionPrincipale = this.traitementSelectionPrincipale(selectionPrincipale);
 
       let resultat = new Tirage(date, selectionPrincipale);
@@ -185,30 +215,34 @@ export class Robot {
       }
 
       if (date !== '') {
-        this.creerTirage(resultat);
+        promesses.push(this.creerTirage(resultat));
       }
-    };
+    }
+
+    return Promise.all(promesses);
   }
 
-  private creerTirage(tirage: Tirage): void {
+  private creerTirage(tirage: Tirage): firebase.Promise<any> {
     tirage.trierResultatsSecondaires();
 
-    this.tirageService.creer(tirage, (erreur) => {
-      if (!erreur) {
-        this.loterieService.mettreAJourDernierTirage(this.loterie.url, tirage.toJSON(), () => { return; });
-
-        let date: Date = new Date(tirage.date, true);
-        this.dateService.creer(date, (erreur) => {
-          if (erreur) {
-            this.tirageService.supprimer(tirage, () => { return; });
+    return this.tirageService.creer(tirage).then(() => {
+      let date: Date = new Date(tirage.date, true);
+      return this.dateService.creer(date)
+        .then(() => {
+          if (tirage.date >= this.dernierTirage) {
+            this.dernierTirage = tirage.date.clone();
+            return this.loterieService.mettreAJourDernierTirage(this.loterie.url, tirage.toJSON());
           }
+        })
+        .catch((erreur: any) => {
+          console.log(erreur);
+          this.tirageService.supprimer(tirage);
         });
-      }
-    });
+      });
   }
 
   //Méthode spécifique permettant d'important les résultats d'un tirage à une date donnée
-  private getTirageUlterieur($: CheerioStatic, date: string): void {
+  private getTirageUlterieur($: CheerioStatic): firebase.Promise<any> {
     if ($('.lqZoneMessageNonDisponibilite').length === 1) {
       return;
     }
@@ -217,6 +251,7 @@ export class Robot {
     let resultatPrincipal = resultats.first();
     let selectionPrincipale = resultatPrincipal.children('.num').map((i, element) => { return $(element).text(); }).get();
 
+    let date: string = $('#dateAffichee').text();
     let resultat = new Tirage(date, selectionPrincipale);
 
     if (this.avecResultatsSecondaires) {
@@ -228,7 +263,7 @@ export class Robot {
       });
     }
 
-    this.creerTirage(resultat);
+    return this.creerTirage(resultat);
   }
 
   //Méthode générale permettant de calculer le nombre de jours à ajouter à une date pour obtenir le prochain tirage

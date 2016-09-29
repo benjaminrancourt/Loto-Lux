@@ -1,81 +1,86 @@
-import DataAccess from './../dataAccess/dataAccess';
+import firebase = require('firebase');
+
 import { Loterie, JSONTirage } from './../model';
+import { Service } from './';
 
-export class LoterieService {
-  private databaseName: string;
-
+export class LoterieService extends Service {
   constructor () {
-    this.databaseName = 'loteries';
+    super('loteries');
   }
 
   //Crée une loterie dans la base de données
-  public creer(loterie: Loterie, callback: (error: any) => void): void {
-    DataAccess.database(this.databaseName).child(loterie.url)
-      .set(loterie, callback);
+  public creer(loterie: Loterie): firebase.Promise<any> {
+    return this.database().child(loterie.url).set(loterie)
+      .catch(this.gererErreur);
   }
 
   //Met à jour le dernier tirage
-  public mettreAJourDernierTirage(url: string, dernierTirage: JSONTirage, callback: (erreur: any) => void): void {
-    DataAccess.database(this.databaseName + '/' + url + '/dernierTirage')
-      .set(dernierTirage, callback);
+  public mettreAJourDernierTirage(url: string, dernierTirage: JSONTirage): firebase.Promise<any> {
+    return this.database().child(url).child('dernierTirage').set(dernierTirage)
+      .catch(this.gererErreur);
   }
 
   //Permet de récupérer la date du dernier tirage de la loterie
-  public recupererDateDernierTirage(url: string, callback: (erreur: any, date: string) => void): void {
-    DataAccess.database(this.databaseName + '/' + url + '/dernierTirage').once('value', (snapshot) => {
-      if (snapshot.exists()) {
-        let tirage: JSONTirage = snapshot.val();
-        callback(null, tirage.date);
-      } else {
-        callback(false, null);
-      }
-    });
+  public recupererDateDernierTirage(url: string): firebase.Promise<string> {
+    return this.database().child(url).child('dernierTirage').once('value')
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          let tirage: JSONTirage = snapshot.val();
+          return firebase.Promise.resolve(tirage.date);
+        } else {
+          return firebase.Promise.reject('La date du dernier tirage de la loterie ' + url + ' n\'existe pas.');
+        }
+      })
+      .catch(this.gererErreur);
   }
 
   //Supprime une loterie de la base de données
-  public supprimer(loterie: Loterie, callback: (error: any) => void): void {
-    DataAccess.database(this.databaseName + '/' + loterie.url)
-      .remove(callback);
+  public supprimer(loterie: Loterie): firebase.Promise<any> {
+    return this.database().child(loterie.url).remove()
+      .catch(this.gererErreur);
   }
 
   //Supprime les loteries de la base de données
-  public supprimerLoteries(callback: (error: any) => void): void {
-     DataAccess.database(this.databaseName).remove(callback);
+  public supprimerLoteries(): firebase.Promise<any> {
+    return this.database().remove()
+      .catch(this.gererErreur);
   }
 
   //Permet de récupérer toutes les loteries
-  public recuperer(callback: (erreur: any, loteries: Loterie[]) => void): void {
-    DataAccess.database(this.databaseName).once('value', (snapshot) => {
-      let loteries: Loterie[] = [];
+  public recuperer(): firebase.Promise<Loterie[]> {
+    return this.database().once('value')
+      .then((snapshot) => {
+        let loteries: Loterie[] = [];
 
-      snapshot.forEach((snap): boolean => {
-        let loterie: Loterie = snap.val();
-        loteries.push(loterie);
+        snapshot.forEach((snap): boolean => {
+          let loterie: Loterie = snap.val();
+          loteries.push(loterie);
 
-        return false;
-      });
+          return false;
+        });
 
-      callback(null, loteries);
-    });
+        return loteries;
+      })
+      .catch(this.gererErreur);
   }
 
   //Permet de récupérer une loterie selon son url
-  public recupererParURL(url: string, callback: (erreur: any, loterie: Loterie) => void): void {
-    DataAccess.database(this.databaseName + '/' + url).once('value', (snapshot) => {
-      if (snapshot.exists()) {
-        let loterie: Loterie = snapshot.val();
-        callback(null, loterie);
-      } else {
-        callback(false, null);
-      }
-    });
+  public recupererParURL(url: string): firebase.Promise<Loterie> {
+    return this.database().child(url).once('value')
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          return firebase.Promise.resolve(snapshot.val());
+        } else {
+          return firebase.Promise.reject('La loterie ' + url + ' n\'existe pas.');
+        }
+      })
+      .catch(this.gererErreur);
   }
 
-  //Permet de déterminer si la loterie a déjà été indexé
-  public estIndexe(url: string, callback: (error: any, result: any) => void): void {
-    DataAccess.database(this.databaseName).child(url).once('value', (snapshot) => {
-      let existe: boolean = snapshot.exists();
-      callback(null, existe);
-    });
+  //Permet de déterminer si la loterie existe dans la base de données
+  public existe(url: string): firebase.Promise<boolean>  {
+    return this.database().child(url).once('value')
+      .then((snapshot) => snapshot.exists())
+      .catch(this.gererErreur);
   }
 }

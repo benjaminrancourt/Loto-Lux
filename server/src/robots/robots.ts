@@ -18,19 +18,24 @@ export class Robots {
     this.robots.push(new QuebecMaxRobot());
   }
 
-  //Permet que chacun des robots mettent à jour la base de données
-  public miseAJour(): void {
+  //Permet de vider le contenu reliés aux robots de la base des données
+  public vider(): Promise<any> {
+    let promesses: any[] = [];
     for (let robot of this.robots) {
-      robot.estIndexe((error, estIndexe) => {
-        if (error) {
-          return;
-        }
-        else if (!estIndexe) {
-          robot.creer(() => {
-            robot.importerTiragesAnterieurs(() => {
-              robot.importerTiragesUlterieurs();
-            });
-          });
+      promesses.push(robot.supprimer());
+    }
+
+    return Promise.all(promesses);
+  }
+
+  //Permet l'importation des données de tous les robots
+  public importer(): void {
+    for (let robot of this.robots) {
+      robot.estIndexe().then((estIndexe: boolean) => {
+        if (!estIndexe) {
+          robot.creer()
+            .then(() => robot.importerTiragesAnterieurs())
+            .then(() => robot.importerTiragesUlterieurs());
         } else {
           robot.importerTiragesUlterieurs();
         }

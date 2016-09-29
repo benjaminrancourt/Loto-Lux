@@ -1,3 +1,5 @@
+import firebase = require('firebase');
+
 import { UtilisateurService } from './../services';
 import { JSONUtilisateur } from './../model';
 
@@ -9,8 +11,7 @@ export class UtilisateurBusiness {
   }
 
   //Enregistre l'utilisateur dans la base de données
-  enregistrer(utilisateur: JSONUtilisateur, callback: (error: any) => void): void {
-    console.log('UtilisateurBusiness ' + JSON.stringify(utilisateur));
-    this.service.enregistrer(utilisateur, callback);
+  public enregistrer(utilisateur: JSONUtilisateur): firebase.Promise<any> {
+    return this.service.enregistrer(utilisateur);
   }
 }

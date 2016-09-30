@@ -7,7 +7,7 @@ import {
 
 //Classe regroupant les différents robots pour mettre à jour la base de données
 export class Robots {
-  private robots: Array<Robot>;
+  private robots: Array<Robot<any>>;
 
   constructor() {
     this.robots = [];

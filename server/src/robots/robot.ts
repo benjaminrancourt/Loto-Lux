@@ -8,18 +8,13 @@ import http = require('http');
 let httpAgent = new http.Agent();
 httpAgent.maxSockets = 15;
 
-import { Date, Loterie, Tirage } from './../app/model';
+import { Date, Loterie, IConstructor, Tirage } from './../app/model';
 import { DateService, LoterieService, TirageService } from './../app/services';
 import { DateUtils } from './../config/utils';
 
 //Classe représentant un robot qui récupère les informations nécessaires sur le Web
-export class Robot {
-  private loterie: Loterie;
-
-  private frequence: Array<number>;
-  private frequenceJours: Array<number>;
-  private noProduit: number;
-  private avecResultatsSecondaires: boolean;
+export class Robot<TLoterie extends Loterie> {
+  private loterie: TLoterie;
 
   private AUJOURDHUI: moment.Moment;
   private PREMIER_TIRAGE: moment.Moment;
@@ -29,23 +24,16 @@ export class Robot {
   private tirageService: TirageService;
   private dateService: DateService;
 
-  constructor(loterie: Loterie, frequence: Array<number>, noProduit: number,
-    premierTirage: string, avecResultatsSecondaires: boolean) {
-    this.loterie = loterie;
+  constructor(loterie: IConstructor<TLoterie>) {
+    this.loterie = new loterie();
 
-    this.tirageService = new TirageService(loterie.url);
-    this.dateService = new DateService(loterie.url);
+    this.tirageService = new TirageService(this.loterie.url);
+    this.dateService = new DateService(this.loterie.url);
     this.loterieService = new LoterieService();
 
-    this.frequence = frequence;
-    this.noProduit = noProduit;
-    this.avecResultatsSecondaires = avecResultatsSecondaires;
-
     this.AUJOURDHUI = moment();
-    this.PREMIER_TIRAGE = DateUtils.stringToMoment(premierTirage);
-    this.dernierTirage = DateUtils.stringToMoment(premierTirage);
-
-    this.calculerFrequenceJours();
+    this.PREMIER_TIRAGE = DateUtils.stringToMoment(this.loterie.premierTirage.date);
+    this.dernierTirage = DateUtils.stringToMoment(this.loterie.premierTirage.date);
   }
 
   public supprimer(): firebase.Promise<any> {
@@ -86,7 +74,7 @@ export class Robot {
     };
 
     options.uri = 'https://loteries.lotoquebec.com/fr/loteries/' + this.loterie.url + '?annee=' + annee;
-    options.uri = options.uri + '&widget=resultats-anterieurs&noProduit=' + this.noProduit;
+    options.uri = options.uri + '&widget=resultats-anterieurs&noProduit=' + this.loterie.noProduit;
 
     //Création de la liste de promesses des pages Web à visiter
     //let promesses: Promise<any>[] = [];
@@ -128,6 +116,18 @@ export class Robot {
     return selectionPrincipale;
   }
 
+  //Calcul de l'indice de la journée de la semaine
+  private calculIndiceJour(date: moment.Moment): number {
+    let indexJour: number = 0;
+    let numFrequence: number = this.loterie.frequence.length;
+
+    while (date.day() !== this.loterie.frequence[indexJour] && indexJour < numFrequence) {
+      indexJour++;
+    }
+
+    return indexJour;
+  }
+
   //Méthode générale permettant de récuperer les résultats ultérieurs à une date donnée
   private importerTiragesUlterieursA(): Promise<any> {
     let date: moment.Moment = this.dernierTirage.clone();
@@ -138,19 +138,9 @@ export class Robot {
       transform: (body) => cheerio.load(body)
     };
 
-    //Calcul de l'indice de la journée de la semaine
-    let indexJour: number = 0;
-    let numFrequence: number = this.frequence.length;
-    while (date.day() !== this.frequence[indexJour] && indexJour < numFrequence) {
-      indexJour++;
-    }
-
-    if (indexJour === this.frequence.length) {
-      return;
-    }
-
     //Obtention de la date du prochain tirage et de son url
-    date.add(this.frequenceJours[indexJour], 'day');
+    let indexJour: number = this.calculIndiceJour(date);
+    date.add(this.loterie.frequenceJours[indexJour], 'day');
     options.uri = 'https://loteries.lotoquebec.com/fr/loteries/' + this.loterie.url + '?date=' + DateUtils.momentToString(date);
 
     //Création de la liste de promesses des pages Web à visiter
@@ -166,8 +156,8 @@ export class Robot {
       urls.push(options.uri);
 
       datePrecedente = DateUtils.momentToString(date);
-      indexJour = (indexJour + 1) % this.frequence.length;
-      date.add(this.frequenceJours[indexJour], 'day');
+      indexJour = (indexJour + 1) % this.loterie.frequence.length;
+      date.add(this.loterie.frequenceJours[indexJour], 'day');
       options.uri = options.uri.replace(datePrecedente, DateUtils.momentToString(date));
     }
 
@@ -205,7 +195,7 @@ export class Robot {
 
       let resultat = new Tirage(date, selectionPrincipale);
 
-      if (this.avecResultatsSecondaires) {
+      if (this.loterie.avecResultatsSecondaires) {
         let resultatsSecondaires = resultats.slice(1);
         resultatsSecondaires.each((i, element) => {
           let selectionSecondaire = [];
@@ -254,7 +244,7 @@ export class Robot {
     let date: string = $('#dateAffichee').text();
     let resultat = new Tirage(date, selectionPrincipale);
 
-    if (this.avecResultatsSecondaires) {
+    if (this.loterie.avecResultatsSecondaires) {
       let resultatsSecondaires = resultats.slice(1);
       resultatsSecondaires.each((i, element) => {
         let selectionSecondaire = [];
@@ -264,19 +254,5 @@ export class Robot {
     }
 
     return this.creerTirage(resultat);
-  }
-
-  //Méthode générale permettant de calculer le nombre de jours à ajouter à une date pour obtenir le prochain tirage
-  private calculerFrequenceJours(): void {
-      let numTirages: number = this.frequence.length;
-      this.frequenceJours = [];
-
-      for (let i = 0; i < numTirages; ++i) {
-        if (i === (numTirages - 1)) {
-          this.frequenceJours[i] = this.frequence[0] + 7 - this.frequence[i];
-        } else {
-          this.frequenceJours[i] = this.frequence[i + 1] - this.frequence[i];
-        }
-      }
   }
 }

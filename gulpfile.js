@@ -93,7 +93,7 @@ function compile(tscConfig) {
     .pipe(browserSync.stream());
 }
 
-gulp.task('compile', ['compile:server', 'compile:client']);
+gulp.task('compile', ['compile:server', 'compile:client', 'compile:specs']);
 
 gulp.task('compile:server', ['tslint:server'], function () {
   return compile(tscConfigServer);
@@ -104,10 +104,10 @@ gulp.task('compile:client', ['tslint:client'], function(){
 });
 
 gulp.task('compile:specs', ['tslint:specs'], function(){
-  var specsClient = tscConfigClient;
+  var specsClient = JSON.parse(JSON.stringify(tscConfigClient));
   specsClient.filesGlob = ["client/app/**/*.spec.ts", "client/typings/*.d.ts"];
 
-  var specsServe = tscConfigServer;
+  var specsServe = JSON.parse(JSON.stringify(tscConfigServer));
   specsServe.filesGlob = ["server/src/**/*.spec.ts", "server/typings/*.d.ts"];
 
   return compile(specsClient) && compile(specsServe);

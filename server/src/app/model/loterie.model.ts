@@ -1,20 +1,30 @@
 import { JSONTirage } from './tirage.model';
 
 export interface ILoterie {
-  url: string;
   nom: string;
+  url: string;
 
   avecComplementaire: boolean;
   avecSeparateur: boolean;
   couleur: string;
 
-  premierTirage: JSONTirage;
-  dernierTirage: JSONTirage;
+  premierTirage?: JSONTirage;
+  dernierTirage?: JSONTirage;
 }
 
-export class Loterie implements ILoterie {
-  url: string;
+export interface ILoterieOptions extends ILoterie {
+  frequence: Array<number>;
+  noProduit: number;
+  avecResultatsSecondaires: boolean;
+}
+
+export interface IConstructor<TLoterie extends Loterie> {
+  new(): TLoterie;
+}
+
+export class Loterie implements ILoterieOptions {
   nom: string;
+  url: string;
 
   avecComplementaire: boolean;
   avecSeparateur: boolean;
@@ -23,16 +33,41 @@ export class Loterie implements ILoterie {
   premierTirage: JSONTirage;
   dernierTirage: JSONTirage;
 
-  constructor(nom: string,
-    url: string,
-    avecComplementaire: boolean,
-    avecSeparateur: boolean,
-    couleur: string) {
-    this.url = url;
-    this.nom = nom;
+  frequence: Array<number>;
+  noProduit: number;
+  avecResultatsSecondaires: boolean;
 
-    this.avecComplementaire = avecComplementaire;
-    this.avecSeparateur = avecSeparateur;
-    this.couleur = couleur;
+  frequenceJours: Array<number>;
+
+  constructor(options: ILoterieOptions) {
+    this.nom = options.nom;
+    this.url = options.url;
+
+    this.avecComplementaire = options.avecComplementaire;
+    this.avecSeparateur = options.avecSeparateur;
+    this.couleur = options.couleur;
+
+    this.premierTirage = options.premierTirage;
+    this.dernierTirage = options.dernierTirage;
+
+    this.frequence = options.frequence;
+    this.noProduit = options.noProduit;
+    this.avecResultatsSecondaires = options.avecResultatsSecondaires;
+
+    this.calculerFrequenceJours();
+  }
+
+  //Méthode générale permettant de calculer le nombre de jours à ajouter à une date pour obtenir le prochain tirage
+  private calculerFrequenceJours(): void {
+    let numTirages: number = this.frequence.length;
+    this.frequenceJours = [];
+
+    for (let i = 0; i < numTirages; ++i) {
+      if (i === (numTirages - 1)) {
+        this.frequenceJours[i] = this.frequence[0] + 7 - this.frequence[i];
+      } else {
+        this.frequenceJours[i] = this.frequence[i + 1] - this.frequence[i];
+      }
+    }
   }
 }

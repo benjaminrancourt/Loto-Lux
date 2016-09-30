@@ -9,8 +9,8 @@ export interface ITirage {
 
 export class JSONTirage {
   date: string;
-  principal: Array<string>;
-  secondaire: Array<Array<string>>;
+  principal?: Array<string>;
+  secondaire?: Array<Array<string>>;
 }
 
 export class Tirage implements ITirage {

@@ -5,6 +5,7 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
 
     plugins: [
+      'karma-remap-istanbul',
       'karma-jasmine',
       'karma-mocha-reporter',
       'karma-coverage',
@@ -67,12 +68,19 @@ module.exports = function(config) {
       'dist/**/!(*spec).js': ['coverage']
     },
 
-    reporters: ['mocha', 'coverage'],
+    reporters: ['mocha', 'coverage', 'karma-remap-istanbul'],
 
     coverageReporter: {
       reporters:[
-        {type: 'json', subdir: '.', file: 'coverage-final.json'}
+        {type: 'json', dir: './coverage', subdir: '.', file: 'coverage.json'}
       ]
+    },
+
+    remapIstanbulReporter: {
+      reports: {
+        lcovonly: 'coverage/lcov.info',
+        html: 'coverage'
+      }
     },
 
     singleRun: true

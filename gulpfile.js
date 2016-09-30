@@ -41,7 +41,11 @@ gulp.task('typings:client', function (callback) {
 //END - Typings ****************************************************************
 
 //BEGIN - Clean ****************************************************************
-gulp.task('clean', ['clean:server', 'clean:client']);
+gulp.task('clean', ['clean:coverage', 'clean:server', 'clean:client']);
+
+gulp.task('clean:coverage', (cb) => {
+  return del(['coverage'], cb);
+});
 
 gulp.task('clean:server', (cb) => {
   return del(['dist/server'], cb);

@@ -5,11 +5,11 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
 
     plugins: [
-      'karma-remap-istanbul',
       'karma-jasmine',
       'karma-mocha-reporter',
       'karma-coverage',
-      'karma-chrome-launcher'
+      'karma-chrome-launcher',
+      'karma-remap-istanbul'
     ],
 
     browsers: process.env.TRAVIS ? ['Chrome_travis_ci'] : ['Chrome'],

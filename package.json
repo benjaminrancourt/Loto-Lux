@@ -9,8 +9,8 @@
   "scripts": {
     "start": "concurrent --kill-others \"gulp watch\" \"gulp start\"",
     "test": "karma start karma.conf.js",
-    "posttest": "correct-coverage",
-    "coverage": "http-server -c-1 -o -p 9875 ./coverage",
+    "posttest": "node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage -t html",
+    "coverage": "correct-coverage && http-server -c-1 -o -p 9875 ./coverage",
     "build-start": "gulp build && npm run start",
     "production": "pm2 start dist/server/server.js && pm2 logs all"
   },
@@ -80,7 +80,6 @@
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "^1.0.2",
     "karma-mocha-reporter": "^2.2.0",
-    "karma-remap-istanbul": "^0.2.1",
     "karma-typescript": "^2.0.6",
     "npm-check": "^5.2.3",
     "remap-istanbul": "^0.6.4"

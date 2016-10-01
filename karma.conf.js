@@ -8,8 +8,7 @@ module.exports = function(config) {
       'karma-jasmine',
       'karma-mocha-reporter',
       'karma-coverage',
-      'karma-chrome-launcher',
-      'karma-remap-istanbul'
+      'karma-chrome-launcher'
     ],
 
     browsers: process.env.TRAVIS ? ['Chrome_travis_ci'] : ['Chrome'],
@@ -68,19 +67,12 @@ module.exports = function(config) {
       'dist/**/!(*spec).js': ['coverage']
     },
 
-    reporters: ['mocha', 'coverage', 'karma-remap-istanbul'],
+    reporters: ['mocha', 'coverage'],
 
     coverageReporter: {
       reporters:[
         {type: 'json', dir: './coverage', subdir: '.', file: 'coverage.json'}
       ]
-    },
-
-    remapIstanbulReporter: {
-      reports: {
-        lcovonly: 'coverage/lcov.info',
-        html: 'coverage'
-      }
     },
 
     singleRun: true

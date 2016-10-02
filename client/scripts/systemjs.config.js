@@ -8,6 +8,7 @@
 
       'components': './app/components',
       'models': './app/models',
+      'selections': './app/selections',
       'services': './app/services',
 
       '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
@@ -21,7 +22,8 @@
 
       'rxjs': 'https://unpkg.com/rxjs@5.0.0-beta.6',
       'moment': 'npm:moment',
-      'angular2-moment': 'npm:angular2-moment'
+      'angular2-moment': 'npm:angular2-moment',
+      'angular2-jwt': 'npm:angular2-jwt/angular2-jwt.js'
     },
 
     packages: {
@@ -32,6 +34,7 @@
 
       components: { main: 'index' },
       models: { main: 'index' },
+      selections: { main: 'index' },
       services: { main: 'index' },
 
       rxjs: {
@@ -45,7 +48,8 @@
       'angular2-moment': {
         main: './index.js',
         defaultExtension: 'js'
-      }
+      },
+      'angular2-jwt': { defaultExtension: 'js' }
     }
   });
 })(this);

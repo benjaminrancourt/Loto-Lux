@@ -1,17 +1,22 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { DateTirage, Loterie, Tirage } from '../../models';
-import { DateService, LoterieService, TirageService } from '../../services';
+import { AuthService, DateService, LoterieService, TirageService } from '../../services';
+import { SelectionsComponent } from './..';
 
 @Component({
   selector: 'loterie-detail',
+  providers: [ AuthService ],
   templateUrl: './app/components/loterie-detail/loterie-detail.component.html',
   styleUrls: ['./app/components/loterie-detail/loterie-detail.component.css']
 })
 
 export class LoterieDetailComponent implements OnInit {
+  @ViewChild(SelectionsComponent)
+  selectionsComponent: SelectionsComponent;
+
   loterie: Loterie;
   tirage: Tirage;
   date: string;
@@ -19,6 +24,7 @@ export class LoterieDetailComponent implements OnInit {
   dates: DateTirage[];
 
   constructor(
+    private auth: AuthService,
     private dateService: DateService,
     private loterieService: LoterieService,
     private tirageService: TirageService,
@@ -42,20 +48,21 @@ export class LoterieDetailComponent implements OnInit {
 
   private recupererLoterie(url: string, date: string): void {
     //Recupère la loterie
-    this.loterieService.recupererParURL(url).then(loterie => {
-      this.loterie = loterie;
+    this.loterieService.recupererParURL(url)
+      .then((loterie) => {
+        this.loterie = loterie;
 
-      //Si la date a été spécifié, ajoute les informations pertinentes
-      if (date !== undefined) {
-        this.onChangementDate(date);
-      } else {
-        this.tirage = this.loterie.dernierTirage;
-        this.date = this.loterie.dernierTirage.date;
-        this.location.go('/loteries/' + this.loterie.url + '/' + this.date);
-      }
+        //Si la date a été spécifié, ajoute les informations pertinentes
+        if (date !== undefined) {
+          this.onChangementDate(date);
+        } else {
+          this.tirage = this.loterie.dernierTirage;
+          this.date = this.loterie.dernierTirage.date;
+          this.location.go('/loteries/' + this.loterie.url + '/' + this.date);
+        }
 
-      this.dateService.recuperer(url).then(dates => this.dates = dates);
-    });
+        this.dateService.recuperer(url).then(dates => this.dates = dates);
+      });
   }
 
   private onChangementDate(date: string): void {
@@ -63,6 +70,14 @@ export class LoterieDetailComponent implements OnInit {
     this.tirageService.recuperer(this.loterie.url, date).then(tirage => {
       this.tirage = tirage;
       this.date = date;
+
+      this.onAjoutSelection();
     });
+  }
+
+  private onAjoutSelection(): void {
+    if (this.selectionsComponent) {
+      this.selectionsComponent.recuperer();
+    }
   }
 }

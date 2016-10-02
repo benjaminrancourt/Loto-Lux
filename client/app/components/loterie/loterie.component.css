@@ -1,6 +1,6 @@
-h3.media-heading {
-  margin-top: 15px;
+.media-heading {
   margin-bottom: 10px;
+  margin-top: 15px;
 }
 
 .media>.pull-left{
@@ -10,7 +10,7 @@ h3.media-heading {
 .services-wrap {
   background: #fff;
   border-radius: 4px;
-  margin: 0 0 40px;
+  margin: 0 0 30px;
 }
 
 .services-wrap .pull-left {
@@ -37,6 +37,10 @@ h3.media-heading {
   color: #313946;
 }
 
+.extra .numeros .num {
+  width: auto;
+}
+
 .numeros .complementaire,
 .numeros .num {
   float: left;
@@ -46,10 +50,6 @@ h3.media-heading {
   margin-right: 1.5%;
   text-align: center;
   width: 30px;
-}
-
-.extra .numeros .num {
-  width: auto;
 }
 
 .num-sep {
@@ -67,20 +67,21 @@ h3.media-heading {
 }
 
 .complementaireGauche {
+  background-color: #0279b5;
+  border-color: #fff;
+  border-radius: 24px 0 0 24px;
+  border-style: solid;
+  border-width: 2px 0 2px 2px;
   float: left;
   height: 24px;
   width: 16px;
-  background-color: #0279b5;
-  -moz-border-radius: 24px 0 0 24px;
-  border-radius: 24px 0 0 24px;
-  border: 2px solid #fff;
-  border-right: 0;
 }
 
 .complementaireCentre {
   background-color: #0279b5;
-  border-bottom: 2px solid #fff;
-  border-top: 2px solid #fff;
+  border-color: #fff;
+  border-style: solid;
+  border-width: 2px 0 2px 0;
   color: #fff;
   float: left;
   font-family: Helvetica,Arial,sans-serif;
@@ -92,25 +93,24 @@ h3.media-heading {
 }
 
 .complementaireDroite {
+  background-color: #0279b5;
+  border-color: #fff;
+  border-radius: 0 24px 24px 0;
+  border-style: solid;
+  border-width: 2px 2px 2px 0;
   float: left;
   height: 24px;
   width: 16px;
-  background-color: #0279b5;
-  -moz-border-radius: 0 24px 24px 0;
-  border-radius: 0 24px 24px 0;
-  border: 2px solid #fff;
-  border-left: 0;
 }
 
 .numeros .complementaire {
   background-color: #0279b5;
-  -moz-border-radius: 24px;
-  border-radius: 24px;
   border: 2px solid #fff;
+  border-radius: 24px;
   color: #fff;
+  line-height: 24px;
   margin-left: 1.5%;
   margin-top: 1%;
-  line-height: 24px;
 }
 
 .list-group {
@@ -119,6 +119,6 @@ h3.media-heading {
 
 .list-group:after {
   clear: both;
-  display: block;
   content: "";
+  display: block;
 }

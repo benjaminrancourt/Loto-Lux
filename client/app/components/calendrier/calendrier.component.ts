@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter,
   Input, OnChanges, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 
+import { BaseCalendar, CalendarClickEventObject, CalendarDataSourceElement } from 'bootstrap-year-calendar';
 import { DateTirage } from './../../models';
 
 declare let $: JQueryStatic;
@@ -27,7 +27,7 @@ export class CalendrierComponent implements AfterViewInit, OnChanges  {
 
   @ViewChild('calendrier') calendrier: ElementRef;
 
-  constructor(private router: Router) {
+  constructor() {
     this.onChangementDate = new EventEmitter<string>();
   }
 
@@ -38,14 +38,14 @@ export class CalendrierComponent implements AfterViewInit, OnChanges  {
 
   ngAfterViewInit(): void {
     $(this.calendrier.nativeElement).calendar({
-        clickDay: (e) => { this.clickDay(e); },
-        customDayRenderer: (element, date) => { this.customDayRenderer(element, date); },
-        disableNext2Year: true,
-        disablePrev2Year: true,
-        displayMonthHeader: true,
-        language: 'fr',
-        numDisplayedMonth: 1,
-        numDisplayedMonthHeader: 3
+      clickDay: (e) => { this.clickDay(e); },
+      customDayRenderer: (element, date) => { this.customDayRenderer(element, date); },
+      disableNext2Year: true,
+      disablePrev2Year: true,
+      displayMonthHeader: true,
+      language: 'fr',
+      numDisplayedMonth: 1,
+      numDisplayedMonthHeader: 3
     });
 
     this.miseAJourDate();
@@ -55,7 +55,7 @@ export class CalendrierComponent implements AfterViewInit, OnChanges  {
   miseAJourDate(): void {
     let dateTirage: DateTirage = { date: this.date, estEffectue: null };
     let dateDepart: Date = this.toDate(dateTirage);
-    let calendrier: any = $(this.calendrier.nativeElement).data('calendar');
+    let calendrier: BaseCalendar = $(this.calendrier.nativeElement).data('calendar');
 
     if (calendrier) {
       calendrier.setYear(dateDepart.getFullYear());
@@ -66,7 +66,7 @@ export class CalendrierComponent implements AfterViewInit, OnChanges  {
   miseAJourDates(): void {
     this.datesJavaScript = this.dates.map(n => this.toDate(n) );
     this.datesString = this.dates.map(n => n.date);
-    let calendrier: any = $(this.calendrier.nativeElement).data('calendar');
+    let calendrier: BaseCalendar = $(this.calendrier.nativeElement).data('calendar');
 
     if (calendrier) {
       calendrier.setEnabledDays(this.datesJavaScript);
@@ -75,7 +75,7 @@ export class CalendrierComponent implements AfterViewInit, OnChanges  {
     }
   }
 
-  clickDay(element: any): void {
+  clickDay(element: CalendarClickEventObject<CalendarDataSourceElement>): void {
     let date: string = element.date.toISOString().slice(0,10);
 
     if (date !== this.date) {

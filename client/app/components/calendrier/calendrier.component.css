@@ -1,5 +1,6 @@
 .calendar .calendar-header {
-  background: rgba(0,0,0,0.45);
+  background-color: #000000;
+  background-color: rgba(0, 0, 0, 0.45);
 }
 
 .calendar .calendar-header .year-title,
@@ -18,19 +19,23 @@
 }
 
 .calendar .calendar-header table th:hover {
-  background: rgba(0,0,0,0.40);
+  background-color: #000000;
+  background-color: rgba(0, 0, 0, 0.40);
 }
 
 .calendar .calendar-header-month {
-  background-color: rgba(0,0,0,0.30);
+  background-color: #000000;
+  background-color: rgba(0, 0, 0, 0.30);
 }
 
 .calendar .calendar-header-month table th:hover {
-  background: rgba(0,0,0,0.25);
+  background-color: #000000;
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .calendar .month-container .month {
-  background-color: rgba(0,0,0,0.15);
+  background-color: #000000;
+  background-color: rgba(0, 0, 0, 0.15);
   border-radius: 4px;
 }
 
@@ -45,6 +50,9 @@
 .calendar .months-container .month .day:not(.disabled) .day-content {
   border-radius: 15px;
   font-weight: bold;
+}
+
+.calendar .months-container .month .day:not(.disabled) .day-content:not(.courant) {
   color: white;
 }
 
@@ -60,7 +68,7 @@
 .calendar .months-container .month .day-content.courant {
   border: 2px solid #00a65a;
   background-color: #00a65a;
-  color: black !important;
+  color: black;
   cursor: default;
 }
 
@@ -75,4 +83,8 @@
 
 .calendar .months-container .month .day-content.suivant:hover {
   background-color: #f39c12;
+}
+
+.panel-default {
+  border: 0;
 }

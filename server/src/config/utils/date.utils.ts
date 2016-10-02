@@ -5,6 +5,10 @@ export class DateUtils {
   static SEPARATEUR_DATE: string = '-';
   static SEPARATEUR_DATE_BDD: string = '/';
 
+  static stringToStringBD(date: string): string {
+    return this.replaceAll(date, this.SEPARATEUR_DATE, this.SEPARATEUR_DATE_BDD);
+  }
+
   static stringToStringArray(date: string): string[] {
     return date.split(this.SEPARATEUR_DATE);
   }

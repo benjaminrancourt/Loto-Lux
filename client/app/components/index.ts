@@ -3,6 +3,10 @@ export * from './calendrier/calendrier.component';
 export * from './loterie/loterie.component';
 export * from './loteries/loteries.component';
 
+/* Sélection */
+export * from './frm-selections/frm-selections.component';
+export * from './selections/selections.component';
+
 /* Accueil */
 export * from './fonctionnalites/fonctionnalites.component';
 export * from './presentation/presentation.component';

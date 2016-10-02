@@ -1,9 +1,14 @@
 export class Service {
+  protected url: string;
   private SEPARATEUR: string = '/';
-  private url: string;
 
   constructor(url: string) {
     this.url = url;
+  }
+
+  protected handleError(error: any): Promise<void>  {
+    console.error('An error occurred', error);
+    return Promise.reject(error.message || error);
   }
 
   protected construireURL(vars: string[]): string {

@@ -1,0 +1,27 @@
+<div *ngIf="selections" [ngClass]="loterie.url">
+  <h3 class="media-heading">Ajouter de nouvelles sélections</h3>
+  <form>
+    <div class="numeros list-group" *ngFor="let ligne of selections; let i = index; trackBy: trackByIdx;">
+      <input
+        *ngFor="let num of ligne; let j = index; trackBy: trackByIdx;"
+        class="num" type="number" required
+        name="{{loterie.url}}_{{i}}_{{j}}" id="{{loterie.url}}_{{i}}_{{j}}"
+        [(ngModel)]="selections[i][j]"
+        [class.valide]="numeroValide(i, j)" [class.invalide]="!numeroValide(i, j)"
+        min="{{selection.minimum}}" max="{{selection.maximum}}"
+      />
+      <span class="input-group-btn">
+        <button *ngIf="selections.length >= 2"
+          class="btn btn-remove btn-danger" type="button" (click)="suppression(i)">
+          <span class="glyphicon glyphicon-minus"></span>
+        </button>
+        <button *ngIf="i === selections.length - 1"
+          class="btn btn-success btn-add" type="button" (click)="ajout()">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </span>
+    </div>
+    <button class="btn btn-primary" (click)="enregistrer()"
+            [disabled]="!selectionsValides()">Enregistrer</button>
+  </form>
+</div>

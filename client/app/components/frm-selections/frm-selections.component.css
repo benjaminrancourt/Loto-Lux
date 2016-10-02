@@ -1,0 +1,25 @@
+.extra .numeros .num {
+  background-color: #fff;
+  color: #313946;
+  width: 30px;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.valide  {
+  border: 2px solid #42A948;
+}
+
+.invalide  {
+  border: 2px solid #a94442;
+}

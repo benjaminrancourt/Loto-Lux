@@ -1,4 +1,7 @@
+import firebase = require('firebase');
+
 import { LoterieService } from './../services';
+import { Loterie } from './../model';
 
 export class LoterieBusiness {
   private service: LoterieService;
@@ -8,12 +11,12 @@ export class LoterieBusiness {
   }
 
   //Retourne les informations de toutes les loteries
-  recuperer(callback: (error: any, result: any) => void): void {
-    this.service.recuperer(callback);
+  recuperer(): firebase.Promise<Loterie[]> {
+    return this.service.recuperer();
   }
 
   //Retourne les informations d'une loterie en particulier
-  recupererParURL(loterie: string, callback: (error: any, result: any) => void): void {
-    this.service.recupererParURL(loterie, callback);
+  recupererParURL(loterie: string): firebase.Promise<Loterie> {
+    return this.service.recupererParURL(loterie);
   }
 }

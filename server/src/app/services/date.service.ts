@@ -1,4 +1,5 @@
-import DataAccess from './../dataAccess/dataAccess';
+import firebase = require('firebase');
+
 import { DateUtils } from './../../config/utils';
 import { DonneeDateService } from './';
 import { Date, JSONDate } from './../model';
@@ -8,8 +9,8 @@ export class DateService extends DonneeDateService<Date, JSONDate> {
     super('dates', nom);
   }
 
-  recupererParAnnee(annee: string, callback: (error: any, result: any) => void): void {
-    DataAccess.database(this.nomDonnees).child(annee).once('value', (snapshot) => {
+  recupererParAnnee(annee: string): firebase.Promise<JSONDate[]> {
+    return this.database().child(annee).once('value').then((snapshot) => {
       let donnees: JSONDate[] = [];
       let date: string[] = [annee];
 
@@ -29,7 +30,8 @@ export class DateService extends DonneeDateService<Date, JSONDate> {
         return false;
       });
 
-      callback(null, donnees);
-    });
+      return donnees;
+    })
+    .catch(this.gererErreur);
   }
 }

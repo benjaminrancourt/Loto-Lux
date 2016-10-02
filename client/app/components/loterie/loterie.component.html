@@ -1,4 +1,4 @@
-<div *ngIf="loterie">
+<div *ngIf="loterie !== undefined">
 <div class="media services-wrap wow fadeInDown" [style.background-color]="loterie.couleur" [ngClass]="loterie.url">
   <div class="pull-left">
     <a [routerLink]="['/loteries', loterie.url, tirage.date]" *ngIf="petitComposant">
@@ -13,7 +13,7 @@
       </a>
       <span *ngIf="!petitComposant">{{titre()}}</span>
     </h3>
-    <div class="numeros list-group" *ngIf="tirage.principal">
+    <div class="numeros list-group" *ngIf="tirage.principal !== undefined">
       <div *ngFor="let num of tirage.principal; let i = index">
 
         <div class="libelleComplementaire" *ngIf="estComplementaire(i)">
@@ -27,8 +27,8 @@
       </div>
     </div>
 
-    <div class="secondaire list-group" *ngIf="tirage.secondaire && !petitComposant">
-      <h3 class="media-heading">Lots additionnels</h3>
+    <div class="secondaire list-group" *ngIf="afficherResultatsSecondaires()">
+      <h3 class="media-heading">Lots additionnels ({{tirage.secondaire.length}})</h3>
       <div class="numeros list-group" *ngFor="let numeros of tirage.secondaire">
         <div *ngFor="let num of numeros; let i = index">
           <span class="num">{{num}}</span>

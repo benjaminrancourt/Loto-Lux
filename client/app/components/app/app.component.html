@@ -23,6 +23,12 @@
           <li>
             <a title="GitHub" href="https://github.com/ranb2002/Loto-Lux"><span class="fa fa-github"></span></a>
           </li>
+          <li *ngIf="!auth.estAuthentifie()">
+            <button class="btn btn-primary btn-margin" (click)="auth.connexion()">Se connecter</button>
+          </li>
+          <li *ngIf="auth.estAuthentifie()">
+            <button class="btn btn-primary btn-margin" (click)="auth.deconnexion()">Se déconnecter</button>
+          </li>
         </ul>
       </div>
     </div>

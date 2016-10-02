@@ -3,13 +3,22 @@ import express = require('express');
 import { Routes } from './config/routes/routes';
 import bodyParser = require('body-parser');
 import path = require('path');
+import replace = require('replace');
 
-import { Journal } from './config/utils';
 import { Robots } from './robots/robots';
 
-let journal: Journal = new Journal();
 let port: number = process.env.PORT || 3000;
 let app = express();
+let ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
+
+console.log('process.env.NODE_ENV = ' + '\'' + ENV + '\'');
+replace({
+  regex: 'process.env.NODE_ENV',
+  replacement: '\'' + ENV + '\'',
+  paths: ['./dist/client/app/main.js'],
+  recursive: true,
+  silent: true
+});
 
 app.use('/app', express.static(path.resolve(__dirname, '../client/app')));
 app.use('/libs', express.static(path.resolve(__dirname, '../client/libs')));
@@ -30,7 +39,10 @@ app.get('/*', renderIndex);
 let server = app.listen(port, () => {
     let host = server.address().address;
     let port = server.address().port;
-    journal.debug('Cette application Express écoute sur le port %d à l\'adresse %s', port, host);
 
-    new Robots().miseAJour();
+    console.log('Cette application Express écoute sur le port %d à l\'adresse %s', port, host);
+
+    let robots: Robots = new Robots();
+    //robots.vider().then(() => robots.importer());
+    robots.importer();
 });

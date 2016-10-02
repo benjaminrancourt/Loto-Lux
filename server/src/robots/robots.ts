@@ -4,16 +4,13 @@ import {
   LottoMaxRobot,
   QuebecMaxRobot,
   Robot } from './';
-import { Journal } from './../config/utils';
 
 //Classe regroupant les différents robots pour mettre à jour la base de données
 export class Robots {
-  private robots: Array<Robot>;
-  private journal: Journal;
+  private robots: Array<Robot<any>>;
 
   constructor() {
     this.robots = [];
-    this.journal = new Journal();
 
     this.robots.push(new ExtraRobot());
     this.robots.push(new Lotto649Robot());
@@ -21,22 +18,24 @@ export class Robots {
     this.robots.push(new QuebecMaxRobot());
   }
 
-  //Permet que chacun des robots mettent à jour la base de données
-  public miseAJour(): void {
-    this.journal.debug('Vérification si les données de chacun des robots sont bien à jours');
-
+  //Permet de vider le contenu reliés aux robots de la base des données
+  public vider(): Promise<any> {
+    let promesses: any[] = [];
     for (let robot of this.robots) {
-      robot.estIndexe((error, estIndexe) => {
-        if (error) {
-          this.journal.error('%s : Erreur lors de l\accès à la base de données : %s', robot, error);
-          return;
-        }
-        else if (!estIndexe) {
-          robot.creer(() => {
-            robot.importerTiragesAnterieurs(() => {
-              robot.importerTiragesUlterieurs();
-            });
-          });
+      promesses.push(robot.supprimer());
+    }
+
+    return Promise.all(promesses);
+  }
+
+  //Permet l'importation des données de tous les robots
+  public importer(): void {
+    for (let robot of this.robots) {
+      robot.estIndexe().then((estIndexe: boolean) => {
+        if (!estIndexe) {
+          robot.creer()
+            .then(() => robot.importerTiragesAnterieurs())
+            .then(() => robot.importerTiragesUlterieurs());
         } else {
           robot.importerTiragesUlterieurs();
         }

@@ -1,20 +1,24 @@
 'use strict';
 
 var gulp = require('gulp'),
-      del = require('del'),
-      csslint = require('gulp-csslint'),
-      tsc = require('gulp-typescript'),
-      environments = require('gulp-environments'),
-      concat = require('gulp-concat'),
-      purify = require('gulp-purifycss'),
-      sourcemaps = require('gulp-sourcemaps'),
-      tslint = require('gulp-tslint'),
-      uglify = require('gulp-uglify'),
-      runSequence = require('run-sequence'),
-      nodemon = require('gulp-nodemon'),
-      gulpTypings = require('gulp-typings'),
-      builder = require('systemjs-builder'),
-      browserSync = require('browser-sync').create();
+    del = require('del'),
+    csslint = require('gulp-csslint'),
+    tsc = require('gulp-typescript'),
+    environments = require('gulp-environments'),
+    concat = require('gulp-concat'),
+    purify = require('gulp-purifycss'),
+    sourcemaps = require('gulp-sourcemaps'),
+    tslint = require('gulp-tslint'),
+    uglify = require('gulp-uglify'),
+    runSequence = require('run-sequence'),
+    nodemon = require('gulp-nodemon'),
+    gulpTypings = require('gulp-typings'),
+    builder = require('systemjs-builder'),
+    browserSync = require('browser-sync').create(),
+    remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul'),
+    Server = require('karma').Server,
+    util = require('gulp-util'),
+    exec = require('child_process').exec;
 
 var development = environments.development;
 var production = environments.production;
@@ -59,14 +63,14 @@ gulp.task('clean:client', (cb) => {
 //BEGIN - Lint *****************************************************************
 gulp.task('tslint:server', () => {
   return gulp
-    .src('server/src/**/*.ts')
+    .src(['server/src/**/*.ts', '!server/src/**/*.spec.ts'])
     .pipe(tslint({ formatter: 'prose' }))
     .pipe(tslint.report());
 });
 
 gulp.task('tslint:client', () => {
   return gulp
-    .src('client/app/**/*.ts')
+    .src(['client/app/**/*.ts', '!client/app/**/*.spec.ts'])
     .pipe(tslint({ formatter: 'prose' }))
     .pipe(tslint.report());
 });
@@ -97,7 +101,7 @@ function compile(tscConfig) {
     .pipe(browserSync.stream());
 }
 
-gulp.task('compile', ['compile:server', 'compile:client', 'compile:specs']);
+gulp.task('compile', ['compile:server', 'compile:client']);
 
 gulp.task('compile:server', ['tslint:server'], function () {
   return compile(tscConfigServer);
@@ -107,15 +111,6 @@ gulp.task('compile:client', ['tslint:client'], function(){
   return compile(tscConfigClient);
 });
 
-gulp.task('compile:specs', ['tslint:specs'], function(){
-  var specsClient = JSON.parse(JSON.stringify(tscConfigClient));
-  specsClient.filesGlob = ["client/app/**/*.spec.ts", "client/typings/*.d.ts"];
-
-  var specsServe = JSON.parse(JSON.stringify(tscConfigServer));
-  specsServe.filesGlob = ["server/src/**/*.spec.ts", "server/typings/*.d.ts"];
-
-  return compile(specsClient) && compile(specsServe);
-});
 //END - Compilation ************************************************************
 
 //BEGIN - Ressources ***********************************************************
@@ -274,9 +269,40 @@ gulp.task('libraries:map', () => {
 });
 //END - Librairies *************************************************************
 
+//BEGIN - Test *****************************************************************
+gulp.task('test', ['clean:coverage', 'unit-test']);
+
+gulp.task('unit-test', (done) => {
+  util.log(__dirname + '/karma.conf.js');
+  new Server({
+    configFile: __dirname + '/karma.conf.js'
+  }, karmaDone).start();
+
+  function karmaDone (exitCode) {
+    remapCoverage(done, exitCode);
+  }
+
+  function remapCoverage (done, exitCode) {
+    gulp.src('coverage/coverage.json')
+      .pipe(remapIstanbul({
+        reports: {
+          'lcovonly': 'coverage/lcov.info',
+          'json': 'coverage/coverage.json',
+          'html': 'coverage',
+          'text-summary': 'coverage/text-summary.txt'
+        }
+      }))
+      .on('finish', function () {
+        exec('correct-coverage', () => done(exitCode));
+      });
+  }
+});
+
+//END - Test *******************************************************************
+
 //BEGIN - Watch ****************************************************************
 function watch(fichier) {
-  console.log('[Client] Resource file ' + fichier.path + ' has been changed. Updating.');
+  util.log('[Client] Resource file ' + fichier.path + ' has been changed. Updating.');
   gulp.src(fichier.path, {base:'client'}).pipe(gulp.dest('dist/client'));
   browserSync.reload(fichier);
 }
@@ -288,11 +314,11 @@ gulp.task('watch', function () {
   });
 
   gulp.watch(['server/**/*.ts'], ['compile:server']).on('change', function (e) {
-      console.log('[Server] TypeScript file ' + e.path + ' has been changed. Compiling.');
+    util.log('[Server] TypeScript file ' + e.path + ' has been changed. Compiling.');
   });
 
   gulp.watch(['client/**/*.ts'], ['compile:client']).on('change', function (e) {
-      console.log('[Client] TypeScript file ' + e.path + ' has been changed. Compiling.');
+    util.log('[Client] TypeScript file ' + e.path + ' has been changed. Compiling.');
   });
 
   gulp.watch(['client/**/*.css'], ['ressources:css']).on('change', watch);
@@ -309,7 +335,7 @@ gulp.task('start', function () {
     delay: '5000', //ms
     watch: 'dist'})
     .on('restart', function () {
-      console.log('Server restarted!')
+      util.log('Server restarted!');
     })
     .once('quit', function () {
       process.exit();

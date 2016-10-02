@@ -15,6 +15,13 @@ describe('La classe « DateUtils » fonctionne', () => {
     dateMoment = moment(dateString, 'YYYY-MM-DD');
   });
 
+  describe('si sa fonction « stringToStringBD » fonctionne', () => {
+    it('si son résultat est correct', () => {
+      let resultat: any = DateUtils.stringToStringBD(dateString);
+      expect(resultat).toEqual(dateStringBD);
+    });
+  });
+
   describe('si sa fonction « stringToStringArray » fonctionne', () => {
     it('si son résultat est un array de trois string et qu\'il est correct', () => {
       let resultat: any = DateUtils.stringToStringArray(dateString);

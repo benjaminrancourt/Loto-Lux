@@ -45,19 +45,12 @@ gulp.task('typings:client', function (callback) {
 //END - Typings ****************************************************************
 
 //BEGIN - Clean ****************************************************************
-gulp.task('clean', ['clean:coverage', 'clean:server', 'clean:client']);
+gulp.task('clean', ['clean:coverage', 'clean:dist']);
 
-gulp.task('clean:coverage', (cb) => {
-  return del(['coverage'], cb);
-});
-
-gulp.task('clean:server', (cb) => {
-  return del(['dist/server'], cb);
-});
-
-gulp.task('clean:client', (cb) => {
-  return del(['dist/client'], cb);
-});
+gulp.task('clean:coverage', (cb) => { return del(['coverage'], cb); });
+gulp.task('clean:dist', (cb) => { return del(['dist'], cb); });
+gulp.task('clean:dist-server', (cb) => { return del(['dist/server'], cb); });
+gulp.task('clean:dist-client', (cb) => { return del(['dist/client'], cb); });
 //END - Clean ******************************************************************
 
 //BEGIN - Lint *****************************************************************
@@ -97,8 +90,7 @@ function compile(tscConfig) {
     .pipe(sourcemaps.init())
     .pipe(tsc(tscConfig.compilerOptions))
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(tscConfig.compilerOptions.outDir))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest(tscConfig.compilerOptions.outDir));
 }
 
 gulp.task('compile', ['compile:server', 'compile:client']);
@@ -141,8 +133,7 @@ gulp.task('ressources:css-global', function() {
         'dist/client/**/*.html'], optionsPurify)
      ))
     .pipe(concat('global.min.css'))
-    .pipe(gulp.dest('dist/client/css'))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest('dist/client/css'));
 });
 
 gulp.task('ressources:css-composants', ['tslint:css-composants'], function() {
@@ -153,32 +144,28 @@ gulp.task('ressources:css-composants', ['tslint:css-composants'], function() {
         'dist/client/scripts/**/*.js',
         'dist/client/**/*.html'], optionsPurify)
      ))
-    .pipe(gulp.dest('dist/client/app/components'))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest('dist/client/app/components'));
 });
 
 //  Fonts **********************************************************************
 gulp.task('ressources:fonts', function() {
   return gulp
     .src('client/fonts/**/*')
-    .pipe(gulp.dest('dist/client/fonts'))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest('dist/client/fonts'));
 });
 
 //  Html ***********************************************************************
 gulp.task('ressources:html', function() {
   return gulp
     .src('client/**/*.html')
-    .pipe(gulp.dest('dist/client'))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest('dist/client'));
 });
 
 //  Images *********************************************************************
 gulp.task('ressources:images', function() {
   return gulp
     .src('client/images/**/*')
-    .pipe(gulp.dest('dist/client/images'))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest('dist/client/images'));
 });
 
 //  scripts ********************************************************************
@@ -193,8 +180,7 @@ gulp.task('ressources:scripts-systemjs', function() {
     .src([
       'client/scripts/systemjs.config.js'
     ])
-    .pipe(gulp.dest('dist/client/scripts'))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest('dist/client/scripts'));
 });
 
 gulp.task('ressources:scripts-min', function() {
@@ -212,8 +198,7 @@ gulp.task('ressources:scripts-min', function() {
     ])
     .pipe(concat('scripts.min.js'))
     .pipe(production(uglify()))
-    .pipe(gulp.dest('dist/client/scripts'))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest('dist/client/scripts'));
 });
 
 gulp.task('ressources:scripts-ie9', function() {
@@ -224,8 +209,7 @@ gulp.task('ressources:scripts-ie9', function() {
     ])
     .pipe(concat('ie9.min.js'))
     .pipe(production(uglify()))
-    .pipe(gulp.dest('dist/client/scripts'))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest('dist/client/scripts'));
 });
 //END - Ressources *************************************************************
 
@@ -301,7 +285,12 @@ gulp.task('unit-test', (done) => {
 //END - Test *******************************************************************
 
 //BEGIN - Watch ****************************************************************
-function watch(fichier) {
+function watch(done) {
+  browserSync.reload();
+  done();
+}
+
+function reload(fichier) {
   util.log('[Client] Resource file ' + fichier.path + ' has been changed. Updating.');
   gulp.src(fichier.path, {base:'client'}).pipe(gulp.dest('dist/client'));
   browserSync.reload(fichier);
@@ -313,19 +302,22 @@ gulp.task('watch', function () {
     port: 7000
   });
 
-  gulp.watch(['server/**/*.ts'], ['compile:server']).on('change', function (e) {
+  gulp.watch(['server/**/*.ts'], ['watch-compile:server']).on('change', function (e) {
     util.log('[Server] TypeScript file ' + e.path + ' has been changed. Compiling.');
   });
 
-  gulp.watch(['client/**/*.ts'], ['compile:client']).on('change', function (e) {
+  gulp.watch(['client/**/*.ts'], ['watch-compile:client']).on('change', function (e) {
     util.log('[Client] TypeScript file ' + e.path + ' has been changed. Compiling.');
   });
 
-  gulp.watch(['client/**/*.css'], ['ressources:css']).on('change', watch);
-  gulp.watch(['client/scripts/**/*.js'], ['ressources:scripts']).on('change', watch);
-  gulp.watch(['client/images/**/*'], ['ressources:images']).on('change', watch);
-  gulp.watch(['client/**/*.html'], ['ressources:html']).on('change', watch);
+  gulp.watch(['client/**/*.css'], ['ressources:css']).on('change', reload);
+  gulp.watch(['client/scripts/**/*.js'], ['ressources:scripts']).on('change', reload);
+  gulp.watch(['client/images/**/*'], ['ressources:images']).on('change', reload);
+  gulp.watch(['client/**/*.html'], ['ressources:html']).on('change', reload);
 });
+
+gulp.task('watch-compile:server', ['compile:server'], watch);
+gulp.task('watch-compile:client', ['compile:client'], watch);
 //END - Watch ******************************************************************
 
 // Start the express server with nodemon
@@ -340,14 +332,6 @@ gulp.task('start', function () {
     .once('quit', function () {
       process.exit();
     });
-});
-
-//Compile the server only and start it
-gulp.task('compile-start:server', function (callback) {
-  runSequence('clean:server',
-    'compile:server',
-    'start',
-    callback);
 });
 
 //Build the server for production

@@ -1,13 +1,13 @@
 import { Extra } from './extra.loterie';
 
-describe('La classe « Extra » est correct', () => {
+describe('[Serveur] Classe « Extra »', () => {
   let loterie: Extra;
 
   beforeEach(() => {
     loterie = new Extra();
   });
 
-  it('si son tableau de jours à ajouter est correct', () => {
+  it('son tableau de jours à ajouter est [1, 1, 1, 1, 1, 1, 1]', () => {
     expect(loterie.frequenceJours.length).toBe(7);
     expect(loterie.frequenceJours).toEqual([1, 1, 1, 1, 1, 1, 1]);
   });

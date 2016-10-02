@@ -48,9 +48,9 @@ export class Robot<TLoterie extends Loterie> {
   }
 
   //Crée la loterie dans la base de données
-   public creer(): firebase.Promise<any> {
-     return this.loterieService.creer(this.loterie);
-   }
+  public creer(): firebase.Promise<any> {
+    return this.loterieService.creer(this.loterie);
+  }
 
   //Méthode générale permettant de récuperer les résultats ultérieurs, récupérant la date du dernier tirage ajouté
   public importerTiragesUlterieurs(): firebase.Promise<any> {
@@ -77,33 +77,20 @@ export class Robot<TLoterie extends Loterie> {
     options.uri = options.uri + '&widget=resultats-anterieurs&noProduit=' + this.loterie.noProduit;
 
     //Création de la liste de promesses des pages Web à visiter
-    //let promesses: Promise<any>[] = [];
-    let urls: string[] = [];
+    let promesses: Promise<any>[] = [];
 
     while (annee < this.AUJOURDHUI.year()) {
-      /*promesses.push(rp(options)
+      promesses.push(rp(options)
         .then(($) => this.getTiragesAnterieurs($))
-        .catch((erreur: any) => console.log('Antérieur ' + erreur))
-      );*/
+      );
 
-      urls.push(options.uri);
       options.uri = options.uri.replace(annee.toString(), (annee + 1).toString());
       annee++;
     }
 
-    console.log('Antérieur ' + this.loterie.nom + ' = ' + urls.length);
+    console.log('[' + this.loterie.nom + ']' + ' - ' + 'Importation de ' + promesses.length + ' année' + (promesses.length > 1 ? 's' : '') + ' de tirages.');
 
-    //return Promise.all(promesses);
-    return Promise.all(urls.map((url: string) => {
-      let opts = options;
-      opts.uri = url;
-
-      console.log('Antérieur ' + opts.uri);
-
-      return rp(opts)
-        .then(($) => this.getTiragesAnterieurs($))
-        .catch((erreur: any) => console.log('Antérieur ' + erreur));
-    }));
+    return Promise.all(promesses);
   }
 
   //Méthode générale et spécifique retournant tous les résultats d'un tirage anterieurs
@@ -144,16 +131,13 @@ export class Robot<TLoterie extends Loterie> {
     options.uri = 'https://loteries.lotoquebec.com/fr/loteries/' + this.loterie.url + '?date=' + DateUtils.momentToString(date);
 
     //Création de la liste de promesses des pages Web à visiter
-    //let promesses: Promise<any>[] = [];
-    let urls: string[] = [];
+    let promesses: Promise<any>[] = [];
     let datePrecedente: string;
 
     while (date < this.AUJOURDHUI) {
-      /*promesses.push(rp(options)
+      promesses.push(rp(options)
         .then(($) => this.getTirageUlterieur($))
-        .catch((erreur: any) => console.log('Ultérieur ' + erreur))
-      );*/
-      urls.push(options.uri);
+      );
 
       datePrecedente = DateUtils.momentToString(date);
       indexJour = (indexJour + 1) % this.loterie.frequence.length;
@@ -161,19 +145,9 @@ export class Robot<TLoterie extends Loterie> {
       options.uri = options.uri.replace(datePrecedente, DateUtils.momentToString(date));
     }
 
-    console.log('Ultérieur ' + this.loterie.nom + ' = ' + urls.length);
+    console.log('[' + this.loterie.nom + ']' + ' - ' + 'Importation de ' + promesses.length + ' tirage' + (promesses.length > 1 ? 's' : '') + '.');
 
-    //return Promise.all(promesses);
-    return Promise.all(urls.map((url) => {
-      let opts = options;
-      opts.uri = url;
-
-      console.log('Ultérieur ' + url);
-
-      return rp(opts)
-        .then(($) => this.getTirageUlterieur($))
-        .catch((erreur: any) => console.log('Ultérieur ' + JSON.stringify(erreur)));
-    }));
+    return Promise.all(promesses);
   }
 
   //Méthode spécifique permettant d'important les résultats des tirages antérieurs d'une année spécifique

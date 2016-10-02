@@ -2,7 +2,7 @@ import * as moment from 'moment';
 
 import { DateUtils } from './';
 
-describe('La classe « DateUtils » fonctionne', () => {
+describe('[Serveur] Classe « DateUtils »', () => {
   let dateString: string;
   let dateArray: string[];
   let dateMoment: moment.Moment;
@@ -15,59 +15,58 @@ describe('La classe « DateUtils » fonctionne', () => {
     dateMoment = moment(dateString, 'YYYY-MM-DD');
   });
 
-  describe('si sa fonction « stringToStringBD » fonctionne', () => {
-    it('si son résultat est correct', () => {
-      let resultat: any = DateUtils.stringToStringBD(dateString);
+  describe('Fonction « stringToStringBD »', () => {
+    it('retourne la date du format YYYY-MM-DD vers le format YYYY/MM/DD', () => {
+      let resultat: string = DateUtils.stringToStringBD(dateString);
       expect(resultat).toEqual(dateStringBD);
     });
   });
 
-  describe('si sa fonction « stringToStringArray » fonctionne', () => {
-    it('si son résultat est un array de trois string et qu\'il est correct', () => {
+  describe('Fonction « stringToStringArray »', () => {
+    it('retourne la date du format YYYY-MM-DD vers le format [YYYY, MM, DD]', () => {
       let resultat: any = DateUtils.stringToStringArray(dateString);
-      expect(resultat.length).toBe(3);
       expect(resultat).toEqual(dateArray);
     });
   });
 
-  describe('si sa fonction « stringToMoment » fonctionne', () => {
-    it('si son résultat est un moment et qu\'il est correct', () => {
-      let resultat: any = DateUtils.stringToMoment(dateString);
+  describe('Fonction « stringToMoment »', () => {
+    it('retourne la date du format YYYY-MM-DD vers le format Moment', () => {
+      let resultat: moment.Moment = DateUtils.stringToMoment(dateString);
       expect(resultat).toEqual(dateMoment);
     });
   });
 
-  describe('si sa fonction « stringArrayToMoment » fonctionne', () => {
-    it('si son résultat est un moment et qu\'il est correct', () => {
-      let resultat: any = DateUtils.stringArrayToMoment(dateArray);
+  describe('Fonction « stringArrayToMoment »', () => {
+    it('retourne la date du format [YYYY, MM, DD] vers le format Moment', () => {
+      let resultat: moment.Moment = DateUtils.stringArrayToMoment(dateArray);
       expect(resultat).toEqual(dateMoment);
     });
   });
 
-  describe('si sa fonction « stringArrayToString » fonctionne', () => {
-    it('si son résultat est un string et qu\'il est correct', () => {
-      let resultat: any = DateUtils.stringArrayToString(dateArray);
+  describe('Fonction « stringArrayToString »', () => {
+    it('retourne la date du format [YYYY, MM, DD] vers le format YYYY-MM-DD', () => {
+      let resultat: string = DateUtils.stringArrayToString(dateArray);
       expect(resultat).toEqual(dateString);
     });
   });
 
-  describe('si sa fonction « stringArrayToString » fonctionne', () => {
-    it('si son résultat est un string et qu\'il est correct', () => {
-      let resultat: any = DateUtils.momentToString(dateMoment);
+  describe('Fonction « momentToString »', () => {
+    it('retourne la date du format Moment vers le format YYYY-MM-DD', () => {
+      let resultat: string = DateUtils.momentToString(dateMoment);
       expect(resultat).toEqual(dateString);
     });
   });
 
-  describe('si sa fonction « momentToStringArray » fonctionne', () => {
-    it('si son résultat est un array de string et qu\'il est correct', () => {
-      let resultat: any = DateUtils.momentToStringArray(dateMoment);
+  describe('Fonction « momentToStringArray »', () => {
+    it('retourne la date du format Moment vers le format [YYYY, MM, DD]', () => {
+      let resultat: string[] = DateUtils.momentToStringArray(dateMoment);
       expect(resultat).toEqual(dateArray);
     });
   });
 
-  describe('si sa fonction « momentToStringBD » fonctionne', () => {
-    it('si son résultat est un string et qu\'il est correct', () => {
-      let resultat: any = DateUtils.momentToStringBD(dateMoment);
+  describe('Fonction « momentToStringBD »', () => {
+    it('retourne la date du format Moment vers le format YYYY/MM/DD', () => {
+      let resultat: string = DateUtils.momentToStringBD(dateMoment);
       expect(resultat).toEqual(dateStringBD);
     });
   });

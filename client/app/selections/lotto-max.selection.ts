@@ -5,8 +5,14 @@ export class LottoMaxSelection extends Selection {
 
   constructor() {
     let options: ISelectionOptions = {
-       nbreNumeros: 7, minimum: 1, maximum: 49, verifieDuplicat: true, regex: '([0]?[1-9]|[1-4][0-9])',
-       numSelectionsMin: 3
+       maximum: 49,
+       minimum: 1,
+       nbreNumeros: 7,
+       numSelectionsMin: 3,
+       regex: '([0]?[1-9]|[1-4][0-9])',
+       trie: true,
+       verifieDuplicat: true,
+       zeros: true
     };
 
     super(options);

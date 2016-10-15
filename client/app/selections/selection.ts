@@ -7,9 +7,9 @@ export interface ISelectionOptions {
   regex: string;
 
   numSelectionsMin?: number;
-  trie?: boolean;
-  zeros?: boolean;
-  verifieDuplicat?: boolean;
+  trie: boolean;
+  zeros: boolean;
+  verifieDuplicat: boolean;
 }
 
 export class Selection {

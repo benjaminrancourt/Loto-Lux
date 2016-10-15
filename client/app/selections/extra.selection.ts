@@ -6,8 +6,13 @@ export class ExtraSelection extends Selection {
 
   constructor() {
     let options: ISelectionOptions = {
-      nbreNumeros: 7, minimum: 0, maximum: 9, regex: '[0-9]',
-      trie: false, zeros: false
+      maximum: 9,
+      minimum: 0,
+      nbreNumeros: 7,
+      regex: '[0-9]',
+      trie: false,
+      verifieDuplicat: false,
+      zeros: false
     };
 
     super(options);

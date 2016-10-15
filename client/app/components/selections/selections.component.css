@@ -1,0 +1,11 @@
+.numeros .numGagnant {
+  background-color: #b53e02 !important;
+}
+
+.numeros .numComplementaire {
+  background-color: #0279b5 !important;
+}
+
+.extra .numeros .num {
+  width: 30px !important;
+}

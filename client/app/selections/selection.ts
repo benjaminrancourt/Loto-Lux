@@ -1,3 +1,5 @@
+import { ISelection, Decomposable } from './../models';
+
 export interface ISelectionOptions {
   nbreNumeros: number;
   minimum: number;
@@ -28,9 +30,9 @@ export class Selection {
     this.regex = options.regex;
 
     this.numSelectionsMin = options.numSelectionsMin ? options.numSelectionsMin : 1;
-    this.trie = options.trie ? options.trie : true;
-    this.zeros = options.zeros ? options.zeros : true;
-    this.verifieDuplicat = options.verifieDuplicat ? options.verifieDuplicat : false;
+    this.trie = options.trie;
+    this.zeros = options.zeros;
+    this.verifieDuplicat = options.verifieDuplicat;
   }
 
   //Retourne vrai si le numéro est entre le minimum et le maximum inclusivement
@@ -78,6 +80,44 @@ export class Selection {
     }
 
     return selectionString;
+  }
+
+  public calculer(selection: ISelection, principal: string[], secondaires: string[][]): ISelection {
+    selection.decomposable = this.calculerDecomposable(selection.nombres, principal);
+    selection.gagnantSecondaire = this.calculerSecondaire(selection.nombres, secondaires);
+
+    return selection;
+  }
+
+  protected calculerDecomposable(selection: string[], principal: string[]): Decomposable[] {
+    let retour: Decomposable[] = [];
+
+    for (let i = 0; i < selection.length; ++i) {
+      let index: number = principal.indexOf(selection[i]);
+      if (index !== -1) {
+        retour[i] = (index !== principal.length - 1) ? Decomposable.Gagnant : Decomposable.Complementaire;
+      } else {
+        retour[i] = Decomposable.Normal;
+      }
+    }
+
+    return retour;
+  }
+
+  private calculerSecondaire(selection: string[], secondaires: string[][]): number {
+    let estIdentique: boolean;
+
+    if (!secondaires) { return -1; }
+
+    for (let i = 0; i < secondaires.length; ++i) {
+      estIdentique = (selection.length === secondaires[i].length) && selection.every((element, index) => {
+        return element === secondaires[i][index];
+      });
+
+      if (estIdentique) { return i; }
+    }
+
+    return -1;
   }
 
   //Trie les sélections

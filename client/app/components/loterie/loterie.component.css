@@ -32,7 +32,6 @@
 .lotto-max .numeros .num,
 .quebec-max .numeros .num {
   background-color: #fff;
-  -moz-border-radius: 24px;
   border-radius: 24px;
   color: #313946;
 }

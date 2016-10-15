@@ -1,7 +1,8 @@
 <div [ngClass]="loterie.url" *ngIf="selections && selections.length">
   <h3 class="media-heading">Vos sélections</h3>
   <div class="numeros list-group" *ngFor="let selection of selections; let i = index">
-    <span *ngFor="let num of selection.nombres; let j = index" class="num">
+    <span *ngFor="let num of selection.nombres; let j = index" class="num"
+      [ngClass]="{numGagnant: numGagnant[i][j], numComplementaire: numComplementaire[i][j]}">
       {{num}}
     </span>
     <span class="input-group-btn">

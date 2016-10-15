@@ -4,6 +4,7 @@ export * from './loterie/loterie.component';
 export * from './loteries/loteries.component';
 
 /* Sélection */
+export * from './selections/iselections.component';
 export * from './frm-selections/frm-selections.component';
 export * from './selections/selections.component';
 

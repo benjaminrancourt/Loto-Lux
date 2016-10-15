@@ -1,7 +1,7 @@
 import firebase = require('firebase');
 
 import { LoterieService, TirageService } from './../services';
-import { JSONTirage } from './../model';
+import { IJSONTirage } from './../model';
 
 export class TirageBusiness {
   private loterieService: LoterieService;
@@ -14,7 +14,7 @@ export class TirageBusiness {
 
   //Retourne tous les résultats des tirages d'une loterie
   //TODO : Si la loterie existe LoterieService
-  recuperer(loterie: string): firebase.Promise<JSONTirage[]> {
+  recuperer(loterie: string): firebase.Promise<IJSONTirage[]> {
     this.tirageService.nomDonnees = loterie;
     return this.tirageService.recuperer();
   }
@@ -22,7 +22,7 @@ export class TirageBusiness {
   //Retourne tous les résultats d'un tirage d'une loterie
   //TODO : Si la loterie existe LoterieService
   //TODO : Si la date existe DateService
-  recupererParDate(loterie: string, date: string): firebase.Promise<JSONTirage> {
+  recupererParDate(loterie: string, date: string): firebase.Promise<IJSONTirage> {
     this.tirageService.nomDonnees = loterie;
     return this.tirageService.recupererParDate(date);
   }
@@ -30,7 +30,7 @@ export class TirageBusiness {
   //Retourne tous les résultats d'un tirage d'une loterie
   //TODO : Si la loterie existe LoterieService
   //TODO : Si la date existe DateService
-  recupererDernierTirage(loterie: string): firebase.Promise<JSONTirage> {
+  recupererDernierTirage(loterie: string): firebase.Promise<IJSONTirage> {
     return this.loterieService.recupererDateDernierTirage(loterie)
       .then((date) => {
         this.tirageService.nomDonnees = loterie;

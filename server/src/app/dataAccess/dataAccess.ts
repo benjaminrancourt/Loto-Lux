@@ -1,5 +1,5 @@
 import firebase = require('firebase');
-import { Constantes } from './../../config/utils';
+import { Constantes } from './../../config/constantes';
 
 class DataAccess {
   static ref: firebase.database.Reference;

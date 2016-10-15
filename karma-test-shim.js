@@ -66,7 +66,7 @@ System.config({
     'dist/server/app/model': { main: 'index' },
     'dist/server/app/services': { main: 'index' },
     'dist/server/config/routes': { main: 'index' },
-    'dist/server/config/utils': { main: 'index' },
+    'dist/server/utils': { main: 'index' },
     'dist/server/controllers': { main: 'index' },
     'dist/server/robots': { main: 'index' }
   }

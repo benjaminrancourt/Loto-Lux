@@ -1,6 +1,6 @@
 import firebase = require('firebase');
 
-import { DateUtils } from './../../config/utils';
+import { DateUtils } from './../../utils';
 import { IDonneeDate, JSONDonneeDate } from './../model';
 import { Service } from './';
 

@@ -1,6 +1,6 @@
 import firebase = require('firebase');
 
-import { Loterie, JSONTirage } from './../model';
+import { Loterie, IJSONTirage } from './../model';
 import { Service } from './';
 
 export class LoterieService extends Service {
@@ -15,7 +15,7 @@ export class LoterieService extends Service {
   }
 
   //Met à jour le dernier tirage
-  public mettreAJourDernierTirage(url: string, dernierTirage: JSONTirage): firebase.Promise<any> {
+  public mettreAJourDernierTirage(url: string, dernierTirage: IJSONTirage): firebase.Promise<any> {
     return this.database().child(url).child('dernierTirage').set(dernierTirage)
       .catch(this.gererErreur);
   }
@@ -25,7 +25,7 @@ export class LoterieService extends Service {
     return this.database().child(url).child('dernierTirage').once('value')
       .then((snapshot) => {
         if (snapshot.exists()) {
-          let tirage: JSONTirage = snapshot.val();
+          let tirage: IJSONTirage = snapshot.val();
           return firebase.Promise.resolve(tirage.date);
         } else {
           return firebase.Promise.reject('La date du dernier tirage de la loterie ' + url + ' n\'existe pas.');

@@ -1,7 +1,7 @@
 import { DonneeDateService } from './';
-import { Tirage, JSONTirage } from './../model';
+import { Tirage, IJSONTirage } from './../model';
 
-export class TirageService extends DonneeDateService<Tirage, JSONTirage> {
+export class TirageService extends DonneeDateService<Tirage, IJSONTirage> {
   constructor (nom?: string) {
     super('tirages', nom);
   }

@@ -10,7 +10,7 @@ httpAgent.maxSockets = 15;
 
 import { Date, Loterie, IConstructor, Tirage } from './../app/model';
 import { DateService, LoterieService, TirageService } from './../app/services';
-import { DateUtils } from './../config/utils';
+import { DateUtils } from './../utils';
 
 //Classe représentant un robot qui récupère les informations nécessaires sur le Web
 export abstract class Robot<TLoterie extends Loterie> {

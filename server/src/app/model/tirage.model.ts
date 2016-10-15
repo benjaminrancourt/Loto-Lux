@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { DateUtils } from './../../config/utils';
+import { DateUtils } from './../../utils';
 
 export interface ITirage {
   date: moment.Moment;
@@ -7,7 +7,7 @@ export interface ITirage {
   secondaire?: Array<Array<string>>;
 }
 
-export class JSONTirage {
+export interface IJSONTirage {
   date: string;
   principal?: Array<string>;
   secondaire?: Array<Array<string>>;
@@ -34,8 +34,8 @@ export class Tirage implements ITirage {
     }
   }
 
-  toJSON(): JSONTirage {
-    let tirage: JSONTirage = {
+  toJSON(): IJSONTirage {
+    let tirage: IJSONTirage = {
       date: DateUtils.momentToString(this.date),
       principal: this.principal,
       secondaire: this.secondaire

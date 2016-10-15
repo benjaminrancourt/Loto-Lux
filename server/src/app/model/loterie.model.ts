@@ -1,4 +1,4 @@
-import { JSONTirage } from './tirage.model';
+import { IJSONTirage } from './tirage.model';
 
 export interface ILoterie {
   nom: string;
@@ -8,8 +8,8 @@ export interface ILoterie {
   avecSeparateur: boolean;
   couleur: string;
 
-  premierTirage?: JSONTirage;
-  dernierTirage?: JSONTirage;
+  premierTirage?: IJSONTirage;
+  dernierTirage?: IJSONTirage;
 }
 
 export interface ILoterieOptions extends ILoterie {
@@ -30,8 +30,8 @@ export class Loterie implements ILoterieOptions {
   avecSeparateur: boolean;
   couleur: string;
 
-  premierTirage: JSONTirage;
-  dernierTirage: JSONTirage;
+  premierTirage: IJSONTirage;
+  dernierTirage: IJSONTirage;
 
   frequence: Array<number>;
   noProduit: number;

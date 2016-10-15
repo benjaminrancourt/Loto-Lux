@@ -2,7 +2,7 @@ import firebase = require('firebase');
 
 import { Service } from './';
 import { ISelection} from './../model';
-import { CourrielUtils, DateUtils } from './../../config/utils';
+import { CourrielUtils, DateUtils } from './../../utils';
 
 export class SelectionService extends Service {
   private courriel: string;

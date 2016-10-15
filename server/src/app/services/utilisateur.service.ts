@@ -2,7 +2,7 @@ import firebase = require('firebase');
 
 import { JSONUtilisateur } from './../model';
 import { Service } from './service';
-import { CourrielUtils } from './../../config/utils';
+import { CourrielUtils } from './../../utils';
 
 export class UtilisateurService extends Service {
   constructor() {

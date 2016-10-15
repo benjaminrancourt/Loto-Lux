@@ -1,10 +1,10 @@
 /// <reference path="../typings/index.d.ts" />
 import express = require('express');
-import { Routes } from './config/routes/routes';
 import bodyParser = require('body-parser');
 import path = require('path');
 import replace = require('replace');
 
+import { Routes } from './config/routes';
 import { Robots } from './robots/robots';
 
 let port: number = process.env.PORT || 3000;

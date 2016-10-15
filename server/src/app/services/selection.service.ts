@@ -1,8 +1,8 @@
 import firebase = require('firebase');
 
-import { UtilisateurService, Service } from './';
+import { Service } from './';
 import { ISelection} from './../model';
-import { DateUtils } from './../../config/utils';
+import { CourrielUtils, DateUtils } from './../../config/utils';
 
 export class SelectionService extends Service {
   private courriel: string;
@@ -19,7 +19,7 @@ export class SelectionService extends Service {
     return this.database()
       .child(loterie)
       .child(DateUtils.stringToStringBD(date))
-      .child(UtilisateurService.encoderCourriel(this.courriel))
+      .child(CourrielUtils.encoder(this.courriel))
       .once('value')
       .then((snapshot) => {
         let selections: ISelection[] = [];
@@ -54,7 +54,7 @@ export class SelectionService extends Service {
     let donnees: any = this.database()
       .child(loterie)
       .child(DateUtils.stringToStringBD(date))
-      .child(UtilisateurService.encoderCourriel(this.courriel));
+      .child(CourrielUtils.encoder(this.courriel));
 
     for (let i = 0; i < selections.length; ++i) {
       promesses.push(donnees.push(selections[i]));
@@ -68,7 +68,7 @@ export class SelectionService extends Service {
     return this.database()
       .child(loterie)
       .child(DateUtils.stringToStringBD(date))
-      .child(UtilisateurService.encoderCourriel(this.courriel))
+      .child(CourrielUtils.encoder(this.courriel))
       .child(id)
       .remove()
       .catch(this.gererErreur);

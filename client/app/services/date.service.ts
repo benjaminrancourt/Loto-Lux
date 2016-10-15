@@ -17,11 +17,4 @@ export class DateService extends Service {
       .then(response => response.json())
       .catch(this.handleError);
   }
-
-  recupererParAnnee(loterie: string, annee: string): Promise<DateTirage[]> {
-    return this.http.get(this.construireURL([loterie, 'dates', annee]))
-      .toPromise()
-      .then(response => response.json())
-      .catch(this.handleError);
-  }
 }

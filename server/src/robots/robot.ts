@@ -13,7 +13,7 @@ import { DateService, LoterieService, TirageService } from './../app/services';
 import { DateUtils } from './../config/utils';
 
 //Classe représentant un robot qui récupère les informations nécessaires sur le Web
-export class Robot<TLoterie extends Loterie> {
+export abstract class Robot<TLoterie extends Loterie> {
   private loterie: TLoterie;
 
   private AUJOURDHUI: moment.Moment;

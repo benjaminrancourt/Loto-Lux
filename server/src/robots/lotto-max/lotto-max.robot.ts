@@ -1,6 +1,6 @@
 import { Robot } from './..';
-import { LottoMax } from './lotto-max.loterie';
+import { LottoMaxLoterie } from './lotto-max.loterie';
 
-export class LottoMaxRobot extends Robot<LottoMax> {
-  constructor() { super(LottoMax); }
+export class LottoMaxRobot extends Robot<LottoMaxLoterie> {
+  constructor() { super(LottoMaxLoterie); }
 }

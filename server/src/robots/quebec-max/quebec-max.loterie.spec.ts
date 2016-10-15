@@ -1,10 +1,10 @@
-import { LottoMax } from './lotto-max.loterie';
+import { QuebecMaxLoterie } from './quebec-max.loterie';
 
-describe('[Serveur] Classe « LottoMax »', () => {
-  let loterie: LottoMax;
+describe('[Serveur] Classe « QuebecMaxLoterie »', () => {
+  let loterie: QuebecMaxLoterie;
 
   beforeEach(() => {
-    loterie = new LottoMax();
+    loterie = new QuebecMaxLoterie();
   });
 
   it('son tableau de jours à ajouter est [7]', () => {

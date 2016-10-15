@@ -1,10 +1,10 @@
-import { Extra } from './extra.loterie';
+import { ExtraLoterie } from './extra.loterie';
 
-describe('[Serveur] Classe « Extra »', () => {
-  let loterie: Extra;
+describe('[Serveur] Classe « ExtraLoterie »', () => {
+  let loterie: ExtraLoterie;
 
   beforeEach(() => {
-    loterie = new Extra();
+    loterie = new ExtraLoterie();
   });
 
   it('son tableau de jours à ajouter est [1, 1, 1, 1, 1, 1, 1]', () => {

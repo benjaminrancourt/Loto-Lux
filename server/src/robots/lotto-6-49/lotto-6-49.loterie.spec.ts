@@ -1,10 +1,10 @@
-import { Lotto649 } from './lotto-6-49.loterie';
+import { Lotto649Loterie } from './lotto-6-49.loterie';
 
-describe('[Serveur] Classe « Lotto649 »', () => {
-  let loterie: Lotto649;
+describe('[Serveur] Classe « Lotto649Loterie »', () => {
+  let loterie: Lotto649Loterie;
 
   beforeEach(() => {
-    loterie = new Lotto649();
+    loterie = new Lotto649Loterie();
   });
 
   it('son tableau de jours à ajouter est [3, 4]', () => {

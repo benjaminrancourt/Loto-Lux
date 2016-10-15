@@ -1,8 +1,8 @@
 import { Robot } from './..';
-import { Extra } from './extra.loterie';
+import { ExtraLoterie } from './extra.loterie';
 
-export class ExtraRobot extends Robot<Extra> {
-  constructor() { super(Extra); }
+export class ExtraRobot extends Robot<ExtraLoterie> {
+  constructor() { super(ExtraLoterie); }
 
   //Méthode spécifique retournant tous les résultats d'un tirage antérieur
   protected getTirageAnterieurResultats($: CheerioStatic, element: CheerioElement): Cheerio {

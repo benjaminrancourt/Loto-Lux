@@ -1,6 +1,6 @@
 import { Robot } from './..';
-import { QuebecMax } from './quebec-max.loterie';
+import { QuebecMaxLoterie } from './quebec-max.loterie';
 
-export class QuebecMaxRobot extends Robot<QuebecMax> {
-  constructor() { super(QuebecMax); }
+export class QuebecMaxRobot extends Robot<QuebecMaxLoterie> {
+  constructor() { super(QuebecMaxLoterie); }
 }

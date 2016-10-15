@@ -1,6 +1,6 @@
 import { Loterie, ILoterieOptions } from './../../app/model';
 
-export class Extra extends Loterie {
+export class ExtraLoterie extends Loterie {
   constructor() {
     let options: ILoterieOptions = {
       nom: 'Extra',

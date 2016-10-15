@@ -88,3 +88,8 @@
 .panel-default {
   border: 0;
 }
+
+.day-content {
+  width: 31px;
+  height: 31px;
+}

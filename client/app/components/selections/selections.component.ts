@@ -65,11 +65,6 @@ export class SelectionsComponent extends ISelectionsComponent implements OnChang
         this.numGagnant[i][j] = this.selections[i].decomposable[j] === Decomposable.Gagnant;
         this.numComplementaire[i][j] = this.selections[i].decomposable[j] === Decomposable.Complementaire;
       }
-
-      console.log(i + ' - ' + JSON.stringify(this.selections[i]));
-      console.log(i + ' - ' + JSON.stringify(this.numGagnant[i]));
-      console.log(i + ' - ' + JSON.stringify(this.numComplementaire[i]));
-      console.log('');
     }
   }
 }

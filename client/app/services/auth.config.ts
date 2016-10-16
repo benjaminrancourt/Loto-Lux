@@ -10,7 +10,7 @@ export class AuthConfiguration {
       redirect: false
     },
     autoclose: false,
-    language: 'en',
+    language: 'fr',
     theme: {
       logo: 'images/ico/logo.png',
       primaryColor: '#b81b1c'

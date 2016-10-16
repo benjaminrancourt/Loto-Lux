@@ -26,17 +26,17 @@ export class UtilisateurService extends Service {
   }
 
   //Vérifie si l'utilisateur est bien celui qu'il prétend être
-  estCorrect(utilisateur: JSONUtilisateur): firebase.Promise<boolean> {
+  estCorrect(courriel: string, token: string): firebase.Promise<boolean> {
     return this.database()
-      .child(CourrielUtils.encoder(utilisateur.courriel))
+      .child(CourrielUtils.encoder(courriel))
       .once('value').then((snapshot) => {
       if (snapshot.exists()) {
         let resultat: JSONUtilisateur = snapshot.val();
-        let correct: boolean = resultat.token === utilisateur.token && resultat.courriel === utilisateur.courriel;
+        let correct: boolean = resultat.token === token && resultat.courriel === courriel;
 
         return firebase.Promise.resolve(correct);
       } else {
-        return firebase.Promise.reject('L\'utilisateur ' + utilisateur.courriel + ' n\'existe pas.');
+        return firebase.Promise.reject('L\'utilisateur ' + courriel + ' n\'existe pas.');
       }
     })
     .catch(this.gererErreur);

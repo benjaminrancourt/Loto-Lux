@@ -1,40 +1,41 @@
 import firebase = require('firebase');
 
-import { LoterieService, TirageService } from './../services';
+import { TirageService } from './../services';
 import { IJSONTirage } from './../model';
+import { Business } from './';
 
-export class TirageBusiness {
-  private loterieService: LoterieService;
+export class TirageBusiness extends Business {
   private tirageService: TirageService;
 
   constructor () {
-    this.loterieService = new LoterieService();
+    super();
     this.tirageService = new TirageService();
   }
 
   //Retourne tous les résultats des tirages d'une loterie
-  //TODO : Si la loterie existe LoterieService
   recuperer(loterie: string): firebase.Promise<IJSONTirage[]> {
     this.tirageService.nomDonnees = loterie;
-    return this.tirageService.recuperer();
+    return this.existeLoterie(loterie)
+      .then(() => this.tirageService.recuperer());
   }
 
   //Retourne tous les résultats d'un tirage d'une loterie
-  //TODO : Si la loterie existe LoterieService
-  //TODO : Si la date existe DateService
   recupererParDate(loterie: string, date: string): firebase.Promise<IJSONTirage> {
     this.tirageService.nomDonnees = loterie;
-    return this.tirageService.recupererParDate(date);
+
+    return this.existeLoterie(loterie)
+      .then(() => this.existeDate(loterie, date))
+      .then(() => this.tirageService.recupererParDate(date));
   }
 
   //Retourne tous les résultats d'un tirage d'une loterie
-  //TODO : Si la loterie existe LoterieService
-  //TODO : Si la date existe DateService
   recupererDernierTirage(loterie: string): firebase.Promise<IJSONTirage> {
-    return this.loterieService.recupererDateDernierTirage(loterie)
+    return this.existeLoterie(loterie)
+      .then(() => this.loterieService.recupererDateDernierTirage(loterie))
+      .then((date) => this.existeDate(loterie, date))
       .then((date) => {
         this.tirageService.nomDonnees = loterie;
         return this.tirageService.recupererParDate(date);
-    });
+      });
   }
 }

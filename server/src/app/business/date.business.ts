@@ -1,22 +1,21 @@
 import firebase = require('firebase');
 
-import { DateService, LoterieService } from './../services';
 import { JSONDonneeDate } from './../model';
+import { Business } from './';
 
-export class DateBusiness {
-  private dateService: DateService;
-  private loterieService: LoterieService;
-
+export class DateBusiness extends Business {
   constructor () {
-    this.dateService = new DateService();
-    this.loterieService = new LoterieService();
+    super();
   }
 
   //Retourne toutes les dates d'une loterie
-  //TODO : Si la loterie existe LoterieService
   recupererParURL(loterie: string): firebase.Promise<JSONDonneeDate[]> {
     this.dateService.nomDonnees = loterie;
-    return this.loterieService.recupererParURL(loterie)
-      .then((loterie) => this.dateService.recuperer());
+    return this.existeLoterie(loterie)
+      .then(() => this.dateService.recuperer());
+  }
+
+  protected retourneErreur(): firebase.Promise<any> {
+    return firebase.Promise.reject('');
   }
 }

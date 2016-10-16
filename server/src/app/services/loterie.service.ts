@@ -76,11 +76,4 @@ export class LoterieService extends Service {
       })
       .catch(this.gererErreur);
   }
-
-  //Permet de déterminer si la loterie existe dans la base de données
-  public existe(url: string): firebase.Promise<boolean>  {
-    return this.database().child(url).once('value')
-      .then((snapshot) => snapshot.exists())
-      .catch(this.gererErreur);
-  }
 }

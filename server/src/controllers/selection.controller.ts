@@ -10,9 +10,9 @@ export class SelectionController extends Controller {
     let date: string = req.params.date;
     let courriel: string = req.params.courriel;
     let token: string = req.params.token;
-    let business: SelectionBusiness = new SelectionBusiness(courriel, token);
+    let business: SelectionBusiness = new SelectionBusiness();
 
-    business.recuperer(loterie, date)
+    business.recuperer(loterie, date, courriel, token)
       .then((selections) => res.send(selections))
       .catch((erreur: any) => this.gererErreur(res, erreur));
   }
@@ -23,10 +23,10 @@ export class SelectionController extends Controller {
     let date: string = req.params.date;
     let courriel: string = req.params.courriel;
     let token: string = req.params.token;
-    let business: SelectionBusiness = new SelectionBusiness(courriel, token);
+    let business: SelectionBusiness = new SelectionBusiness();
     let selections: string[][] = req.body as string[][];
 
-    business.ajouter(loterie, date, selections)
+    business.ajouter(loterie, date, courriel, token, selections)
       .then(() => res.send(true))
       .catch((erreur: any) => this.gererErreur(res, erreur));
   }
@@ -37,10 +37,10 @@ export class SelectionController extends Controller {
     let date: string = req.params.date;
     let courriel: string = req.params.courriel;
     let token: string = req.params.token;
-    let business: SelectionBusiness = new SelectionBusiness(courriel, token);
+    let business: SelectionBusiness = new SelectionBusiness();
     let id: string = req.params.id as string;
 
-    business.supprimer(loterie, date, id)
+    business.supprimer(loterie, date, courriel, token, id)
       .then(() => res.send(true))
       .catch((erreur: any) => this.gererErreur(res, erreur));
   }

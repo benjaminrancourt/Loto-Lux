@@ -2,39 +2,37 @@ import firebase = require('firebase');
 
 import { SelectionService } from './../services';
 import { ISelection } from './../model';
+import { Business } from './';
 
-export class SelectionBusiness {
-  private service: SelectionService;
-  private courriel: string;
-  private token: string;
+export class SelectionBusiness extends Business {
+  private selectionService: SelectionService;
 
-  constructor(courriel: string, token: string) {
-    this.service = new SelectionService(courriel, token);
-    this.courriel = courriel;
-    this.token = token;
+  constructor() {
+    super();
+    this.selectionService = new SelectionService();
   }
 
   //Recupère les sélections de l'utilisateur
-  //TODO: Valider utilisateur
-  //TODO: Valider loterie
-  //TODO: Valider date
-  recuperer(loterie: string, date: string): firebase.Promise<ISelection[]> {
-    return this.service.recuperer(loterie, date);
+  recuperer(loterie: string, date: string, courriel: string, token: string): firebase.Promise<ISelection[]> {
+    return this.utilisateurService.estCorrect(courriel, token)
+      .then(() => this.existeLoterie(loterie))
+      .then(() => this.existeDate(loterie, date))
+      .then(() => this.selectionService.recuperer(loterie, date, courriel));
   }
 
   //Ajoute les sélections de l'utilisateur dans la base de données
-  //TODO: Valider utilisateur
-  //TODO: Valider loterie
-  //TODO: Valider date
-  ajouter(loterie: string, date: string, selections: string[][]): firebase.Promise<any> {
-    return this.service.ajouter(loterie, date, selections);
+  ajouter(loterie: string, date: string, courriel: string, token: string, selections: string[][]): firebase.Promise<any> {
+    return this.utilisateurService.estCorrect(courriel, token)
+      .then(() => this.existeLoterie(loterie))
+      .then(() => this.existeDate(loterie, date))
+      .then(() => this.selectionService.ajouter(loterie, date, courriel, selections));
   }
 
   //Supprime la sélection de l'utilisateur dans la base de dommées
-  //TODO: Valider utilisateur
-  //TODO: Valider loterie
-  //TODO: Valider date
-  supprimer(loterie: string, date: string, id: string): firebase.Promise<any> {
-    return this.service.supprimer(loterie, date, id);
+  supprimer(loterie: string, date: string, courriel: string, token: string, id: string): firebase.Promise<any> {
+    return this.utilisateurService.estCorrect(courriel, token)
+      .then(() => this.existeLoterie(loterie))
+      .then(() => this.existeDate(loterie, date))
+      .then(() => this.selectionService.supprimer(loterie, date, courriel, id));
   }
 }

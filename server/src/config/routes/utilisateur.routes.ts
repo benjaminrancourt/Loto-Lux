@@ -1,8 +1,6 @@
 import express = require('express');
 import { UtilisateurController } from './../../controllers';
 
-let router = express.Router();
-
 export class UtilisateurRoutes {
   private utilisateurController: UtilisateurController;
 
@@ -11,6 +9,7 @@ export class UtilisateurRoutes {
   }
 
   get routes(): any {
+    let router = express.Router();
     router.post('/connexion', this.utilisateurController.enregistrer);
     return router;
   }

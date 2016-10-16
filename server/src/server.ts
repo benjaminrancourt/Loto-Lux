@@ -1,8 +1,10 @@
 /// <reference path="../typings/index.d.ts" />
 import express = require('express');
+import serveStatic = require('serve-static');
 import bodyParser = require('body-parser');
 import path = require('path');
 import replace = require('replace');
+import compression = require('compression');
 
 import { Routes } from './config/routes';
 import { Robots } from './robots/robots';
@@ -20,14 +22,17 @@ replace({
   silent: true
 });
 
-app.use('/app', express.static(path.resolve(__dirname, '../client/app')));
-app.use('/libs', express.static(path.resolve(__dirname, '../client/libs')));
-app.use('/css', express.static(path.resolve(__dirname, '../client/css')));
-app.use('/scripts', express.static(path.resolve(__dirname, '../client/scripts')));
-app.use('/images', express.static(path.resolve(__dirname, '../client/images')));
-app.use('/fonts', express.static(path.resolve(__dirname, '../client/fonts')));
+app.use('/app', serveStatic(path.resolve(__dirname, '../client/app')));
+app.use('/libs', serveStatic(path.resolve(__dirname, '../client/libs')));
+app.use('/css', serveStatic(path.resolve(__dirname, '../client/css')));
+app.use('/scripts', serveStatic(path.resolve(__dirname, '../client/scripts')));
+app.use('/images', serveStatic(path.resolve(__dirname, '../client/images')));
+app.use('/fonts', serveStatic(path.resolve(__dirname, '../client/fonts')));
 
+app.use(compression());
 app.use(bodyParser.json());
+app.set('view cache', true);
+
 app.use('/api', new Routes().routes);
 
 let renderIndex = (req: express.Request, res: express.Response) => {

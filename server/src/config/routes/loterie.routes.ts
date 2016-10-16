@@ -4,27 +4,20 @@ import { DateController,
   TirageController
 } from './../../controllers';
 
-let router = express.Router();
-
 export class LoterieRoutes {
-  private dateController: DateController;
-  private loterieController: LoterieController;
-  private tirageController: TirageController;
-
-  constructor() {
-    this.dateController = new DateController();
-    this.loterieController = new LoterieController();
-    this.tirageController = new TirageController();
-  }
-
   get routes(): any {
-    router.get('/', this.loterieController.recuperer);
-    router.get('/:loterie', this.loterieController.recupererParURL);
+    let router = express.Router();
+    let dateController = new DateController();
+    let loterieController = new LoterieController();
+    let tirageController = new TirageController();
 
-    router.get('/:loterie/tirages', this.tirageController.recupererDernierTirage);
-    router.get('/:loterie/tirages/:date', this.tirageController.recupererParDate);
+    router.get('/', loterieController.recuperer);
+    router.get('/:loterie', loterieController.recupererParURL);
 
-    router.get('/:loterie/dates', this.dateController.recupererParURL);
+    router.get('/:loterie/tirages', tirageController.recupererDernierTirage);
+    router.get('/:loterie/tirages/:date', tirageController.recupererParDate);
+
+    router.get('/:loterie/dates', dateController.recupererParURL);
 
     return router;
   }

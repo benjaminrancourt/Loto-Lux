@@ -16,6 +16,7 @@ var gulp = require('gulp'),
     builder = require('systemjs-builder'),
     browserSync = require('browser-sync').create(),
     remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul'),
+    htmlmin = require('gulp-htmlmin'),
     Server = require('karma').Server,
     util = require('gulp-util'),
     exec = require('child_process').exec;
@@ -158,6 +159,13 @@ gulp.task('ressources:fonts', function() {
 gulp.task('ressources:html', function() {
   return gulp
     .src('client/**/*.html')
+    .pipe(htmlmin({
+      caseSensitive: true,
+      collapseBooleanAttributes: true,
+      collapseWhitespace: true,
+      removeComments: true,
+      removeEmptyAttributes: true
+    }))
     .pipe(gulp.dest('dist/client'));
 });
 

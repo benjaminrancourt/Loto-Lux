@@ -52,6 +52,8 @@ export class SelectionsComponent extends ISelectionsComponent implements OnChang
     this.selectionService.supprimer(this.getOptions(), selection.id)
       .then(() => {
         this.selections.splice(position, 1);
+        this.numGagnant.splice(position, 1);
+        this.numComplementaire.splice(position, 1);
       });
   }
 

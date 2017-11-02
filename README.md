@@ -1,4 +1,6 @@
 # Loto-Lux
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/ranb2002/Loto-Lux.svg)](https://greenkeeper.io/)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](http://stackshare.io/ranb2002/loto-lux)
 [![Build Status](https://travis-ci.org/ranb2002/Loto-Lux.svg?branch=master)](https://travis-ci.org/ranb2002/Loto-Lux)
